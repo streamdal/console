@@ -80,6 +80,7 @@ const ruleMatchSchema = z
     path: z.string().min(1, { message: "Required" }),
     type: z.enum(matchTypes as any),
     args: z.string().array().optional(),
+    operator: z.string().optional(),
   })
   .superRefine(({ type, args }, ctx) => {
     if (

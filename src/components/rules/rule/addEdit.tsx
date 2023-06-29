@@ -7,6 +7,7 @@ import { useFormState, useWatch } from "react-hook-form";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { FailureModes } from "./failureModes";
 import type { RulesetType } from "../rulesetAddEdit";
+import { Dropdown } from "flowbite-react";
 export type MATCH_TYPE = { [key in string]: { display: string } };
 
 export const RULE_TYPE_MATCH: MATCH_TYPE = {
@@ -25,6 +26,20 @@ export const RULE_TYPE_MATCH: MATCH_TYPE = {
   pii_ssn: { display: "PII Social Security Number" },
   pii_email: { display: "PII Email" },
   pii_phone: { display: "PII Phone" },
+};
+
+//More semantic displays for offset to come once we know what the arg format is
+export const OPERATOR_MATCH_TYPE: MATCH_TYPE = {
+  MATCH_OPERATOR_ISMATCH: { display: "Matches Timestamp Format" },
+  MATCH_OPERATOR_EQUALS: { display: "Equals Value" },
+  MATCH_OPERATOR_GREATER_THAN: { display: "Is Greater Than Value" },
+  MATCH_OPERATOR_GREATER_THAN_OR_EQUAL: {
+    display: "Is Greater Than or Equal to Value",
+  },
+  MATCH_OPERATOR_LESS_THAN: { display: "Is Less Than Value" },
+  MATCH_OPERATOR_LESS_THAN_OR_EQUAL: {
+    display: "Is Less Than or Equal to Value",
+  },
 };
 
 export const RuleAddEdit = ({
@@ -49,10 +64,16 @@ export const RuleAddEdit = ({
     name: `rules[${index}][match_config.type]`,
   });
 
+  const operatorWatchType = useWatch({
+    control,
+    name: `rules[${index}][match_operator_config_type]`,
+  });
+
   //
   // Shenanigans: I don't know how to make react-hooks-form watch initial value on
   // dynamic fields
   const type = watchType || rule?.match_config?.type;
+  const operatorMatchType = operatorWatchType || rule?.match_config?.type;
 
   return (
     <div className="flex flex-col justify-start align-top">
@@ -102,6 +123,30 @@ export const RuleAddEdit = ({
           type
         ) && (
           <RuleArgs ruleIndex={index} register={register} control={control} />
+        )}
+        {/*Flowbite style for operator_match dropdown:*/}
+        {/*{["ts_rfc3339", "ts_unix_nano", "ts_unix"].includes(type) && (*/}
+        {/*  <Dropdown label="Dropdown button">*/}
+        {/*    {Object.keys(OPERATOR_MATCH_TYPE).map((t) => (*/}
+        {/*      <Dropdown.Item>{t}</Dropdown.Item>*/}
+        {/*    ))}*/}
+        {/*  </Dropdown>*/}
+        {/*)}*/}
+        {["ts_rfc3339", "ts_unix_nano", "ts_unix"].includes(type) && (
+          <FormSelect
+            name={`rules[${index}][match_operator_config_type]`}
+            label="Field Match Operator Type"
+            register={register}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            error={errors?.rules?.[index]?.match_config?.type?.message || ""}
+          >
+            {Object.keys(OPERATOR_MATCH_TYPE).map((t: string, i: number) => (
+              <option key={`operator-match-type-key${i}`} value={t}>
+                {OPERATOR_MATCH_TYPE[t].display}
+              </option>
+            ))}
+          </FormSelect>
         )}
         <FailureModes
           rule={rule}
