@@ -58,7 +58,7 @@ export const Slack = (props: any) => {
 };
 
 export const Github = (props: any) => {
-  const color = "#372D56";
+  const color = "white";
   const fillColor = props?.fill || color;
 
   return (

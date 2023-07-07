@@ -31,7 +31,7 @@ export const LoginFormInput = ({
   };
   return (
     <div
-      className={`flex flex-col ${margin} w-full w-[200px] md:max-2xl:w-[450px]`}
+      className={`flex flex-col ${margin} w-full w-[200px] md:max-2xl:w-[350px]`}
     >
       <div className={`flex ${row ? "flex-row" : "flex-col"} mb-2 block`}>
         <Label

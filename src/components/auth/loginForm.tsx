@@ -34,10 +34,14 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="p-2 w-full h-[500px] flex flex-col justify-center align-top items-center">
-      <form
-        className={"border-web border-2 rounded-xl px-8 py-10 items-center"}
-      >
+    <div className="w-full h-screen flex flex-col justify-center align-top items-center bg-[url('/images/login/login-background.png')] bg-cover bg-center bg-no-repeat">
+      <form className={"rounded-xl px-4 py-10 items-center bg-white w-[384px]"}>
+        <div className={"w-full items-center"}>
+          <img
+            src={"/images/login/logo.svg"}
+            className={"w-16 ml-[144px] mb-4 max-w-16"}
+          />
+        </div>
         <h2 className={"text-center mb-3 text-xl"}>Welcome Back!</h2>
         <LoginFormInput
           name={"email"}
@@ -61,7 +65,7 @@ export const LoginForm = () => {
           </Button>
           <Button
             color="gray"
-            className="text-web hover:text-web hover:bg-streamdalYellow w-full md:max-2xl:w-1/2"
+            className="text-white bg-web hover:text-web hover:bg-streamdalYellow w-full md:max-2xl:w-3/4"
           >
             <Github className="mr-2 h-5 w-5" />
             <p>Login with Github</p>
