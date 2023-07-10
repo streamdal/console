@@ -2,9 +2,10 @@
 import { NavMenu } from "../components/nav/menu";
 export interface Props {
   title: string;
+  hideNav?: boolean;
 }
 
-const { title } = Astro.props;
+const { title, hideNav } = Astro.props;
 import "../styles/global.css";
 import React from "react";
 import { RuleSetAddEdit } from "../components/rules/rulesetAddEdit";
@@ -26,14 +27,16 @@ import { RuleSetAddEdit } from "../components/rules/rulesetAddEdit";
   </head>
   <body class="h-screen">
     <div class="flex flex-col w-full text-web">
-      <div
-        class="sticky top-0 flex flex-row justify-between h-16 bg-web w-full items-center"
-      >
-        <a href="/">
-          <img src="/images/logo-dark.png" class="w-44 h-fit ml-4" />
-        </a>
-        <NavMenu client:load client:only />
-      </div>
+      {
+        hideNav ? null : (
+          <div class="sticky top-0 flex flex-row justify-between h-16 bg-web w-full items-center">
+            <a href="/">
+              <img src="/images/logo-dark.png" class="w-44 h-fit ml-4" />
+            </a>
+            <NavMenu client:load client:only />
+          </div>
+        )
+      }
       <div class="m-6">
         <slot />
       </div>
