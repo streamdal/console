@@ -6,14 +6,17 @@ import { Bars3Icon } from "@heroicons/react/20/solid";
 
 export const NavMenu = () => {
   return (
-    <Menu as="div" className="text-right align-text-bottom pt-[6px] relative">
+    <Menu
+      as="div"
+      className="text-right align-text-bottom pt-[6px] pr-2 mr-2 relative border-r-2"
+    >
       <div>
         <Menu.Button>
-          <Bars3Icon className="mr-4 w-[20px] text-white cursor-pointer" />
+          <Bars3Icon className="mr-4 w-[30px] text-web cursor-pointer" />
         </Menu.Button>
       </div>
 
-      <Menu.Items className="absolute z-[100] right-0 mt-2 mr-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none opacity-100">
+      <Menu.Items className="absolute z-[100] left-0 mt-2 mr-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none opacity-100">
         <div className="p-2 pb-1">
           <Menu.Item>
             {({ active }) => (
