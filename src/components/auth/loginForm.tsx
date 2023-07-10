@@ -89,17 +89,17 @@ export const LoginForm = () => {
             <Button
               color="gray"
               size="xs"
-              className="text-white bg-web hover:text-web hover:bg-streamdalYellow w-full md:max-2xl:w-[165px]"
+              className="group text-white bg-web hover:text-web hover:bg-streamdalYellow w-full md:max-2xl:w-[165px]"
             >
-              <Github className="mr-2 h-5 w-5" />
+              <Github className="mr-2 h-5 w-5 fill-white group-hover:fill-web" />
               <p className={"text-xs"}>Sign in with Github</p>
             </Button>
             <Button
               color="gray"
               size="xs"
-              className="text-white bg-web hover:text-web hover:bg-streamdalYellow w-full md:max-2xl:w-[165px]"
+              className="group text-white bg-web hover:text-web hover:bg-streamdalYellow w-full md:max-2xl:w-[165px]"
             >
-              <Google className="mr-2 h-5 w-5" />
+              <Google className="mr-2 h-5 w-5 fill-white group-hover:fill-web" />
               <p className={"text-xs"}>Sign in with Google</p>
             </Button>
           </div>
