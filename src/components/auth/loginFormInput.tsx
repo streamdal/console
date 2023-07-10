@@ -24,15 +24,13 @@ export const LoginFormInput = ({
     field: {
       input: {
         colors: {
-          gray: "focus:border-purple-500 focus:ring-purple-500",
+          gray: "focus:border-purple-500 focus:ring-purple-500 bg-purple-50 mt-2",
         },
       },
     },
   };
   return (
-    <div
-      className={`flex flex-col ${margin} w-full w-[200px] md:max-2xl:w-[350px]`}
-    >
+    <div className={`flex flex-col ${margin} w-full w-[200px] `}>
       <div className={`flex ${row ? "flex-row" : "flex-col"} mb-2 block`}>
         <Label
           className="text-stormCloud font-medium text-[14px] leading-[18px]"
