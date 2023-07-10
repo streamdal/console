@@ -24,6 +24,7 @@ module.exports = {
 			},
 			fontFamily: {
 				sans: ["Inter"],
+				display: ["Space Grotesk"]
 			},
 		},
 	},
