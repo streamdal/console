@@ -3,8 +3,8 @@ import { client, meta } from "./grpc.ts";
 
 export const getServiceMap = async () => {
   try {
-    const { response } = await client.getServiceMap({}, meta);
-
+    const { response } = await client.getAll({}, meta);
+    console.log("GET ALL RESPONSE", response);
     return response;
   } catch (error) {
     console.error("error fetching service map", error);
