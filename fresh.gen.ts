@@ -13,9 +13,10 @@ import * as $7 from "./routes/pipelines/add.tsx";
 import * as $8 from "./routes/pipelines/index.tsx";
 import * as $9 from "./routes/pipelines/save.tsx";
 import * as $10 from "./routes/rules.tsx";
-import * as $11 from "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/index.tsx";
-import * as $12 from "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/pipeline/[id]/pause.tsx";
-import * as $13 from "./routes/service/[service]/component/[component]/[operationType]/all.tsx";
+import * as $11 from "./routes/service/[service]/component/[component]/[operationType]/all.tsx";
+import * as $12 from "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/index.tsx";
+import * as $13 from "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/pipeline/[id]/attach-detach.tsx";
+import * as $14 from "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/pipeline/[id]/pause.tsx";
 import * as $$0 from "./islands/InfoModal.tsx";
 import * as $$1 from "./islands/flow.tsx";
 import * as $$2 from "./islands/pipeline.tsx";
@@ -34,12 +35,14 @@ const manifest = {
     "./routes/pipelines/index.tsx": $8,
     "./routes/pipelines/save.tsx": $9,
     "./routes/rules.tsx": $10,
-    "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/index.tsx":
-      $11,
-    "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/pipeline/[id]/pause.tsx":
-      $12,
     "./routes/service/[service]/component/[component]/[operationType]/all.tsx":
+      $11,
+    "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/index.tsx":
+      $12,
+    "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/pipeline/[id]/attach-detach.tsx":
       $13,
+    "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/pipeline/[id]/pause.tsx":
+      $14,
   },
   islands: {
     "./islands/InfoModal.tsx": $$0,
