@@ -2,6 +2,7 @@ import { ConsumerIcon } from "../components/icons/consumer.tsx";
 import { ProducerIcon } from "../components/icons/producer.tsx";
 import IconPlus from "https://deno.land/x/tabler_icons_tsx@0.0.3/tsx/plus.tsx";
 import IconX from "https://deno.land/x/tabler_icons_tsx@0.0.3/tsx/x.tsx";
+import IconUnlink from "https://deno.land/x/tabler_icons_tsx@0.0.3/tsx/unlink.tsx";
 import {
   PipelineInfo,
   ServiceInfo,
@@ -35,7 +36,7 @@ export default function InfoModal(
       /*pipeline config info*/
       pipeline: {
         id: "1234-1234-54321",
-        name: "Dummy Pipeline",
+        name: "some pipeline name",
         steps: [],
       },
       paused: [],
@@ -51,12 +52,14 @@ export default function InfoModal(
       /*pipeline config info*/
       pipeline: {
         id: "987-987-6789",
-        name: "Dumber Pipeline",
+        name: "another pipeline name",
         steps: [],
       },
       paused: [],
     },
   };
+
+  console.log("fuck this shit", Object.keys(dummyPipelines));
 
   const associatedPipeline = serviceMap
     .pipelines.find(
@@ -77,7 +80,7 @@ export default function InfoModal(
   );
   console.log(
     "this is the associated pipeline",
-    dummyPipelines[pipelineName].pipeline,
+    dummyPipelines[pipelineName]?.pipeline,
   );
   const [linkedPipeline, setLinkedPipeline] = useState(
     dummyPipelines[pipelineName]?.pipeline,
@@ -119,39 +122,41 @@ export default function InfoModal(
             <div class="px-4 py-1">
               <div class="mb-2 flex justify-between items-center pr-2">
                 <h3 class="text-white text-sm">Attached Pipeline</h3>
-                <a href={"/pipelines"}>
-                  <button
-                    type="button"
-                    data-tooltip-target="add-pipeline-tooltip"
-                    data-tooltip-placement="top"
-                    className="mt-1 mr-1 text-white bg-transparent hover:bg-gray-500 hover:text-white-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    data-modal-hide="accordion-collapse"
-                  >
-                    <IconPlus class="w-5 h-5 text-white" />
-                  </button>
-                  <div
-                    id="add-pipeline-tooltip"
-                    role="tooltip"
-                    class="absolute z-10 invisible inline-block px-2 py-1 text-xs font-medium text-white transition-opacity duration-300 bg-gray-500 rounded-xs shadow-sm opacity-0 tooltip dark:bg-gray-700"
-                  >
-                    Add new pipeline
-                    <div class="tooltip-arrow" data-popper-arrow></div>
-                  </div>
-                </a>
               </div>
-              <button
-                id="attached-pipeline"
-                // data-dropdown-toggle="attached-pipeline-dropdown"
-                class="text-white border border-gray-600 font-medium rounded-sm w-full flex justify-between text-sm px-2 text-xs py-1 text-center inline-flex items-center"
-                type="button"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-                {attachedPipeline?.name}
-                <IconPlus class="w-4 h-4" />
-              </button>
+              {!Object.keys(dummyPipelines).length
+                ? (
+                  <a href={"/pipelines"}>
+                    <button class="text-gray-400 border border-gray-600 font-medium rounded-sm w-full flex justify-center text-sm px-2 text-xs py-1 text-center inline-flex items-center">
+                      <IconPlus class="w-4 h-4 mr-1" />
+                      Create a new pipeline
+                    </button>
+                  </a>
+                )
+                : linkedPipeline
+                ? (
+                  <button
+                    id="attached-pipeline"
+                    class="text-white border border-gray-600 font-medium rounded-sm w-full flex justify-between text-sm px-2 text-xs py-1 text-center inline-flex items-center"
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    {linkedPipeline?.name}
+                    <IconUnlink class="w-4 h-4 text-gray-400" />
+                  </button>
+                )
+                : (
+                  <button
+                    id="attached-pipeline"
+                    className="text-gray-400 border border-gray-600 font-medium rounded-sm w-full flex justify-between text-sm px-2 text-xs py-1 text-center inline-flex items-center"
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    {"Attach a pipeline"}
+                    <IconPlus class="w-4 h-4" />
+                  </button>
+                )}
               {isOpen && (
-                <div // id="attached-pipeline-dropdown"
-                 class="z-50 bg-white  absolute right-[325px] divide-gray-100 rounded-md shadow w-[200px] dark:bg-gray-700">
+                <div class="z-50 bg-white  absolute right-[325px] divide-gray-100 rounded-md shadow w-[200px] dark:bg-gray-700">
                   <ul
                     class="py-2 text-sm text-gray-700 dark:text-gray-200 divide-y"
                     aria-labelledby="dropdownDefaultButton"
@@ -166,7 +171,7 @@ export default function InfoModal(
                           type="radio"
                           value=""
                           checked={dummyPipelines[pipeline].pipeline.id ===
-                            linkedPipeline.id}
+                            linkedPipeline?.id}
                           name="pipeline-name"
                           className={`w-4 h-4 bg-gray-100 checked:bg-purple-500 cursor-pointer`}
                         />
@@ -179,14 +184,16 @@ export default function InfoModal(
                       </div>
                     ))}
                     <div class="flex items-center justify-center py-2 px-2 hover:bg-purple-50">
-                      <button>
-                        <div class={"flex justify-between items-center"}>
-                          <p class={"text-xs text-gray-600"}>
-                            Create new pipeline
-                          </p>
-                          <IconPlus class={"w-3 h-3 ml-3"} />
-                        </div>
-                      </button>
+                      <a href={"/pipelines"}>
+                        <button>
+                          <div class={"flex justify-between items-center"}>
+                            <p class={"text-xs text-gray-600"}>
+                              Create new pipeline
+                            </p>
+                            <IconPlus class={"w-3 h-3 ml-3"} />
+                          </div>
+                        </button>
+                      </a>
                     </div>
                   </ul>
                 </div>
