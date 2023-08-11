@@ -26,7 +26,7 @@ export const handler: Handlers<SuccessType> = {
         status: 307,
         headers: {
           Location:
-            `/service/${ctx.params.service}/component/${ctx.params.component}/op/${ctx.params.operationName}`,
+            `/service/${ctx.params.service}/component/${ctx.params.component}/${ctx.params.operationType}/op/${ctx.params.operationName}`,
         },
       },
     );

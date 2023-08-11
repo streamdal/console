@@ -42,7 +42,7 @@ export default function InfoModal(
       }],
       /*pipeline config info*/
       pipeline: {
-        id: "1234-1234-54321",
+        id: "094b074a-b783-42e9-b138-827ce3c6de7c",
         name: "some pipeline name",
         steps: [],
       },
@@ -58,7 +58,7 @@ export default function InfoModal(
       }],
       /*pipeline config info*/
       pipeline: {
-        id: "987-987-6789",
+        id: "ecb3c652-8feb-4111-87d9-d66e9ed7288a",
         name: "another pipeline name",
         steps: [],
       },
@@ -180,6 +180,7 @@ export default function InfoModal(
                   <div class="z-50 bg-white  absolute right-[325px] divide-gray-100 rounded-md shadow w-[200px] dark:bg-gray-700">
                     <form
                       onSumbit={attachPipeline}
+                      method="POST"
                       action={`${[
                         params.operationName,
                       ]}/pipeline/${linkedPipeline?.id}/attach-detach`}
