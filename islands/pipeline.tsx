@@ -38,11 +38,11 @@ export const newStep = {
   onSuccess: [],
   onFailure: [],
   step: {
-    oneofKind: "detective",
-    detective: {
-      type: DetectiveType.BOOLEAN_TRUE,
+    oneofKind: "transform",
+    transform: {
+      type: TransformType.MASK_VALUE,
       path: "",
-      args: [""],
+      value: "",
     },
   },
 };
@@ -400,48 +400,76 @@ const PipelineDetail = (
                       />
                     ))}
                   />
-                  {["detective", "transform"].includes(
+                  {["transform"].includes(
                     data?.steps[i]?.step?.oneofKind,
                   ) && (
-                    <FormInput
-                      name={`steps.${i}.step.detective.path`}
-                      data={data}
-                      setData={setData}
-                      label="Path"
-                      placeHolder="ex: object.field"
-                      errors={errors}
-                    />
+                    <>
+                      <FormSelect
+                        name={`steps.${i}.step.transform.type`}
+                        label="Transform Type"
+                        data={data}
+                        setData={setData}
+                        errors={errors}
+                        inputClass="w-64"
+                        children={optionsFromEnum(TransformType)}
+                      />
+                      <FormInput
+                        name={`steps.${i}.step.transform.path`}
+                        data={data}
+                        setData={setData}
+                        label="Path"
+                        placeHolder="ex: object.field"
+                        errors={errors}
+                      />
+                      <FormInput
+                        name={`steps.${i}.step.transform.value`}
+                        data={data}
+                        setData={setData}
+                        label="Value"
+                        errors={errors}
+                      />
+                    </>
                   )}
                   {"detective" ===
                       data?.steps[i]?.step?.oneofKind &&
                     (
-                      <div class="flex flex-col">
-                        <FormSelect
-                          name={`steps.${i}.step.detective.type`}
-                          label="Detective Type"
+                      <>
+                        <FormInput
+                          name={`steps.${i}.step.detective.path`}
                           data={data}
                           setData={setData}
+                          label="Path"
+                          placeHolder="ex: object.field"
                           errors={errors}
-                          inputClass="w-64"
-                          children={optionsFromEnum(DetectiveType)}
                         />
-                        <div>
-                          {argTypes.includes(
-                            DetectiveType[data.steps[i].step.detective.type],
-                          ) &&
-                            (
-                              <StepArgs
-                                stepIndex={i}
-                                type={DetectiveType[
-                                  data.steps[i].step.detective.type
-                                ]}
-                                data={data}
-                                setData={setData}
-                                errors={errors}
-                              />
-                            )}
+                        <div class="flex flex-col">
+                          <FormSelect
+                            name={`steps.${i}.step.detective.type`}
+                            label="Detective Type"
+                            data={data}
+                            setData={setData}
+                            errors={errors}
+                            inputClass="w-64"
+                            children={optionsFromEnum(DetectiveType)}
+                          />
+                          <div>
+                            {argTypes.includes(
+                              DetectiveType[data.steps[i].step.detective.type],
+                            ) &&
+                              (
+                                <StepArgs
+                                  stepIndex={i}
+                                  type={DetectiveType[
+                                    data.steps[i].step.detective.type
+                                  ]}
+                                  data={data}
+                                  setData={setData}
+                                  errors={errors}
+                                />
+                              )}
+                          </div>
                         </div>
-                      </div>
+                      </>
                     )}
                   <StepConditions
                     stepIndex={i}
