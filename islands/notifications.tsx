@@ -6,7 +6,11 @@ import { ErrorType, validate } from "../components/form/validate.ts";
 import { useState } from "preact/hooks";
 import { zfd } from "https://esm.sh/v130/zod-form-data@2.0.1/denonext/zod-form-data.mjs";
 import { z } from "zod/index.ts";
-import { NotificationType } from "snitch-protos/protos/sp_notify.ts";
+import {
+  NotificationEmail_Type,
+  NotificationPagerDuty_Urgency,
+  NotificationType,
+} from "snitch-protos/protos/sp_notify.ts";
 
 const slack = {
   botToken: "",
@@ -23,6 +27,35 @@ const newNotificationConfig = {
 };
 
 const NotificationTypeEnum = z.nativeEnum(NotificationType);
+const EmailNotificationTypeEnum = z.nativeEnum(NotificationEmail_Type);
+const NotificationPaterDutyUrgencyEnum = z.nativeEnum(
+  NotificationPagerDuty_Urgency,
+);
+
+const SMTPEmailNotificationSchema = z.object({
+  host: z.string().min(1, { message: "Required" }),
+  port: z.number({ message: "Required" }).int(),
+  user: z.string().min(1, { message: "Required" }),
+  password: z.string().min(1, { message: "Required" }),
+  useTls: z.boolean({ message: "Required" }),
+});
+
+const SESEmailNotificationSchema = z.object({
+  sesRegion: z.string().min(1, { message: "Required" }),
+  sesAccessKeyId: z.string().min(1, { message: "Required" }),
+  sesSecretAccessKey: z.string().min(1, { message: "Required" }),
+});
+
+const EmailNotificationKindSchema = z.discriminatedUnion("oneofKind", [
+  z.object({
+    oneofKind: z.literal("smtp"),
+    smtp: SMTPEmailNotificationSchema,
+  }),
+  z.object({
+    oneofKind: z.literal("ses"),
+    ses: SESEmailNotificationSchema,
+  }),
+]);
 
 const NotificationKindSchema = z.discriminatedUnion("oneofKind", [
   z.object({
@@ -32,12 +65,22 @@ const NotificationKindSchema = z.discriminatedUnion("oneofKind", [
       channel: z.string().min(1, { message: "Required" }),
     }),
   }),
-  //TO DO: set up email and pager configs
   z.object({
     oneofKind: z.literal("email"),
     email: z.object({
-      botToken: z.string().min(1, { message: "Required" }),
-      channel: z.string().min(1, { message: "Required" }),
+      type: zfd.numeric(EmailNotificationTypeEnum),
+      recipients: zfd.repeatable(z.array(z.string()).default([])),
+      fromAddress: z.string(min(1, { message: Required })),
+      config: EmailNotificationKindSchema,
+    }),
+  }),
+  z.object({
+    oneofKind: z.literal("pagerduty"),
+    pagerduty: z.object({
+      token: z.string().min(1, { message: "Required" }),
+      email: z.string().min(1, { message: "Required" }),
+      serviceId: z.string().min(1, { message: "Required" }),
+      urgency: z.numeric(NotificationPaterDutyUrgencyEnum),
     }),
   }),
 ]);
