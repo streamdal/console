@@ -70,7 +70,7 @@ const NotificationKindSchema = z.discriminatedUnion("oneofKind", [
     email: z.object({
       type: zfd.numeric(EmailNotificationTypeEnum),
       recipients: zfd.repeatable(z.array(z.string()).default([])),
-      fromAddress: z.string(min(1, { message: Required })),
+      fromAddress: z.string().min(1, { message: "Required" }),
       config: EmailNotificationKindSchema,
     }),
   }),
@@ -80,7 +80,7 @@ const NotificationKindSchema = z.discriminatedUnion("oneofKind", [
       token: z.string().min(1, { message: "Required" }),
       email: z.string().min(1, { message: "Required" }),
       serviceId: z.string().min(1, { message: "Required" }),
-      urgency: z.numeric(NotificationPaterDutyUrgencyEnum),
+      urgency: zfd.numeric(NotificationPaterDutyUrgencyEnum),
     }),
   }),
 ]);
@@ -190,6 +190,7 @@ export const NotificationDetail = (success: SuccessType) => {
                 Please choose a different notification method.
               </p>
             )}
+            {data?.type === NotificationType.EMAIL.toString() && <h1>HELLO</h1>}
           </div>
         </div>
       </div>
