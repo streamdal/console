@@ -47,8 +47,10 @@ export const NotificationConfigModal = ({ success }: SuccessType) => {
                 <span class="sr-only">Close modal</span>
               </button>
             </a>
-            <div class="flex flex-col min-w-full items-center px-10 py-10">
-              <div class="text-[16px] font-bold mb-3">Notifications</div>
+            <div class="flex flex-col min-w-full items-start px-10 py-10">
+              <div class="w-full text-center text-[16px] font-bold mb-3">
+                Notifications
+              </div>
               <NotificationDetail success={success} />
             </div>
           </div>
