@@ -28,9 +28,10 @@ export default function OpModal(
   const audience = opModal.value?.audience;
   const attachedPipeline = opModal.value?.attachedPipeline;
   const opType = OperationType[audience?.operationType];
-  const clients = opModal.value?.clients;
+  const clients = opModal.value?.clients?.length || 0;
 
   const [isOpen, setIsOpen] = useState(false);
+  const [peekOpen, setPeekOpen] = useState(false);
 
   useSignalEffect(() => {
     if (opModal.value) {
@@ -114,7 +115,7 @@ export default function OpModal(
                           {audience?.operationName}
                         </h3>
                         <p class="text-xs text-cloud">
-                          {`${clients || 0} attached client${
+                          {`${clients} attached client${
                             (clients !== 1) ? "s" : ""
                           }`}
                         </p>
@@ -222,23 +223,24 @@ export default function OpModal(
                     <h3 id="collapse-heading-2">
                       <button
                         type="button"
-                        className="flex items-center w-full px-5 border-y border-purple-100 py-3 font-medium text-left text-web focus:ring-2"
+                        className={`flex items-center w-full px-5 border-y border-purple-100 py-3 font-medium text-left text-web focus:ring-2`}
                         data-accordion-target="#collapse-body-2"
                         aria-expanded="true"
                         aria-controls="collapse-body-2"
+                        onClick={() => setPeekOpen(!peekOpen)}
                       >
-                        <h3 class="text-web text-sm font-semibold ml-3">
+                        <h3 class="text-sm font-semibold ml-3">
                           Peek
                         </h3>
                       </button>
                     </h3>
                     <div
                       id="collapse-body-2"
-                      class="hidden"
+                      class={`${peekOpen ? "" : "hidden"}`}
                       aria-labelledby="collapse-heading-2"
                     >
                       <p class="p-5 text-gray-300 text-xs dark:text-gray-400">
-                        Metrics coming soon...
+                        Peek coming soon...
                       </p>
                     </div>
                     <h3 id="collapse-heading-3">
