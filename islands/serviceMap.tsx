@@ -126,9 +126,6 @@ export default function ServiceMapComponent(
   const [nodes, setNodes, onNodesChange] = useNodesState(initNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initEdges);
 
-  console.log("fucking nodes", nodes);
-  console.log("fucking edges", edges);
-
   const defaultViewport = {
     x: 0,
     y: 150,
