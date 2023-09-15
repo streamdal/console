@@ -70,7 +70,9 @@ const NotificationKindSchema = z.discriminatedUnion("oneofKind", [
     oneofKind: z.literal("email"),
     email: z.object({
       type: zfd.numeric(EmailNotificationTypeEnum),
-      recipients: zfd.repeatable(z.array(z.string()).default([])),
+      recipients: zfd.repeatable(
+        z.array(z.string().min(1, { message: "Required" })).default([]),
+      ),
       fromAddress: z.string().min(1, { message: "Required" }),
       config: EmailNotificationKindSchema,
     }),
@@ -117,7 +119,8 @@ export const NotificationDetail = (success: SuccessType) => {
         ...data,
         config: {
           email: {
-            recipients: [],
+            type: "1",
+            recipients: [""],
           },
         },
       });
@@ -222,13 +225,19 @@ export const NotificationDetail = (success: SuccessType) => {
                   value={NotificationEmail_Type[data?.config.email?.type]
                     ?.toLowerCase()}
                 />
-                <IconPlus
-                  data-tooltip-target="step-add"
-                  class="w-5 h-5 cursor-pointer"
+                <button
+                  class={"flex items-center justify-evenly btn-secondary w-[175px] border border-web"}
                   onClick={() => {
                     addRecipients();
                   }}
-                />
+                >
+                  Add a new recipient
+                  <IconPlus
+                    data-tooltip-target="step-add"
+                    class="w-5 h-5 cursor-pointer"
+                  />
+                </button>
+
                 {data.config.email && (
                   <div class={"flex w-[650px] flex-wrap"}>
                     {data.config.email &&
@@ -240,7 +249,7 @@ export const NotificationDetail = (success: SuccessType) => {
                           setData={setData}
                           placeHolder={""}
                           errors={errors}
-                          wrapperClass={"w-[200px] mx-2"}
+                          wrapperClass={"w-[180px] mx-2"}
                         />
                       ))}
                   </div>
