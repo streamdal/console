@@ -143,10 +143,10 @@ export const NotificationDetail = (success: SuccessType) => {
       action="/notifications/configure"
       method="post"
     >
-      <div class="flex justify-between rounded-t items-center w-full min-w-full px-[18px] pt-[18px] pb-[8px]">
-        <div class="flex flex-row items-center w-full justify-center">
-          <div class="text-[16px] font-medium mr-2 h-[54px] w-full">
-            <div class={"flex justify-between"}>
+      <div class="flex justify-between rounded-t items-center w-full px-[18px] pt-[18px] pb-[8px]">
+        <div class="flex flex-row items-center w-full justify-between">
+          <div class="text-[16px] flex flex-col justify-between font-medium mr-2 h-[54px] w-full">
+            <div class={"flex justify-between w-[580px]"}>
               <FormInput
                 name="name"
                 data={data}
@@ -207,7 +207,7 @@ export const NotificationDetail = (success: SuccessType) => {
                 </>
               )}
             {data?.type === NotificationType.EMAIL.toString() && (
-              <>
+              <div class={"w-[580px]"}>
                 <FormSelect
                   name={"config.email.type"}
                   data={data}
@@ -229,17 +229,22 @@ export const NotificationDetail = (success: SuccessType) => {
                     addRecipients();
                   }}
                 />
-                {data.config.email &&
-                  data?.config.email?.recipients?.map((r, i) => (
-                    <FormInput
-                      name={`config.email.recipients.${i}`}
-                      data={data}
-                      label={`Recipient ${i + 1}.`}
-                      setData={setData}
-                      placeHolder={""}
-                      errors={errors}
-                    />
-                  ))}
+                {data.config.email && (
+                  <div class={"flex w-[650px] flex-wrap"}>
+                    {data.config.email &&
+                      data?.config.email?.recipients?.map((r, i) => (
+                        <FormInput
+                          name={`config.email.recipients.${i}`}
+                          data={data}
+                          label={`Recipient ${i + 1}.`}
+                          setData={setData}
+                          placeHolder={""}
+                          errors={errors}
+                          wrapperClass={"w-[200px] mx-2"}
+                        />
+                      ))}
+                  </div>
+                )}
                 <FormInput
                   name={"config.email.fromAddress"}
                   label={"Origin email address"}
@@ -343,9 +348,9 @@ export const NotificationDetail = (success: SuccessType) => {
                       />
                     </>
                   )}
-              </>
+              </div>
             )}
-            <div class="flex flex-row justify-center items-center">
+            <div class="flex flex-row justify-end mb-4">
               <button
                 className="btn-heimdal"
                 type="submit"
