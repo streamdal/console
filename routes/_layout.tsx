@@ -8,6 +8,7 @@ import {
   setServiceSignal,
 } from "../components/serviceMap/serviceSignal.ts";
 import { getAll } from "../lib/fetch.ts";
+import { version } from "../version.ts";
 
 export default async function Layout(req: Request, ctx: LayoutContext) {
   const allServices = await getAll();
@@ -29,6 +30,9 @@ export default async function Layout(req: Request, ctx: LayoutContext) {
               req.url.includes("notifications")}
           />
         </ReactFlowProvider>
+        <div class="absolute bottom-0 left-0 text-streamdalPurple ml-2 mb-1">
+          {version}
+        </div>
       </div>
     </>
   );

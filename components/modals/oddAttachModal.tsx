@@ -3,7 +3,6 @@ import IconPlus from "tabler-icons/tsx/plus.tsx";
 import { getAudienceOpRoute } from "../../lib/utils.ts";
 import { toastSignal } from "../toasts/toast.tsx";
 import { opModal } from "../serviceMap/opModalSignal.ts";
-import { ServiceMapper } from "../../lib/fetch.ts";
 import { opUpdateSignal } from "../../islands/serviceMap.tsx";
 
 export const OddAttachModal = (
@@ -56,18 +55,18 @@ export const OddAttachModal = (
     }
   };
   return (
-    <div class="mt-[235px]">
-      <div class="w-[200px] bg-white divide-gray-100 rounded-md shadow-lg border max-h-[400px] overflow-auto">
+    <div>
+      <div class="w-full bg-purple-50 divide-gray-100 max-h-[400px] overflow-auto rounded mt-2">
         <form onSumbit={attachPipeline}>
           <ul
-            class="pt-2 text-sm text-gray-700 divide-y"
+            class="text-sm text-gray-700 divide-y"
             aria-labelledby="dropdownDefaultButton"
           >
             {sorted?.map((
               p: PipelineInfo,
               i: number,
             ) => (
-              <div class="flex items-center py-2 px-2 hover:bg-purple-50">
+              <div class="flex items-center py-3 px-2 hover:bg-purple-100">
                 <input
                   id={`default-radio-${i}`}
                   type="radio"
@@ -76,17 +75,17 @@ export const OddAttachModal = (
                   checked={p.pipeline.id ===
                     attachedPipeline?.id}
                   name="pipelineId"
-                  className={`w-4 h-4 bg-gray-100 checked:bg-purple-500 cursor-pointer`}
+                  className={`w-4 h-4 bg-gray-100 text-purple-500 cursor-pointer`}
                 />
                 <label
                   htmlFor={`default-radio-${i}`}
-                  className="ml-2 text-xs font-medium text-gray-900"
+                  className="ml-2 text-xs font-medium text-gray-900 cursor-pointer"
                 >
                   {p.pipeline.name}
                 </label>
               </div>
             ))}
-            <div class="flex items-center justify-center hover:bg-purple-50 py-2">
+            <div class="flex items-center justify-center hover:bg-purple-100 py-3">
               <a href="/pipelines">
                 <div class={"flex justify-between items-center"}>
                   <p class={"text-xs text-gray-600"}>
