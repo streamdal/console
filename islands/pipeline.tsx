@@ -215,7 +215,6 @@ const PipelineDetail = (
       dragOrder: i,
     })),
   });
-  console.log("fuck", pipeline);
 
   const [dragId, setDragId] = useState(null);
   const [canDrag, setCanDrag] = useState(false);

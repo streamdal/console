@@ -11,24 +11,11 @@ import {
   NotificationPagerDuty_Urgency,
   NotificationType,
 } from "snitch-protos/protos/sp_notify.ts";
-import { CheckboxGroup } from "../components/form/checkboxGroup.tsx";
+import IconPlus from "tabler-icons/tsx/plus.tsx";
 
 const slack = {
   botToken: "",
   channel: "",
-};
-
-const emailSMTP = {
-  type: "SMTP",
-};
-
-const newEmailSESConfig = {
-  type: "SES",
-};
-
-const newEmailSMTPConfig = {
-  oneOfKind: "email",
-  email: emailSMTP,
 };
 
 const newNotificationConfig = {
@@ -40,12 +27,6 @@ const newNotificationConfig = {
   },
 };
 
-enum smtpUseTlsOptions {
-  UNSET,
-  TRUE,
-  FALSE,
-}
-
 const NotificationTypeEnum = z.nativeEnum(NotificationType);
 const EmailNotificationTypeEnum = z.nativeEnum(NotificationEmail_Type);
 const NotificationPaterDutyUrgencyEnum = z.nativeEnum(
@@ -54,10 +35,10 @@ const NotificationPaterDutyUrgencyEnum = z.nativeEnum(
 
 const SMTPEmailNotificationSchema = z.object({
   host: z.string().min(1, { message: "Required" }),
-  port: z.number({ message: "Required" }).int(),
+  port: zfd.numeric(z.number({ message: "Required" })),
   user: z.string().min(1, { message: "Required" }),
   password: z.string().min(1, { message: "Required" }),
-  useTls: z.boolean({ message: "Required" }),
+  useTls: zfd.text(z.string({ required_error: "Required" })),
 });
 
 const SESEmailNotificationSchema = z.object({
@@ -117,8 +98,6 @@ export const NotificationDetail = (success: SuccessType) => {
 
   const [errors, setErrors] = useState({});
   const [data, setData] = useState(newNotificationConfig);
-  console.log("shit", data);
-  console.log("hello", NotificationType[data?.type]);
 
   const onSubmit = async (e: any) => {
     const notificationFormData = new FormData(e.target);
@@ -126,6 +105,7 @@ export const NotificationDetail = (success: SuccessType) => {
     setErrors(errors || {});
 
     if (errors) {
+      console.error("submit errors", errors);
       e.preventDefault();
       return;
     }
@@ -136,28 +116,26 @@ export const NotificationDetail = (success: SuccessType) => {
       setData({
         ...data,
         config: {
-          email: {},
-        },
-      });
-    }
-    if (data?.type === "1") {
-      setData({
-        ...data,
-        config: {
-          ...newEmailSESConfig,
+          email: {
+            recipients: [],
+          },
         },
       });
     }
   }, [data.type]);
 
-  // useEffect(() => {
-  //   if (data?.config.email.type) {
-  //     setData({
-  //       ...data,
-  //       config: {},
-  //     });
-  //   }
-  // }, [data?.config.email.type]);
+  const addRecipients = () => {
+    setData({
+      ...data,
+      config: {
+        ...data.config,
+        email: {
+          ...data.config.email,
+          recipients: [...data.config.email.recipients, ""],
+        },
+      },
+    });
+  };
 
   return (
     <form
@@ -168,30 +146,31 @@ export const NotificationDetail = (success: SuccessType) => {
       <div class="flex justify-between rounded-t items-center w-full min-w-full px-[18px] pt-[18px] pb-[8px]">
         <div class="flex flex-row items-center w-full justify-center">
           <div class="text-[16px] font-medium mr-2 h-[54px] w-full">
-            <FormInput
-              name="name"
-              data={data}
-              setData={setData}
-              label="Notification Name"
-              placeHolder=""
-              errors={errors}
-              wrapperClass={"w-full"}
-            />
-            <FormSelect
-              name={"type"}
-              data={data}
-              setData={setData}
-              label="Notification Type"
-              errors={errors}
-              inputClass="w-36"
-              children={optionsFromEnum(NotificationType)}
-            />
-            <FormHidden
-              name={`config.oneofKind.${
-                NotificationType[data?.type].toLowerCase()
-              }`}
-              value={NotificationType[data?.type].toLowerCase()}
-            />
+            <div class={"flex justify-between"}>
+              <FormInput
+                name="name"
+                data={data}
+                setData={setData}
+                label="Notification Name"
+                placeHolder=""
+                errors={errors}
+                wrapperClass={"w-[275px]"}
+              />
+              <FormSelect
+                name={"type"}
+                data={data}
+                setData={setData}
+                label="Notification Type"
+                errors={errors}
+                inputClass="w-36"
+                children={optionsFromEnum(NotificationType)}
+              />
+              <FormHidden
+                name={`config.oneofKind`}
+                value={NotificationType[data?.type].toLowerCase()}
+              />
+            </div>
+
             {data?.type === NotificationType.SLACK.toString() &&
               (
                 <>
@@ -238,8 +217,38 @@ export const NotificationDetail = (success: SuccessType) => {
                   inputClass="w-36"
                   children={optionsFromEnum(NotificationEmail_Type)}
                 />
-                {data?.config.email?.type ===
-                    NotificationEmail_Type.SMTP.toString() &&
+                <FormHidden
+                  name={`config.email.config.oneofKind`}
+                  value={NotificationEmail_Type[data?.config.email?.type]
+                    ?.toLowerCase()}
+                />
+                <IconPlus
+                  data-tooltip-target="step-add"
+                  class="w-5 h-5 cursor-pointer"
+                  onClick={() => {
+                    addRecipients();
+                  }}
+                />
+                {data.config.email &&
+                  data?.config.email?.recipients?.map((r, i) => (
+                    <FormInput
+                      name={`config.email.recipients.${i}`}
+                      data={data}
+                      label={`Recipient ${i + 1}.`}
+                      setData={setData}
+                      placeHolder={""}
+                      errors={errors}
+                    />
+                  ))}
+                <FormInput
+                  name={"config.email.fromAddress"}
+                  label={"Origin email address"}
+                  data={data}
+                  setData={setData}
+                  errors={errors}
+                />
+                {data?.config.email?.type !==
+                    NotificationEmail_Type.SES.toString() &&
                   (
                     <div class={"flex-col"}>
                       <div class={"flex"}>
@@ -257,9 +266,9 @@ export const NotificationDetail = (success: SuccessType) => {
                           data={data}
                           setData={setData}
                           label="Port"
-                          placeHolder=""
                           errors={errors}
                           wrapperClass={"w-[225px]"}
+                          isNumber={true}
                         />
                       </div>
                       <div class={"flex"}>
@@ -282,13 +291,25 @@ export const NotificationDetail = (success: SuccessType) => {
                           wrapperClass={"w-[225px]"}
                         />
                       </div>
-
-                      <CheckboxGroup
+                      <FormSelect
                         name={"config.email.config.smtp.useTls"}
                         data={data}
-                        label={"Use Tls?"}
-                        options={smtpUseTlsOptions}
+                        setData={setData}
+                        label="Use Tls?"
                         errors={errors}
+                        inputClass="w-36"
+                        children={[
+                          <option
+                            key={`option-type-key-true`}
+                            value={true}
+                            label={"true"}
+                          />,
+                          <option
+                            key={`option-type-key-false`}
+                            value={false}
+                            label={"false"}
+                          />,
+                        ]}
                       />
                     </div>
                   )}
@@ -296,20 +317,23 @@ export const NotificationDetail = (success: SuccessType) => {
                     NotificationEmail_Type.SES.toString() &&
                   (
                     <>
-                      <FormInput
-                        name={"config.email.config.ses.sesRegion"}
-                        data={data}
-                        label="Region"
-                        setData={setData}
-                        errors={errors}
-                      />
-                      <FormInput
-                        name={"config.email.config.ses.sesAccessKeyId"}
-                        data={data}
-                        label="Access Key Id"
-                        setData={setData}
-                        errors={errors}
-                      />
+                      <div class={"flex justify-between"}>
+                        <FormInput
+                          name={"config.email.config.ses.sesRegion"}
+                          data={data}
+                          label="Region"
+                          setData={setData}
+                          errors={errors}
+                        />
+                        <FormInput
+                          name={"config.email.config.ses.sesAccessKeyId"}
+                          data={data}
+                          label="Access Key Id"
+                          setData={setData}
+                          errors={errors}
+                        />
+                      </div>
+
                       <FormInput
                         name={"config.email.config.ses.sesSecretAccessKey"}
                         data={data}

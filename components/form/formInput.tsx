@@ -20,6 +20,7 @@ export const FormInput = ({
   placeHolder,
   inputClass,
   wrapperClass,
+  isNumber,
 }: FormInputProps) => {
   const value = resolveValue(data, name);
   return (
@@ -40,7 +41,12 @@ export const FormInput = ({
         } ${inputClass}`}
         value={value}
         onChange={(e) =>
-          updateData(data, setData, parsePath(name), e.target.value)}
+          updateData(
+            data,
+            setData,
+            parsePath(name),
+            e.target.value,
+          )}
         placeholder={placeHolder}
         size={value?.length}
       />

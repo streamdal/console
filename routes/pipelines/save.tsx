@@ -5,10 +5,12 @@ import { pipelineSchema } from "../../islands/pipeline.tsx";
 import { ResponseCode } from "snitch-protos/protos/sp_common.ts";
 import { upsertPipeline } from "../../lib/mutation.ts";
 import { SuccessType } from "../_middleware.ts";
+import { logFormData } from "../../lib/utils.ts";
 
 export const handler: Handlers<SuccessType> = {
   async POST(req, ctx) {
     const formData = await req.formData();
+    logFormData(formData);
 
     const { data: pipeline, errors }: {
       pipeline: Pipeline;
