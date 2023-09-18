@@ -114,7 +114,7 @@ export const NotificationDetail = (success: SuccessType) => {
   };
 
   useEffect(() => {
-    if (data?.type === "2") {
+    if (data?.type === NotificationType["EMAIL"].toString()) {
       setData({
         ...data,
         config: {
@@ -134,7 +134,7 @@ export const NotificationDetail = (success: SuccessType) => {
         ...data.config,
         email: {
           ...data.config.email,
-          recipients: [...data.config.email.recipients, ""],
+          recipients: [...data.config.email?.recipients, ""],
         },
       },
     });
