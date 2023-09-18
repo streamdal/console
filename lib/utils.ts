@@ -114,56 +114,65 @@ export const getHoverGroup = (
   a: Audience,
   highlight: boolean,
 ) => {
-  console.log("audience", a);
-  console.log("DOM", document.getElementById(`${a.serviceName}`));
   const allDOMEdges = Array.from(document.getElementsByTagName("g"));
+  console.log(allDOMEdges);
+  const serviceId = a.serviceName;
+  const componentId = a.componentName;
   if (highlight) {
-    document.getElementById(`${a.serviceName}`).classList.remove(
-      "border-purple-200",
-    );
-    // document.getElementById(`${a.componentName}`).classList.remove(
-    //   "",
-    // );
-    document.getElementById(`${a.componentName}`).classList.add(
+    document.getElementById(serviceId).classList.add(
       "shadow-lg",
-      "focus:ring-purple-800",
     );
-    document.getElementById(`${a.serviceName}`).classList.add(
-      "border-purple-600",
-      "shadow-lg",
-      "brightness-125",
+    document.getElementById(componentId).classList.add(
+      "shadow-2xl",
     );
   } else {
-    document.getElementById(`${a.serviceName}`).classList.remove(
-      "border-purple-600",
+    document.getElementById(serviceId).classList.remove(
       "shadow-lg",
-      "brightness-125",
     );
-    document.getElementById(`${a.serviceName}`).classList.add(
-      "border-purple-200",
-    );
-    document.getElementById(`${a.componentName}`).classList.remove(
-      "shadow-lg",
-      "brightness-125",
+    document.getElementById(componentId).classList.remove(
+      "shadow-2xl",
     );
   }
-  // document.getElementById(`${a.serviceName}`).classList.add(
-  //   "border-3",
+  const serviceEdge = document.querySelector(
+    `[data-testid=rf__edge-${serviceKey(a)}-${groupKey(a)}-edge]`,
+  );
+  const componentEdge = document.querySelector(
+    `[data-testid=rf__edge-${componentKey(a)}-${groupKey(a)}-edge]`,
+  );
+  componentEdge.children[0].style.stroke = `${
+    highlight ? "#956CFF" : "#E6DDFE"
+  }`;
+  serviceEdge.children[0].style.stroke = `${highlight ? "#956CFF" : "#E6DDFE"}`;
+  console.log("IS THIS THE EDGE", componentEdge.style);
+
+  // const edgeIds = [
+  //   `${serviceKey(a)}-${groupKey(a)}-edge`,
+  //   `${componentKey(a)}-${groupKey(a)}-edge`,
+  // ];
+  // edgeIds.map((e) => {
+  //   return allDOMEdges.find((edge) => {
+  //     return edge.dataset.testid === `rf__edge-${e}`;
+  //   });
+  // }).forEach((element) => {
+  //   element.children[0].style.stroke = `${highlight ? "#956CFF" : "#E6DDFE"}`;
+  // });
+};
+
+export const getComponentGroup = (
+  serviceName: string,
+  audiences: Audience[],
+) => {
+  document.getElementById(serviceName).classList.remove("border-purple-200");
+  document.getElementById(serviceName).classList.add(
+    "border-purple-600",
+    "shadow-lg",
+  );
+  // console.log(
+  //   "is this a thing?",
+  //   document.querySelectorAll(
+  //     "[data-testid=rf__edge-kafka-component-test-service-consumer-kafka-group-edge]",
+  //   ),
   // );
-  // document.getElementById(`${a.serviceName}`).classList.add(
-  //   "border-purple-600",
-  // );
-  const edgeIds = [
-    `${serviceKey(a)}-${groupKey(a)}-edge`,
-    `${componentKey(a)}-${groupKey(a)}-edge`,
-  ];
-  edgeIds.map((e) => {
-    return allDOMEdges.find((edge) => {
-      return edge.dataset.testid === `rf__edge-${e}`;
-    });
-  }).forEach((element) => {
-    element.children[0].style.stroke = `${highlight ? "#956CFF" : "#E6DDFE"}`;
-  });
 };
 
 export const getAttachedPipeline = (
@@ -174,3 +183,11 @@ export const getAttachedPipeline = (
 
 export const bigIntStringify = (obj: any) =>
   JSON.stringify(obj, (_, v) => typeof v === "bigint" ? v.toString() : v);
+
+export const addClass = (id: string, item: string) => {
+  return document.getElementById(id).classList.add(item);
+};
+
+export const removeClass = (id: string, item: string) => {
+  return document.getElementById(id).classList.remove(item);
+};

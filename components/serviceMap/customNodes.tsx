@@ -6,21 +6,26 @@ import {OperationType} from "snitch-protos/protos/sp_common.ts";
 import {ServiceNodeMenu} from "./nodeMenu.tsx";
 import {ProducerIcon} from "../icons/producer.tsx";
 import {ConsumerIcon} from "../icons/consumer.tsx";
-import {getHoverGroup, removeWhitespace, titleCase} from "../../lib/utils.ts";
+import {getComponentGroup, getHoverGroup, removeWhitespace, titleCase} from "../../lib/utils.ts";
 import {Tooltip} from "../tooltip/tooltip.tsx";
 import {NodeData, Operation} from "../../lib/nodeMapper.ts";
 import {opModal} from "./opModalSignal.ts";
-import {serviceSignal} from "./serviceSignal.ts";
 
 export const GROUP_WIDTH = 280;
 export const GROUP_MARGIN = 45;
 
 export const ServiceNode = ({data}: { data: NodeData }) => {
+    console.log(data);
+    const onHover = () => {
+        getComponentGroup(data.audience.serviceName, data.serviceMap.audiences)
+    }
+
     return (
         <div>
             <div
-                class="min-h-[80px] w-[320px] border-1 border-gray-200 flex items-center justify-between bg-white rounded-lg z-10 px-2"
+                class="min-h-[80px] w-[320px] flex items-center justify-between bg-white rounded-lg z-10 px-2 border"
                 id={data.audience.serviceName}
+                onMouseOver={() => onHover()}
             >
                 <div class="flex flex-row items-center">
                     <IconGripVertical class="w-6 h-6 text-purple-100 mr-1"/>
@@ -55,9 +60,7 @@ export const GroupNode = ({data}: { data: NodeData }) => {
     const op = OperationType[data.audience.operationType];
     const producer = op === OperationType[OperationType.PRODUCER];
     const setHover = () => {
-        console.log("this is data", data);
         getHoverGroup(data.audience, true);
-        console.log("here?", serviceSignal.value);
     };
 
     const resetHover = () => {
@@ -166,6 +169,7 @@ export const ComponentImage = (
 };
 
 export const ComponentNode = ({data}: { data: NodeData }) => {
+    console.log("In component", data);
     return (
         <div>
             <div className={"flex w-1/2 justify-between mb"}>

@@ -25,6 +25,7 @@ export default async function Layout(req: Request, ctx: LayoutContext) {
                         initEdges={Array.from(serviceSignal.value.edgesMap.values())}
                         blur={req.url.includes("pipelines") ||
                             req.url.includes("notifications")}
+                        serviceMap={serviceSignal.value}
                     />
                 </ReactFlowProvider>
                 <div class="absolute bottom-0 left-0 text-streamdalPurple ml-2 mb-1">

@@ -26,6 +26,7 @@ export type Operation = {
 export type NodeData = {
   audience: Audience;
   ops?: Operation[];
+  serviceMap: ServiceMapper;
 };
 
 export type FlowNode = {
@@ -176,7 +177,7 @@ export const mapNodes = (
           ),
           y: 0,
         },
-        data: { audience: a },
+        data: { audience: a, serviceMap },
       });
 
       mapOperation(nodesMap, a, serviceMap);
@@ -191,7 +192,7 @@ export const mapNodes = (
           x: offset(cKey, nodesMap.components),
           y: 450 + (max - 1) * 76,
         },
-        data: { audience: a },
+        data: { audience: a, serviceMap },
       });
     },
   );
