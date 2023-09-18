@@ -114,7 +114,45 @@ export const getHoverGroup = (
   a: Audience,
   highlight: boolean,
 ) => {
+  console.log("audience", a);
+  console.log("DOM", document.getElementById(`${a.serviceName}`));
   const allDOMEdges = Array.from(document.getElementsByTagName("g"));
+  if (highlight) {
+    document.getElementById(`${a.serviceName}`).classList.remove(
+      "border-purple-200",
+    );
+    // document.getElementById(`${a.componentName}`).classList.remove(
+    //   "",
+    // );
+    document.getElementById(`${a.componentName}`).classList.add(
+      "shadow-lg",
+      "focus:ring-purple-800",
+    );
+    document.getElementById(`${a.serviceName}`).classList.add(
+      "border-purple-600",
+      "shadow-lg",
+      "brightness-125",
+    );
+  } else {
+    document.getElementById(`${a.serviceName}`).classList.remove(
+      "border-purple-600",
+      "shadow-lg",
+      "brightness-125",
+    );
+    document.getElementById(`${a.serviceName}`).classList.add(
+      "border-purple-200",
+    );
+    document.getElementById(`${a.componentName}`).classList.remove(
+      "shadow-lg",
+      "brightness-125",
+    );
+  }
+  // document.getElementById(`${a.serviceName}`).classList.add(
+  //   "border-3",
+  // );
+  // document.getElementById(`${a.serviceName}`).classList.add(
+  //   "border-purple-600",
+  // );
   const edgeIds = [
     `${serviceKey(a)}-${groupKey(a)}-edge`,
     `${componentKey(a)}-${groupKey(a)}-edge`,
