@@ -359,6 +359,40 @@ export const NotificationDetail = (success: SuccessType) => {
                   )}
               </div>
             )}
+            {data?.type === NotificationType.PAGERDUTY.toString() && (
+              <>
+                <FormInput
+                  name={"config.pagerduty.token"}
+                  data={data}
+                  label="Token"
+                  setData={setData}
+                  errors={errors}
+                />
+                <FormInput
+                  name={"config.pagerduty.email"}
+                  data={data}
+                  label="Email"
+                  setData={setData}
+                  errors={errors}
+                />
+                <FormInput
+                  name={"config.pagerduty.serviceId"}
+                  data={data}
+                  label="Service ID"
+                  setData={setData}
+                  errors={errors}
+                />
+                <FormSelect
+                  name={"config.pagerduty.urgency"}
+                  data={data}
+                  setData={setData}
+                  label="Urgency"
+                  errors={errors}
+                  inputClass="w-36"
+                  children={optionsFromEnum(NotificationPagerDuty_Urgency)}
+                />
+              </>
+            )}
             <div class="flex flex-row justify-end mb-4">
               <button
                 className="btn-heimdal"
