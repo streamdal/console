@@ -110,7 +110,7 @@ export const groupKey = (audience: Audience) =>
 
 export const lower = (s: string) => s.toLowerCase();
 
-export const getHoverGroup = (
+export const getOperationHoverGroup = (
   a: Audience,
   highlight: boolean,
 ) => {
@@ -133,6 +133,10 @@ export const getHoverGroup = (
       "shadow-2xl",
     );
   }
+  getHighlightedEdges(a, highlight);
+};
+
+export const getHighlightedEdges = (a: Audience, highlight: boolean) => {
   const serviceEdge = document.querySelector(
     `[data-testid=rf__edge-${serviceKey(a)}-${groupKey(a)}-edge]`,
   );
@@ -143,36 +147,20 @@ export const getHoverGroup = (
     highlight ? "#956CFF" : "#E6DDFE"
   }`;
   serviceEdge.children[0].style.stroke = `${highlight ? "#956CFF" : "#E6DDFE"}`;
-  console.log("IS THIS THE EDGE", componentEdge.style);
-
-  // const edgeIds = [
-  //   `${serviceKey(a)}-${groupKey(a)}-edge`,
-  //   `${componentKey(a)}-${groupKey(a)}-edge`,
-  // ];
-  // edgeIds.map((e) => {
-  //   return allDOMEdges.find((edge) => {
-  //     return edge.dataset.testid === `rf__edge-${e}`;
-  //   });
-  // }).forEach((element) => {
-  //   element.children[0].style.stroke = `${highlight ? "#956CFF" : "#E6DDFE"}`;
-  // });
 };
 
 export const getComponentGroup = (
   serviceName: string,
   audiences: Audience[],
+  highlight: boolean,
 ) => {
   document.getElementById(serviceName).classList.remove("border-purple-200");
   document.getElementById(serviceName).classList.add(
     "border-purple-600",
     "shadow-lg",
   );
-  // console.log(
-  //   "is this a thing?",
-  //   document.querySelectorAll(
-  //     "[data-testid=rf__edge-kafka-component-test-service-consumer-kafka-group-edge]",
-  //   ),
-  // );
+  const audienceList = audiences.filter((a) => a.serviceName === serviceName)
+    .map((x) => getHighlightedEdges(x, highlight));
 };
 
 export const getAttachedPipeline = (
