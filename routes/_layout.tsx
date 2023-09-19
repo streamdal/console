@@ -1,7 +1,7 @@
-import {LayoutContext} from "$fresh/server.ts";
+import { LayoutContext } from "$fresh/server.ts";
 import ServiceMapComponent from "../islands/serviceMap.tsx";
-import {NavBar} from "../components/nav/nav.tsx";
-import {ReactFlowProvider} from "reactflow";
+import { NavBar } from "../components/nav/nav.tsx";
+import { ReactFlowProvider } from "reactflow";
 import OpModal from "../islands/opModal.tsx";
 import {
   serviceSignal,
@@ -35,7 +35,7 @@ export default async function Layout(req: Request, ctx: LayoutContext) {
           <ServiceMapComponent
             initNodes={Array.from(serviceSignal.value.nodesMap.values())}
             initEdges={Array.from(serviceSignal.value.edgesMap.values())}
-            blur={req.url.includes("pipelines") |
+            blur={req.url.includes("pipelines") ||
               req.url.includes("notifications")}
           />
         </ReactFlowProvider>
