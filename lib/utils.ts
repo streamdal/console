@@ -150,15 +150,21 @@ export const getHighlightedEdges = (a: Audience, highlight: boolean) => {
 };
 
 export const getComponentGroup = (
+  componentName: string,
+  audiences: Audience[],
+  highlight: boolean,
+) => {
+  const audienceList = audiences.filter((a) =>
+    a.componentName === componentName
+  )
+    .map((x) => getHighlightedEdges(x, highlight));
+};
+
+export const getServiceGroup = (
   serviceName: string,
   audiences: Audience[],
   highlight: boolean,
 ) => {
-  document.getElementById(serviceName).classList.remove("border-purple-200");
-  document.getElementById(serviceName).classList.add(
-    "border-purple-600",
-    "shadow-lg",
-  );
   const audienceList = audiences.filter((a) => a.serviceName === serviceName)
     .map((x) => getHighlightedEdges(x, highlight));
 };
