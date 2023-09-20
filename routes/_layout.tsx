@@ -14,14 +14,23 @@ import { Toast, toastSignal } from "../components/toasts/toast.tsx";
 export default async function Layout(req: Request, ctx: LayoutContext) {
   const allServices = await getAll();
   setServiceSignal(allServices);
+  console.log("fuck ctx", ctx);
 
   if (ctx.data?.success?.message) {
+    console.log("damn", ctx.data?.success);
     toastSignal.value = {
       id: "notifications",
       type: ctx.data?.success?.status ? "success" : "error",
       message: ctx.data?.success?.message,
     };
   }
+  // if (ctx.data?.success?.message) {
+  //   toastSignal.value = {
+  //     id: "deleteAudience",
+  //     type: ctx.data?.success?.status ? "success" : "error",
+  //     message: ctx.data?.success?.message,
+  //   };
+  // }
   return (
     <>
       <NavBar />

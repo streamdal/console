@@ -28,7 +28,6 @@ export default function OpModal(
   { serviceMap }: { serviceMap: ServiceMapType },
 ) {
   const audience = opModal.value?.audience;
-  // console.log(audience);
   const attachedPipeline = opModal.value?.attachedPipeline;
   const opType = OperationType[audience?.operationType];
   const clients = opModal.value?.clients?.length || 0;
