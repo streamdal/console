@@ -267,7 +267,6 @@ export const mapEdgePair = (
 export const mapEdges = (audiences: Audience[]): Map<string, FlowEdge> => {
   const edgesMap = new Map<string, FlowEdge>();
   audiences.forEach((a: Audience) => mapEdgePair(edgesMap, a, audiences));
-  console.log(edgesMap);
   return edgesMap;
 };
 
