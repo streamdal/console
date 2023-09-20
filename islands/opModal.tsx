@@ -19,6 +19,8 @@ import { OddAttachModal } from "../components/modals/oddAttachModal.tsx";
 import { EmptyStateBird } from "../components/icons/emptyStateBird.tsx";
 import { useState } from "preact/hooks";
 import { useSignalEffect } from "@preact/signals";
+import IconTrash from "tabler-icons/tsx/trash.tsx";
+import { DeleteOperationModal } from "../components/modals/deleteOperationModal.tsx";
 
 export const OP_MODAL_WIDTH = "80px";
 
@@ -26,6 +28,7 @@ export default function OpModal(
   { serviceMap }: { serviceMap: ServiceMapType },
 ) {
   const audience = opModal.value?.audience;
+  // console.log(audience);
   const attachedPipeline = opModal.value?.attachedPipeline;
   const opType = OperationType[audience?.operationType];
   const clients = opModal.value?.clients?.length || 0;
@@ -34,7 +37,7 @@ export default function OpModal(
   const [peekOpen, setPeekOpen] = useState(false);
 
   useSignalEffect(() => {
-    if (opModal.value) {
+    if (opModal.value || !opModal.value) {
       setIsOpen(true);
     }
   });
@@ -51,6 +54,12 @@ export default function OpModal(
         <DetachPipelineModal
           audience={audience}
           pipeline={attachedPipeline}
+        />
+      )}
+      {opModal.value?.delete && (
+        <DeleteOperationModal
+          audience={audience}
+          pipeline={attachedPipeline || null}
         />
       )}
       <div
@@ -289,6 +298,7 @@ export default function OpModal(
                         Trends coming soon...
                       </p>
                     </div>
+                    c
                     <h3 id="collapse-heading-5">
                       <button
                         type="button"
@@ -312,6 +322,19 @@ export default function OpModal(
                       </p>
                     </div>
                   </div>
+                  <button
+                    data-tooltip-target="delete-operation"
+                    type="button"
+                    onClick={() =>
+                      opModal.value = {
+                        ...opModal.value,
+                        delete: true,
+                      }}
+                    className="w-[260px] h-[45px] border border-streamdalRed text-streamdalRed rounded flex justify-center items-center"
+                  >
+                    <IconTrash class="w-6 h-6 text-streamdalRed mr-3" />
+                    Delete Item
+                  </button>
                 </div>
               ))}
           </div>

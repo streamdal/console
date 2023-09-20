@@ -1,6 +1,13 @@
 import { Audience, OperationType } from "snitch-protos/protos/sp_common.ts";
 import { ConfigType, PipelinesType } from "./fetch.ts";
 
+export type AudienceParams = {
+  service: string;
+  component: string;
+  operationType: string;
+  operationName: string;
+};
+
 const UNITS = [
   "byte",
   "kilobyte",
@@ -73,6 +80,15 @@ export const getAudienceOpRoute = (
   }/${OperationType[audience.operationType]}/op/${
     encodeURIComponent(audience.operationName)
   }`;
+
+export const getAudienceFromParams = (params: AudienceParams) => {
+  return {
+    serviceName: params.service,
+    componentName: params.component,
+    operationType: OperationType[params.operationType],
+    operationName: params.operationName,
+  };
+};
 
 export const getOpRoute = (
   service: string,

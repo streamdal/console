@@ -8,6 +8,7 @@ import { Pipeline } from "snitch-protos/protos/sp_pipeline.ts";
 import {
   AttachPipelineRequest,
   CreateNotificationRequest,
+  DeleteAudienceRequest,
   DetachPipelineRequest,
   PausePipelineRequest,
 } from "snitch-protos/protos/sp_external.ts";
@@ -135,6 +136,24 @@ export const pausePipeline = async (
     console.error("error pausing pipeline", error);
     return {
       id: "pausePipelineRequest",
+      code: ResponseCode.INTERNAL_SERVER_ERROR,
+      error,
+    };
+  }
+};
+
+export const deleteAudience = async (audience: Audience) => {
+  try {
+    const request: DeleteAudienceRequest = { audience };
+    const { response } = await client.deleteAudience(
+      request,
+      meta,
+    );
+    return response;
+  } catch (error) {
+    console.error("error deleting audience", error);
+    return {
+      id: "deleteAudienceRequest",
       code: ResponseCode.INTERNAL_SERVER_ERROR,
       error,
     };
