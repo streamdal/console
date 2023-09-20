@@ -227,12 +227,12 @@ export const mapEdgePair = (
     markerEnd: {
       width: 20,
       height: 20,
-      color: "#E6DDFE",
+      color: "#d2c1ff",
     },
     type: "interactiveEdge",
     style: {
-      strokeWidth: 1.5,
-      stroke: "#E6DDFE",
+      strokeWidth: 2,
+      stroke: "#d2c1ff",
     },
     data: { audiences, a },
   });
@@ -252,12 +252,12 @@ export const mapEdgePair = (
     markerEnd: {
       width: 20,
       height: 20,
-      color: "#E6DDFE",
+      color: "#d2c1ff",
     },
     type: "interactiveEdge",
     style: {
-      strokeWidth: 1.5,
-      stroke: "#E6DDFE",
+      strokeWidth: 2,
+      stroke: "#d2c1ff",
     },
     data: { audiences, a },
   });
