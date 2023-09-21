@@ -10,8 +10,11 @@ import {
 import { getAll } from "../lib/fetch.ts";
 import { version } from "../version.ts";
 import { Toast, toastSignal } from "../components/toasts/toast.tsx";
+import { grpcToken, grpcUrl } from "../lib/configs.ts";
 
 export default async function Layout(req: Request, ctx: LayoutContext) {
+  const url = await grpcUrl();
+  const token = await grpcToken();
   const allServices = await getAll();
   setServiceSignal(allServices);
   console.log("fuck ctx", ctx);
@@ -36,6 +39,8 @@ export default async function Layout(req: Request, ctx: LayoutContext) {
       <NavBar />
       <OpModal
         serviceMap={serviceSignal.value}
+        grpcUrl={url}
+        grpcToken={token}
       />
       <Toast id="notifications" />
       <div className="flex flex-col w-screen text-web">

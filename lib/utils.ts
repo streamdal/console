@@ -1,5 +1,5 @@
-import { Audience, OperationType } from "snitch-protos/protos/sp_common.ts";
-import { ConfigType, PipelinesType } from "./fetch.ts";
+import {  Audience, OperationType  } from "snitch-protos/protos/sp_common.ts";
+import {  ConfigType, PipelinesType  } from "./fetch.ts";
 
 export type AudienceParams = {
   service: string;
@@ -126,64 +126,65 @@ export const groupKey = (audience: Audience) =>
 
 export const lower = (s: string) => s.toLowerCase();
 
-export const getOperationHoverGroup = (
+export const setOperationHoverGroup = (
   a: Audience,
   highlight: boolean,
 ) => {
   const serviceId = a.serviceName;
   const componentId = a.componentName;
   if (highlight) {
-    document.getElementById(serviceId).classList.add(
+    document.getElementById(serviceId)?.classList.add(
       "shadow-lg",
     );
-    document.getElementById(componentId).classList.add(
+    document.getElementById(componentId)?.classList.add(
       "shadow-2xl",
     );
   } else {
-    document.getElementById(serviceId).classList.remove(
+    document.getElementById(serviceId)?.classList.remove(
       "shadow-lg",
     );
-    document.getElementById(componentId).classList.remove(
+    document.getElementById(componentId)?.classList.remove(
       "shadow-2xl",
     );
   }
-  getHighlightedEdges(a, highlight);
+  setHighlightedEdges(a, highlight);
 };
 
-export const getHighlightedEdges = (a: Audience, highlight: boolean) => {
+export const setHighlightedEdges = (a: Audience, highlight: boolean) => {
   const serviceEdge = document.querySelector(
     `[data-testid=rf__edge-${serviceKey(a)}-${groupKey(a)}-edge]`,
   );
   const componentEdge = document.querySelector(
     `[data-testid=rf__edge-${componentKey(a)}-${groupKey(a)}-edge]`,
   );
-  componentEdge.children[0].style.stroke = `${
-    highlight ? "#956CFF" : "#d2c1ff"
-  }`;
-  componentEdge.children[0].style.strokeWidth = `${highlight ? 2.5 : 2}`;
-  serviceEdge.children[0].style.stroke = `${highlight ? "#956CFF" : "#d2c1ff"}`;
-  serviceEdge.children[0].style.stroke = `${highlight ? 2.5 : 2}`;
+
+  if (componentEdge) {
+    componentEdge.children[0].style.stroke = `${
+      highlight ? "#956CFF" : "#E6DDFE"
+    }`;
+  }
+  if (serviceEdge) {
+    serviceEdge.children[0].style.stroke = `${
+      highlight ? "#956CFF" : "#E6DDFE"
+    }`;
+  }
 };
 
-export const getComponentGroup = (
+export const setComponentGroup = (
   componentName: string,
   audiences: Audience[],
   highlight: boolean,
-) => {
-  const audienceList = audiences.filter((a) =>
-    a.componentName === componentName
-  )
-    .map((x) => getHighlightedEdges(x, highlight));
-};
+) =>
+  audiences.filter((a) => a.componentName === componentName)
+    .map((x) => setHighlightedEdges(x, highlight));
 
-export const getServiceGroup = (
+export const setServiceGroup = (
   serviceName: string,
   audiences: Audience[],
   highlight: boolean,
-) => {
-  const audienceList = audiences.filter((a) => a.serviceName === serviceName)
-    .map((x) => getHighlightedEdges(x, highlight));
-};
+) =>
+  audiences.filter((a) => a.serviceName === serviceName)
+    .map((x) => setHighlightedEdges(x, highlight));
 
 export const getAttachedPipeline = (
   audience: Audience,

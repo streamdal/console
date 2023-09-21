@@ -69,7 +69,6 @@ export const attachPipeline = async (
     );
     return response;
   } catch (error) {
-    console.error("error attaching pipeline", error);
     return {
       id: "attachPipelineRequest",
       code: ResponseCode.INTERNAL_SERVER_ERROR,
