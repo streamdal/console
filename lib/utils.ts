@@ -110,31 +110,65 @@ export const groupKey = (audience: Audience) =>
 
 export const lower = (s: string) => s.toLowerCase();
 
-export const getHoverGroup = (
+export const setOperationHoverGroup = (
   a: Audience,
   highlight: boolean,
 ) => {
-  const allDOMEdges = Array.from(document.getElementsByTagName("g"));
-  // document.getElementById(`${a.serviceName}`).classList.add(
-  //   "border-3",
-  // );
-  // document.getElementById(`${a.serviceName}`).classList.add(
-  //   "border-purple-600",
-  // );
-  const edgeIds = [
-    `${serviceKey(a)}-${groupKey(a)}-edge`,
-    `${componentKey(a)}-${groupKey(a)}-edge`,
-  ];
-  edgeIds.map((e) => {
-    return allDOMEdges.find((edge) => {
-      return edge.dataset.testid === `rf__edge-${e}`;
-    });
-  }).forEach((element: any) => {
-    if (element) {
-      element.children[0].style.stroke = `${highlight ? "#956CFF" : "#E6DDFE"}`;
-    }
-  });
+  const serviceId = a.serviceName;
+  const componentId = a.componentName;
+  if (highlight) {
+    document.getElementById(serviceId)?.classList.add(
+      "shadow-lg",
+    );
+    document.getElementById(componentId)?.classList.add(
+      "shadow-2xl",
+    );
+  } else {
+    document.getElementById(serviceId)?.classList.remove(
+      "shadow-lg",
+    );
+    document.getElementById(componentId)?.classList.remove(
+      "shadow-2xl",
+    );
+  }
+  setHighlightedEdges(a, highlight);
 };
+
+export const setHighlightedEdges = (a: Audience, highlight: boolean) => {
+  const serviceEdge = document.querySelector(
+    `[data-testid=rf__edge-${serviceKey(a)}-${groupKey(a)}-edge]`,
+  );
+  const componentEdge = document.querySelector(
+    `[data-testid=rf__edge-${componentKey(a)}-${groupKey(a)}-edge]`,
+  );
+
+  if (componentEdge) {
+    componentEdge.children[0].style.stroke = `${
+      highlight ? "#956CFF" : "#E6DDFE"
+    }`;
+  }
+  if (serviceEdge) {
+    serviceEdge.children[0].style.stroke = `${
+      highlight ? "#956CFF" : "#E6DDFE"
+    }`;
+  }
+};
+
+export const setComponentGroup = (
+  componentName: string,
+  audiences: Audience[],
+  highlight: boolean,
+) =>
+  audiences.filter((a) => a.componentName === componentName)
+    .map((x) => setHighlightedEdges(x, highlight));
+
+export const setServiceGroup = (
+  serviceName: string,
+  audiences: Audience[],
+  highlight: boolean,
+) =>
+  audiences.filter((a) => a.serviceName === serviceName)
+    .map((x) => setHighlightedEdges(x, highlight));
 
 export const getAttachedPipeline = (
   audience: Audience,
