@@ -3,6 +3,9 @@ import { Pipeline } from "snitch-protos/protos/sp_pipeline.ts";
 import { OP_MODAL_OPEN_WIDTH, OP_MODAL_WIDTH } from "./opModal.tsx";
 import IconPlayerPauseFilled from "tabler-icons/tsx/player-pause-filled.tsx";
 import IconPlayerPlayFilled from "tabler-icons/tsx/player-play-filled.tsx";
+import IconWindowMinimize from "tabler-icons/tsx/window-minimize.tsx";
+import IconWindowMaximize from "tabler-icons/tsx/window-maximize.tsx";
+import IconX from "tabler-icons/tsx/x.tsx";
 
 import { useEffect, useRef, useState } from "preact/hooks";
 import { peek, peekPausedSignal, peekSignal } from "../lib/peek.ts";
@@ -68,15 +71,18 @@ export const Peek = (
     modalExpanded,
     grpcToken,
     grpcUrl,
+    close,
   }: {
     audience: Audience;
     pipeline: Pipeline;
     modalExpanded: boolean;
     grpcUrl: string;
     grpcToken: string;
+    close: () => void;
   },
 ) => {
   const [peekData, setPeekData] = useState();
+  const [fullScreen, setFullScreen] = useState(false);
 
   useEffect(() => {
     if (pipeline) {
@@ -94,27 +100,59 @@ export const Peek = (
 
   return (
     <div
-      class={`flex flex-col h-screen w-[calc(100vw-${width})]`}
+      class={`relative flex flex-col h-screen w-[calc(100vw-${width})]`}
     >
       <div class="h-46 w-full bg-streamdalPurple p-4 text-white font-semibold text-sm">
         <span class="opacity-50">Home</span> / Peek
       </div>
-      <div class="h-full flex flex-col bg-white p-4">
-        <div class="flex flew-row justify-between item-centermt-6 my-4 mx-auto text-3xl font-medium w-[90%]">
+      <div
+        class={`h-full flex flex-col bg-white p-4 ${
+          fullScreen
+            ? "absolute top-0 bottom-0 right-0 left-0 z-[51] w-screen h-screen"
+            : ""
+        }`}
+      >
+        <div
+          class={`flex flew-row justify-between item-center mt-6 my-4 mx-auto text-3xl font-medium w-[${
+            fullScreen ? "100" : "90"
+          }%]`}
+        >
           <div>
             Peeking{" "}
             <span class="text-streamdalPurple">{audience.operationName}</span>
           </div>
-          <div
-            class="flex justify-center items-center w-[36px] h-[36px] rounded-[50%] bg-streamdalPurple cursor-pointer"
-            onClick={() => peekPausedSignal.value = !peekPausedSignal.value}
-          >
-            {peekPausedSignal.value
-              ? <IconPlayerPlayFilled class="w-6 h-6 text-white" />
-              : <IconPlayerPauseFilled class="w-6 h-6 text-white" />}
+          <div class="flex flex-row justify-end items-center">
+            <div
+              class="flex justify-center items-center w-[36px] h-[36px] rounded-[50%] bg-streamdalPurple cursor-pointer"
+              onClick={() => peekPausedSignal.value = !peekPausedSignal.value}
+            >
+              {peekPausedSignal.value
+                ? <IconPlayerPlayFilled class="w-6 h-6 text-white" />
+                : <IconPlayerPauseFilled class="w-6 h-6 text-white" />}
+            </div>
+            <div
+              className="ml-2 flex justify-center items-center w-[36px] h-[36px] rounded-[50%] bg-streamdalPurple cursor-pointer"
+              onClick={() => setFullScreen(!fullScreen)}
+            >
+              {fullScreen
+                ? <IconWindowMinimize class="w-6 h-6 text-white" />
+                : <IconWindowMaximize class="w-6 h-6 text-white" />}
+            </div>
+            <div
+              className="ml-2 flex justify-center items-center w-[36px] h-[36px] rounded-[50%] bg-streamdalPurple cursor-pointer"
+              onClick={close}
+            >
+              <IconX class="w-6 h-6 text-white" />
+            </div>
           </div>
         </div>
-        <div class="flex flex-col mx-auto w-[90%] h-[calc(100vh-300px)] overflow-y-scroll rounded-md">
+        <div
+          class={`flex flex-col mx-auto w-[${
+            fullScreen ? "100" : "90"
+          }%] h-[calc(100vh-${
+            fullScreen ? "200" : "260"
+          }px)] overflow-y-scroll rounded-md`}
+        >
           {peekData?.map((p: TailResponse, i: number) => (
             <PeekRow row={p} index={i} />
           ))}

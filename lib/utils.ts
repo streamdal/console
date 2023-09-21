@@ -129,8 +129,10 @@ export const getHoverGroup = (
     return allDOMEdges.find((edge) => {
       return edge.dataset.testid === `rf__edge-${e}`;
     });
-  }).forEach((element) => {
-    element.children[0].style.stroke = `${highlight ? "#956CFF" : "#E6DDFE"}`;
+  }).forEach((element: any) => {
+    if (element) {
+      element.children[0].style.stroke = `${highlight ? "#956CFF" : "#E6DDFE"}`;
+    }
   });
 };
 

@@ -41,7 +41,7 @@ export default function OpModal(
   const clients = opModal.value?.clients?.length || 0;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [peekOpen, setPeekOpen] = useState(false);
+  const [peekNavOpen, setPeekNavOpen] = useState(false);
   const [peeking, setPeeking] = useState(false);
 
   useSignalEffect(() => {
@@ -72,6 +72,7 @@ export default function OpModal(
             modalExpanded={isOpen}
             grpcUrl={grpcUrl}
             grpcToken={grpcToken}
+            close={() => setPeeking(false)}
           />
         )}
         <div
@@ -251,7 +252,7 @@ export default function OpModal(
                           data-accordion-target="#collapse-body-2"
                           aria-expanded="true"
                           aria-controls="collapse-body-2"
-                          onClick={() => setPeekOpen(!peekOpen)}
+                          onClick={() => setPeekNavOpen(!peekNavOpen)}
                         >
                           <h3 class="text-sm font-semibold ml-3">
                             Peek
@@ -261,7 +262,7 @@ export default function OpModal(
                       <div
                         id="collapse-body-2"
                         class={`border-b border-purple-100 pl-7 ${
-                          peekOpen ? "" : "hidden"
+                          peekNavOpen ? "" : "hidden"
                         }`}
                         aria-labelledby="collapse-heading-2"
                       >
