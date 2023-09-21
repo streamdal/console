@@ -5,15 +5,19 @@ import {
 } from "../../../../../../../../lib/utils.ts";
 import { deleteAudience } from "../../../../../../../../lib/mutation.ts";
 import { ResponseCode } from "snitch-protos/protos/sp_common.ts";
-import { getPipelines } from "../../../../../../../../lib/fetch.ts";
 import { serviceSignal } from "../../../../../../../../components/serviceMap/serviceSignal.ts";
 
 export const handler: Handlers<> = {
   async POST(req, ctx) {
     const audience = getAudienceFromParams(ctx.params);
-    const pipelines = getPipelines();
+    const pipelines = serviceSignal.value.pipelines;
     const config = serviceSignal.value.config;
-    const attachedPipeline = getAttachedPipeline(audience, pipelines, config);
+    console.log("the fucking config", config);
+    const attachedPipeline = await getAttachedPipeline(
+      audience,
+      pipelines,
+      config,
+    );
     console.log("damn", attachedPipeline);
     const response = await deleteAudience(audience);
 

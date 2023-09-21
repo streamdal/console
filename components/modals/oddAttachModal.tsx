@@ -47,7 +47,6 @@ export const OddAttachModal = (
         attachedPipeline: newPipeline,
         attach: false,
       };
-
       opUpdateSignal.value = {
         audience,
         attachedPipeline: newPipeline,

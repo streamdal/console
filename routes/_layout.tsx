@@ -17,10 +17,8 @@ export default async function Layout(req: Request, ctx: LayoutContext) {
   const token = await grpcToken();
   const allServices = await getAll();
   setServiceSignal(allServices);
-  console.log("fuck ctx", ctx);
 
   if (ctx.data?.success?.message) {
-    console.log("damn", ctx.data?.success);
     toastSignal.value = {
       id: "notifications",
       type: ctx.data?.success?.status ? "success" : "error",

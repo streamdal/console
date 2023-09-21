@@ -1,5 +1,5 @@
-import {  Audience, OperationType  } from "snitch-protos/protos/sp_common.ts";
-import {  ConfigType, PipelinesType  } from "./fetch.ts";
+import { Audience, OperationType } from "snitch-protos/protos/sp_common.ts";
+import { ConfigType, PipelinesType } from "./fetch.ts";
 
 export type AudienceParams = {
   service: string;
@@ -104,9 +104,9 @@ export const getOpRoute = (
 //snitch server serialized audiences a bit oddly
 //and we need to do the same to interpret config keys
 export const audienceKey = (audience: Audience) =>
-  `${audience.serviceName}/operation_type_${
+  `${audience.serviceName}:operation_type_${
     OperationType[audience.operationType]
-  }/${audience.operationName}/${audience.componentName}`.toLowerCase();
+  }:${audience.operationName}:${audience.componentName}`.toLowerCase();
 
 export const serviceKey = (audience: Audience) =>
   lower(`${audience.serviceName}-service`.toLowerCase());
@@ -190,7 +190,23 @@ export const getAttachedPipeline = (
   audience: Audience,
   pipelines: PipelinesType,
   config: ConfigType,
-) => pipelines[config[audienceKey(audience)]]?.pipeline;
+) => {
+  console.log(
+    "shit audience",
+    audience,
+    "shit pipes",
+    pipelines,
+    "shit config",
+    config,
+    "shit audience key",
+    audienceKey(audience),
+  );
+  console.log(
+    "fucking hell",
+    pipelines[config[audienceKey(audience)]]?.pipeline,
+  );
+  return pipelines[config[audienceKey(audience)]]?.pipeline;
+};
 
 export const bigIntStringify = (obj: any) =>
   JSON.stringify(obj, (_, v) => typeof v === "bigint" ? v.toString() : v);
