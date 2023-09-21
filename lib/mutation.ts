@@ -142,7 +142,7 @@ export const pausePipeline = async (
   }
 };
 
-export const deleteAudience = async (audience: Audience) => {
+export const deleteAudience = async (audience: Audience, force: boolean) => {
   try {
     const request: DeleteAudienceRequest = { audience };
     const { response } = await client.deleteAudience(
