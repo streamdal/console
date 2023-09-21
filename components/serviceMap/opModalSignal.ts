@@ -11,12 +11,4 @@ export type OpModalType = {
   detach?: boolean;
 };
 
-export const opModal = signal<OpModalType | null>({
-  audience: {
-    serviceName: "another-test-service",
-    componentName: "another-kafka",
-    operationType: 1,
-    operationName: "test-kafka-consumer",
-  },
-  clients: 1,
-});
+export const opModal = signal<OpModalType | null>(null);
