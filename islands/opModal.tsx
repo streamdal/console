@@ -25,6 +25,7 @@ import {
   peekSamplingRateSignal,
   peekSamplingSignal,
 } from "../lib/peek.ts";
+import IconTrash from "tabler-icons/tsx/trash.tsx";
 
 export const OP_MODAL_WIDTH = "80px";
 export const OP_MODAL_OPEN_WIDTH = "308px";
@@ -40,6 +41,7 @@ export default function OpModal(
   const attachedPipeline = opModal.value?.attachedPipeline;
   const opType = OperationType[audience?.operationType];
   const clients = opModal.value?.clients?.length || 0;
+  console.log(opModal);
 
   const [isOpen, setIsOpen] = useState(true);
   const [peekNavOpen, setPeekNavOpen] = useState(false);
