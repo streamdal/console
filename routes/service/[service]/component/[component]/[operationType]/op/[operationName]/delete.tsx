@@ -20,7 +20,6 @@ export const handler: Handlers<> = {
       pipelines,
       config,
     );
-    console.log(attachedPipeline);
     if (attachedPipeline) {
       const response1 = await detachPipeline(attachedPipeline.id, audience);
       if (response1.code === ResponseCode.OK) {
@@ -55,7 +54,6 @@ export const handler: Handlers<> = {
       }
     } else {
       const response = await deleteAudience(audience, false);
-      console.log("damn", response);
 
       return new Response(
         JSON.stringify({
