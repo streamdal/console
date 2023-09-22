@@ -86,8 +86,10 @@ export const OddAttachModal = (
             ))}
             <div class="flex items-center justify-center hover:bg-purple-100 py-3">
               <a href="/pipelines">
-                <div class={"flex justify-between items-center"}>
-                  <p class={"text-xs text-gray-600"}>
+                <div
+                  class={"flex justify-between items-center text-streamdalPurple font-semibold"}
+                >
+                  <p class={"text-xs text-streamdalPurple font-semibold"}>
                     Create new pipeline
                   </p>
                   <IconPlus class={"w-3 h-3 ml-3"} />

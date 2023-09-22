@@ -25,13 +25,6 @@ export default async function Layout(req: Request, ctx: LayoutContext) {
       message: ctx.data?.success?.message,
     };
   }
-  // if (ctx.data?.success?.message) {
-  //   toastSignal.value = {
-  //     id: "deleteAudience",
-  //     type: ctx.data?.success?.status ? "success" : "error",
-  //     message: ctx.data?.success?.message,
-  //   };
-  // }
   return (
     <>
       <NavBar />

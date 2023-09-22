@@ -2,7 +2,6 @@ import { ConsumerIcon } from "../components/icons/consumer.tsx";
 import { ProducerIcon } from "../components/icons/producer.tsx";
 import IconPlus from "tabler-icons/tsx/plus.tsx";
 import IconUnlink from "tabler-icons/tsx/unlink.tsx";
-import IconUserCircle from "tabler-icons/tsx/user-circle.tsx";
 import IconAdjustmentsHorizontal from "tabler-icons/tsx/adjustments-horizontal.tsx";
 import { ServiceMapType } from "../lib/fetch.ts";
 import { opModal } from "../components/serviceMap/opModalSignal.ts";
@@ -41,16 +40,9 @@ export default function OpModal(
   const attachedPipeline = opModal.value?.attachedPipeline;
   const opType = OperationType[audience?.operationType];
   const clients = opModal.value?.clients?.length || 0;
-  console.log(opModal);
 
   const [isOpen, setIsOpen] = useState(true);
   const [peekNavOpen, setPeekNavOpen] = useState(false);
-
-  // useSignalEffect(() => {
-  //     if (opModal.value || !opModal.value) {
-  //         setIsOpen(true);
-  //     }
-  // });
 
   return (
     <>
@@ -89,34 +81,34 @@ export default function OpModal(
         >
           <div class="w-[308px] shadow-xl h-full">
             <div class="bg-white h-full dark:bg-gray-700">
-              <div class=" flex p-4 justify-between items-center border-b border-purple-100">
-                <div class="flex items-center justify-start">
-                  <IconUserCircle class="w-12 h-12 mr-4" />
-                  <h2 class="text-web font-semibold">User Name</h2>
-                </div>
-                <button class="p-1 rounded hover:bg-purple-100">
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 18 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M3.53975 11.479C3.75942 11.2593 4.11558 11.2593 4.33525 11.479L8.67992 15.8236C8.75314 15.8969 8.87186 15.8969 8.94508 15.8236L13.2898 11.479C13.5094 11.2593 13.8656 11.2593 14.0852 11.479C14.3049 11.6986 14.3049 12.0548 14.0852 12.2745L9.74058 16.6191C9.22801 17.1317 8.39699 17.1317 7.88442 16.6191L3.53975 12.2745C3.32008 12.0548 3.32008 11.6986 3.53975 11.479Z"
-                      fill="#372D56"
-                    />
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M3.53975 6.64946C3.75942 6.86913 4.11558 6.86913 4.33525 6.64946L8.67992 2.30479C8.75314 2.23156 8.87186 2.23157 8.94508 2.30479L13.2898 6.64946C13.5094 6.86913 13.8656 6.86913 14.0852 6.64946C14.3049 6.42979 14.3049 6.07363 14.0852 5.85396L9.74058 1.50929C9.22801 0.996729 8.39699 0.996731 7.88442 1.50929L3.53975 5.85396C3.32008 6.07363 3.32008 6.42979 3.53975 6.64946Z"
-                      fill="#372D56"
-                    />
-                  </svg>
-                </button>
-              </div>
+              {/*<div class="flex h-16 p-4 justify-between items-center border-b border-purple-100">*/}
+              {/*  <div class="flex items-center justify-start">*/}
+              {/*    <IconUserCircle class="w-12 h-12 mr-4" />*/}
+              {/*    <h2 class="text-web font-semibold">User Name</h2>*/}
+              {/*  </div>*/}
+              {/*  <button class="p-1 rounded hover:bg-purple-100">*/}
+              {/*    <svg*/}
+              {/*      width="18"*/}
+              {/*      height="18"*/}
+              {/*      viewBox="0 0 18 18"*/}
+              {/*      fill="none"*/}
+              {/*      xmlns="http://www.w3.org/2000/svg"*/}
+              {/*    >*/}
+              {/*      <path*/}
+              {/*        fill-rule="evenodd"*/}
+              {/*        clip-rule="evenodd"*/}
+              {/*        d="M3.53975 11.479C3.75942 11.2593 4.11558 11.2593 4.33525 11.479L8.67992 15.8236C8.75314 15.8969 8.87186 15.8969 8.94508 15.8236L13.2898 11.479C13.5094 11.2593 13.8656 11.2593 14.0852 11.479C14.3049 11.6986 14.3049 12.0548 14.0852 12.2745L9.74058 16.6191C9.22801 17.1317 8.39699 17.1317 7.88442 16.6191L3.53975 12.2745C3.32008 12.0548 3.32008 11.6986 3.53975 11.479Z"*/}
+              {/*        fill="#372D56"*/}
+              {/*      />*/}
+              {/*      <path*/}
+              {/*        fill-rule="evenodd"*/}
+              {/*        clip-rule="evenodd"*/}
+              {/*        d="M3.53975 6.64946C3.75942 6.86913 4.11558 6.86913 4.33525 6.64946L8.67992 2.30479C8.75314 2.23156 8.87186 2.23157 8.94508 2.30479L13.2898 6.64946C13.5094 6.86913 13.8656 6.86913 14.0852 6.64946C14.3049 6.42979 14.3049 6.07363 14.0852 5.85396L9.74058 1.50929C9.22801 0.996729 8.39699 0.996731 7.88442 1.50929L3.53975 5.85396C3.32008 6.07363 3.32008 6.42979 3.53975 6.64946Z"*/}
+              {/*        fill="#372D56"*/}
+              {/*      />*/}
+              {/*    </svg>*/}
+              {/*  </button>*/}
+              {/*</div>*/}
               {isOpen && (opModal.value == null
                 ? (
                   <div class="w-full h-4/5 flex flex-col justify-center items-center">
@@ -130,7 +122,7 @@ export default function OpModal(
                   >
                     <div>
                       <div class="rounded-t flex justify-between">
-                        <div class="z-[20] flex items-start justify-start w-full p-4 bg-web">
+                        <div class="z-[20] flex items-center justify-start px-4 w-full h-16 bg-web">
                           {opType === "CONSUMER"
                             ? <ConsumerIcon className={"mx-2"} />
                             : <ProducerIcon className={"mx-2"} />}
@@ -138,24 +130,24 @@ export default function OpModal(
                             <h3 class="text-lg text-cloud">
                               {audience?.operationName}
                             </h3>
-                            <p class="text-xs text-cloud">
-                              {`${clients} attached client${
-                                (clients !== 1) ? "s" : ""
-                              }`}
-                            </p>
+                            {/*<p class="text-xs text-cloud">*/}
+                            {/*    {`${clients} attached client${*/}
+                            {/*        (clients !== 1) ? "s" : ""*/}
+                            {/*    }`}*/}
+                            {/*</p>*/}
                           </div>
                         </div>
                       </div>
-                      <div class="px-4 py-4 rounded mx-2">
+                      <div class="px-4 py-4 rounded-md mx-2">
                         <div class="mb-2 flex justify-between items-center pr-2">
-                          <h3 class="text-wWEB font-bold text-sm">
+                          <h3 class="text-web font-bold text-sm">
                             Attached Pipelines
                           </h3>
                         </div>
                         {!serviceMap?.pipes.length
                           ? (
                             <a href={"/pipelines"}>
-                              <button class="text-web border border-purple-600 bg-purple-50 font-medium rounded-sm w-full flex justify-center text-sm px-2 text-xs py-1 text-center inline-flex items-center">
+                              <button class="text-streamdalPurple border border-purple-600 bg-purple-50 font-semibold rounded-lg w-full flex justify-center text-sm px-2 py-1 text-center inline-flex items-center">
                                 <IconPlus class="w-4 h-4 mr-1" />
                                 Create a new pipeline
                               </button>
@@ -164,7 +156,7 @@ export default function OpModal(
                           : attachedPipeline
                           ? (
                             <div
-                              className={`flex justify-between items-center text-web bg-purple-50 border border-purple-600 font-medium rounded-sm w-full text-sm px-2 text-xs py-1 focus:ring-1 focus:outline-none focus:ring-purple-600 ${
+                              className={`flex justify-between items-center text-web bg-purple-50 border border-purple-600 font-medium rounded-md w-full text-sm px-2 text-xs py-1 focus:ring-1 focus:outline-none focus:ring-purple-600 ${
                                 opModal.value?.attach &&
                                 "ring-1 outline-none active:ring-purple-600"
                               }`}
@@ -225,7 +217,7 @@ export default function OpModal(
                           : (
                             <button
                               id="attach-pipeline"
-                              className="text-web bg-purple-50 border border-purple-600 hover:border-[#8E84AD] font-medium rounded-sm w-full flex justify-between text-sm px-2 text-xs py-1 text-center inline-flex items-center focus:ring-1 focus:outline-none focus:ring-purple-600 active:ring-1 active:outline-none active:ring-purple-600"
+                              className="text-web font-semibold bg-purple-50 border border-purple-600 hover:border-[#8E84AD] font-medium rounded-md w-full flex justify-between text-sm px-2 text-xs py-1 text-center inline-flex items-center focus:ring-1 focus:outline-none focus:ring-purple-600 active:ring-1 active:outline-none active:ring-purple-600"
                               type="button"
                               onClick={() =>
                                 opModal.value = {
