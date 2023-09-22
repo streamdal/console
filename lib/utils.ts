@@ -160,12 +160,12 @@ export const setHighlightedEdges = (a: Audience, highlight: boolean) => {
 
   if (componentEdge) {
     componentEdge.children[0].style.stroke = `${
-      highlight ? "#956CFF" : "#E6DDFE"
+      highlight ? "#956CFF" : "#d2c1ff"
     }`;
   }
   if (serviceEdge) {
     serviceEdge.children[0].style.stroke = `${
-      highlight ? "#956CFF" : "#E6DDFE"
+      highlight ? "#956CFF" : "#d2c1ff"
     }`;
   }
 };
@@ -191,20 +191,6 @@ export const getAttachedPipeline = (
   pipelines: PipelinesType,
   config: ConfigType,
 ) => {
-  console.log(
-    "shit audience",
-    audience,
-    "shit pipes",
-    pipelines,
-    "shit config",
-    config,
-    "shit audience key",
-    audienceKey(audience),
-  );
-  console.log(
-    "fucking hell",
-    pipelines[config[audienceKey(audience)]]?.pipeline,
-  );
   return pipelines[config[audienceKey(audience)]]?.pipeline;
 };
 
