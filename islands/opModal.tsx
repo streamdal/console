@@ -110,7 +110,7 @@ export default function OpModal(
               {/*  </button>*/}
               {/*</div>*/}
               {isOpen &&
-                ((opModal.value == null | opModal.value?.delete !== null)
+                (opModal.value == null
                   ? (
                     <div class="w-full h-4/5 flex flex-col justify-center items-center">
                       <EmptyStateBird class="mb-2" />

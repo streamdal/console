@@ -20,55 +20,27 @@ export const handler: Handlers<> = {
       pipelines,
       config,
     );
+    let response;
     if (attachedPipeline) {
-      const response1 = await detachPipeline(attachedPipeline.id, audience);
-      if (response1.code === ResponseCode.OK) {
-        const response = await deleteAudience(audience, true);
-        return new Response(
-          JSON.stringify({
-            status: 307,
-            success: {
-              status: response.code === ResponseCode.OK,
-              message: response.code === ResponseCode.OK
-                ? "Successfully deleted"
-                : response.message,
-            },
-            headers: { Location: "/" },
-          }),
-          { status: response.code === ResponseCode.OK ? 200 : 400 },
-        );
-      } else {
-        return new Response(
-          JSON.stringify({
-            status: 307,
-            success: {
-              status: response1.code === ResponseCode.OK,
-              message: response1.code === ResponseCode.OK
-                ? "Successfully deleted"
-                : response1.message,
-            },
-            headers: { Location: "/" },
-          }),
-          { status: response1.code === ResponseCode.OK ? 200 : 400 },
-        );
-      }
-    } else {
-      const response = await deleteAudience(audience, false);
-
-      return new Response(
-        JSON.stringify({
-          status: 307,
-          success: {
-            status: response.code === ResponseCode.OK,
-            message: response.code === ResponseCode.OK
-              ? "Successfully deleted"
-              : response.message,
-          },
-          headers: { Location: "/" },
-        }),
-        { status: response.code === ResponseCode.OK ? 200 : 400 },
-      );
+      response = await detachPipeline(attachedPipeline.id, audience);
     }
+    if (!attachedPipeline || response?.code === ResponseCode.OK) {
+      response = await deleteAudience(audience, true);
+    }
+
+    return new Response(
+      JSON.stringify({
+        status: 307,
+        success: {
+          status: response.code === ResponseCode.OK,
+          message: response.code === ResponseCode.OK
+            ? "Successfully deleted"
+            : response.message,
+        },
+        headers: { Location: "/" },
+      }),
+      { status: response.code === ResponseCode.OK ? 200 : 400 },
+    );
   },
 };
 
