@@ -36,9 +36,6 @@ export const DeleteOperationModal = (
       setOpen(false);
       opUpdateSignal.value = null;
     }
-    setTimeout(() => {
-      close();
-    }, 3000);
   };
 
   return (
