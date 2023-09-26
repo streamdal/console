@@ -1,45 +1,49 @@
-// import {Handlers} from "$fresh/src/server/types.ts";
-// import {getAttachedPipeline, getAudienceFromParams,} from "../../../../../../../../lib/utils.ts";
-// import {deleteAudience, detachPipeline,} from "../../../../../../../../lib/mutation.ts";
-// import {ResponseCode} from "snitch-protos/protos/sp_common.ts";
-// import {serviceSignal} from "../../../../../../../../components/serviceMap/serviceSignal.ts";
-//
-// export const handler: Handlers<> = {
-//     async POST(req, ctx) {
-//
-//
-//         const audience = getAudienceFromParams(ctx.params);
-//         const pipelines = serviceSignal.value.pipelines;
-//         const config = serviceSignal.value.config;
-//         const attachedPipeline = await getAttachedPipeline(
-//             audience,
-//             pipelines,
-//             config,
-//         );
-//         let response;
-//         if (attachedPipeline) {
-//             response = await detachPipeline(attachedPipeline.id, audience);
-//         }
-//         if (!attachedPipeline || response?.code === ResponseCode.OK) {
-//             response = await deleteAudience(audience, true);
-//         }
-//
-//         return new Response(
-//             JSON.stringify({
-//                 status: 307,
-//                 success: {
-//                     status: response.code === ResponseCode.OK,
-//                     message: response.code === ResponseCode.OK
-//                         ? "Successfully deleted"
-//                         : response.message,
-//                 },
-//                 headers: {Location: "/"},
-//             }),
-//             {status: response.code === ResponseCode.OK ? 200 : 400},
-//         );
-//     },
-// };
-//
-// export default function DeleteAudienceRoute() {
-//     return null;
-// }
+import {Handlers} from "$fresh/src/server/types.ts";
+import {serviceSignal} from "../../../components/serviceMap/serviceSignal.ts";
+import {ResponseCode} from "snitch-protos/protos/sp_common.ts";
+import {getAttachedPipeline} from "../../../lib/utils.ts";
+import {deleteAudience, detachPipeline} from "../../../lib/mutation.ts";
+
+export const handler: Handlers<> = {
+    async POST(req, ctx) {
+        const pipelines = serviceSignal.value.pipelines;
+        const config = serviceSignal.value.config;
+        const audiences = serviceSignal.value.audiences.filter((a) =>
+            a.serviceName === ctx.params.service
+        );
+        const responses = audiences.map(async (a) => {
+            const attachedPipeline = await getAttachedPipeline(
+                a,
+                pipelines,
+                config,
+            );
+            if (attachedPipeline) {
+                return await detachPipeline(attachedPipeline.id, a);
+            }
+            if (!attachedPipeline || response?.code === ResponseCode.OK) {
+                return await deleteAudience(a);
+            }
+        });
+
+        const response = await responses.find((r) => r.code !== ResponseCode.OK) ||
+            responses.find((r) => r.code === ResponseCode.OK);
+
+        return new Response(
+            JSON.stringify({
+                status: 307,
+                success: {
+                    status: response.code === ResponseCode.OK,
+                    message: response.code === ResponseCode.OK
+                        ? "Successfully deleted"
+                        : response.message,
+                },
+                headers: {Location: "/"},
+            }),
+            {status: response.code === ResponseCode.OK ? 200 : 400},
+        );
+    },
+};
+
+export default function DeleteServiceRoute() {
+    return null;
+}

@@ -25,7 +25,7 @@ export const handler: Handlers<> = {
       response = await detachPipeline(attachedPipeline.id, audience);
     }
     if (!attachedPipeline || response?.code === ResponseCode.OK) {
-      response = await deleteAudience(audience, true);
+      response = await deleteAudience(audience);
     }
 
     return new Response(

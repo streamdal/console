@@ -39,39 +39,41 @@ export const ServiceNode = ({ data }: { data: NodeData }) => {
   };
 
   return (
-    <div>
-      <div
-        class="min-h-[80px] w-[320px] flex items-center justify-between bg-white rounded-lg z-10 px-2 border hover:border-purple-600 hover:shadow-lg"
-        id={`${serviceKey(data.audience)}-draghandle`}
-        onMouseOver={() => setHover()}
-        onMouseLeave={() => resetHover()}
-      >
-        <div class="flex flex-row items-center">
-          <IconGripVertical class="w-6 h-6 text-purple-100 mr-1" />
-          <img
-            src={"/images/placeholder-icon.png"}
-            className={"h-[40px]"}
-          />
-          <div class="flex flex-col ml-2">
-            <h2 className={"text-lg"}>{data.audience.serviceName}</h2>
+    <>
+      <div>
+        <div
+          class="min-h-[80px] w-[320px] flex items-center justify-between bg-white rounded-lg z-10 px-2 border hover:border-purple-600 hover:shadow-lg"
+          id={`${serviceKey(data.audience)}-draghandle`}
+          onMouseOver={() => setHover()}
+          onMouseLeave={() => resetHover()}
+        >
+          <div class="flex flex-row items-center">
+            <IconGripVertical class="w-6 h-6 text-purple-100 mr-1" />
+            <img
+              src={"/images/placeholder-icon.png"}
+              className={"h-[40px]"}
+            />
+            <div class="flex flex-col ml-2">
+              <h2 className={"text-lg"}>{data.audience.serviceName}</h2>
+            </div>
           </div>
+          <ServiceNodeMenu data={data} />
         </div>
-        <ServiceNodeMenu data={data} />
-      </div>
 
-      <div className={"flex justify-evenly w-1/2 mt"}>
-        <Handle
-          type="target"
-          position={Position.Bottom}
-          className="opacity-0 relative"
-        />
-        <Handle
-          type="source"
-          position={Position.Bottom}
-          className="opacity-0 relative"
-        />
+        <div className={"flex justify-evenly w-1/2 mt"}>
+          <Handle
+            type="target"
+            position={Position.Bottom}
+            className="opacity-0 relative"
+          />
+          <Handle
+            type="source"
+            position={Position.Bottom}
+            className="opacity-0 relative"
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

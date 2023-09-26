@@ -10,6 +10,7 @@ export type OpModalType = {
   pause?: boolean;
   detach?: boolean;
   delete?: boolean;
+  deleteService?: boolean;
 };
 
 export const opModal = signal<OpModalType | null>(null);

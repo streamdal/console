@@ -10,6 +10,7 @@ import IconLink from "tabler-icons/tsx/link.tsx";
 import { Tooltip } from "../tooltip/tooltip.tsx";
 import IconUnlink from "tabler-icons/tsx/unlink.tsx";
 import { useState } from "preact/hooks";
+import IconTrash from "tabler-icons/tsx/trash.tsx";
 
 export const NodeMenu = (
   { audience, attachedPipeline }: {
@@ -128,44 +129,59 @@ export const NodeMenu = (
   );
 };
 
-export const ServiceNodeMenu = ({ data }: { data: NodeData }) => {
+export const ServiceNodeMenu = (
+  { data }: { data: NodeData; setDeleteService: () => void },
+) => {
   const sKey = serviceKey(data.audience);
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={"flex flex-col"}>
-      <div
-        data-dropdown-toggle={`${sKey}-menu`}
-        data-dropdown-placement="top"
-        type="button"
-        class="rounded bg-purple-50 ml-4 cursor-pointer"
-        onClick={() => setOpen(!open)}
-      >
-        <IconDots class="w-6 h-6 text-gray-400" aria-hidden="true" />
-      </div>
-      {open && (
+    <>
+      <div className={"flex flex-col"}>
         <div
-          id={`${sKey}-menu`}
-          class={`absolute z-[51] left-[-10x] top-[-60px] bg-white divide-y divide-gray-100 rounded-lg shadow w-[200px]`}
-          onMouseLeave={() => setOpen(false)}
+          data-dropdown-toggle={`${sKey}-menu`}
+          data-dropdown-placement="top"
+          type="button"
+          class="rounded bg-purple-50 ml-4 cursor-pointer"
+          onClick={() => setOpen(!open)}
         >
-          <ul
-            class="py-2 text-sm text-gray-700 dark:text-gray-200"
-            aria-labelledby="dropdownButton"
-          >
-            <a href="/pipelines">
-              <li className="flex w-full flex-start items-center py-2 px-2 hover:bg-sunset text-sm">
-                <Edit className="text-red mr-2" />
-                Edit Pipelines
-              </li>
-            </a>
-            <li className="flex w-full flex-start items-center py-2 px-2 hover:bg-sunset text-sm cursor-not-allowed">
-              <Silence className="text-web mr-2" />
-              Silence Notifications
-            </li>
-          </ul>
+          <IconDots class="w-6 h-6 text-gray-400" aria-hidden="true" />
         </div>
-      )}
-    </div>
+        {open && (
+          <div
+            id={`${sKey}-menu`}
+            class={`absolute z-[51] left-[-10x] top-[-60px] bg-white divide-y divide-gray-100 rounded-lg shadow w-[200px]`}
+            onMouseLeave={() => setOpen(false)}
+          >
+            <ul
+              class="py-2 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdownButton"
+            >
+              <a href="/pipelines">
+                <li className="flex w-full flex-start items-center py-2 px-2 hover:bg-sunset text-sm">
+                  <Edit className="text-red mr-2" />
+                  Edit Pipelines
+                </li>
+              </a>
+              <li className="flex w-full flex-start items-center py-2 px-2 hover:bg-sunset text-sm cursor-not-allowed">
+                <Silence className="text-web mr-2" />
+                Silence Notifications
+              </li>
+              <li
+                className="flex w-full flex-start items-center py-2 px-2 hover:bg-sunset text-sm cursor-pointer"
+                onClick={() =>
+                  opModal.value = {
+                    audience: data?.audience,
+                    deleteService: true,
+                  }}
+              >
+                <IconTrash className="w-4 h-4 text-red mr-2" />
+                Delete Service
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
