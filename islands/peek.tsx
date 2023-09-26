@@ -11,14 +11,16 @@ import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/
 
 import { useEffect, useRef, useState } from "preact/hooks";
 import {
+  MAX_PEEK_SIZE,
   peek,
   peekingSignal,
   peekPausedSignal,
   peekSignal,
 } from "../lib/peek.ts";
 import { effect } from "@preact/signals";
+import { longDateFormat } from "../lib/utils.ts";
 
-export const MAX_PEEK_UI_SIZE = 150;
+export const MAX_PEEK_UI_SIZE = 50;
 
 export const parseData = (data: Uint8Array) => {
   const decoded = new TextDecoder().decode(data);
@@ -62,7 +64,10 @@ export const PeekRow = (
         className="bg-black text-white py-2 px-4 text-sm overflow-x-scroll flex flex-col justify-start"
       >
         <div className="text-stream">
-          {parseDate(row.timestampNs)?.toLocaleString()}
+          {parseDate(row.timestampNs)?.toLocaleDateString(
+            "en-us",
+            longDateFormat,
+          )}
         </div>
         <div
           dangerouslySetInnerHTML={{
@@ -165,9 +170,9 @@ export const Peek = (
               fullScreen ? "200" : "260"
             }px)] overflow-y-scroll rounded-md bg-black text-white`}
           >
-            {peekData?.map((p: TailResponse, i: number) => (
-              i <= MAX_PEEK_UI_SIZE && <PeekRow row={p} />
-            ))}
+            {peekData?.slice(-MAX_PEEK_UI_SIZE).map((
+              p: TailResponse,
+            ) => <PeekRow row={p} />)}
           </div>
         </div>
       </div>
