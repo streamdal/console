@@ -129,21 +129,22 @@ export const NodeMenu = (
   );
 };
 
-export const ServiceNodeMenu = (
-  { data }: { data: NodeData; setDeleteService: () => void },
-) => {
-  const sKey = serviceKey(data.audience);
+export const ServiceNodeMenu = ({ data }: { data: NodeData }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <>
-      <div className={"flex flex-col"}>
+    <div className={"flex flex-col"}>
+      <div
+        type="button"
+        class="rounded bg-purple-50 ml-4 cursor-pointer"
+        onClick={() => setOpen(!open)}
+      >
+        <IconDots class="w-6 h-6 text-gray-400" aria-hidden="true" />
+      </div>
+      {open && (
         <div
-          data-dropdown-toggle={`${sKey}-menu`}
-          data-dropdown-placement="top"
-          type="button"
-          class="rounded bg-purple-50 ml-4 cursor-pointer"
-          onClick={() => setOpen(!open)}
+          class={`absolute z-[51] left-[-10x] top-[-60px] bg-white divide-y divide-gray-100 rounded-lg shadow w-[200px]`}
+          onMouseLeave={() => setOpen(false)}
         >
           <IconDots class="w-6 h-6 text-gray-400" aria-hidden="true" />
         </div>

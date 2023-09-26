@@ -16,9 +16,10 @@ import {
   peekPausedSignal,
   peekSignal,
 } from "../lib/peek.ts";
-import { effect } from "@preact/signals";
+import { useSignalEffect } from "@preact/signals";
+import { longDateFormat } from "../lib/utils.ts";
 
-export const MAX_PEEK_UI_SIZE = 150;
+export const MAX_PEEK_UI_SIZE = 50;
 
 export const parseData = (data: Uint8Array) => {
   const decoded = new TextDecoder().decode(data);
@@ -62,7 +63,10 @@ export const PeekRow = (
         className="bg-black text-white py-2 px-4 text-sm overflow-x-scroll flex flex-col justify-start"
       >
         <div className="text-stream">
-          {parseDate(row.timestampNs)?.toLocaleString()}
+          {parseDate(row.timestampNs)?.toLocaleDateString(
+            "en-us",
+            longDateFormat,
+          )}
         </div>
         <div
           dangerouslySetInnerHTML={{
@@ -78,27 +82,24 @@ export const PeekRow = (
 export const Peek = (
   {
     audience,
-    pipeline,
     grpcToken,
     grpcUrl,
   }: {
     audience: Audience;
-    pipeline: Pipeline;
     grpcUrl: string;
     grpcToken: string;
   },
 ) => {
-  const [peekData, setPeekData] = useState();
+  const [peekData, setPeekData] = useState(peekSignal.value);
   const [fullScreen, setFullScreen] = useState(false);
 
   useEffect(() => {
-    if (pipeline) {
-      void peek({ audience, pipeline, grpcUrl, grpcToken });
-    }
+    peekPausedSignal.value = false;
+    void peek({ audience, grpcUrl, grpcToken });
   }, []);
 
-  effect(() => {
-    if (peekSignal.value && !peekPausedSignal.value) {
+  useSignalEffect(() => {
+    if (!peekPausedSignal.value) {
       setPeekData(peekSignal.value);
     }
   });
@@ -165,9 +166,9 @@ export const Peek = (
               fullScreen ? "200" : "260"
             }px)] overflow-y-scroll rounded-md bg-black text-white`}
           >
-            {peekData?.map((p: TailResponse, i: number) => (
-              i <= MAX_PEEK_UI_SIZE && <PeekRow row={p} />
-            ))}
+            {peekData?.slice(-MAX_PEEK_UI_SIZE).map((
+              p: TailResponse,
+            ) => <PeekRow row={p} />)}
           </div>
         </div>
       </div>

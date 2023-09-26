@@ -9,12 +9,11 @@ import {
   TailRequestType,
   TailResponse,
 } from "snitch-protos/protos/sp_common.ts";
-import { Pipeline } from "snitch-protos/protos/sp_pipeline.ts";
 
 import { effect, signal } from "@preact/signals";
 import { parseDate } from "../islands/peek.tsx";
 
-export const MAX_PEEK_SIZE = 1000;
+export const MAX_PEEK_SIZE = 200;
 
 export const peekSignal = signal<TailResponse[] | []>(
   [],
@@ -25,12 +24,18 @@ export const peekPausedSignal = signal<boolean>(false);
 export const peekSamplingSignal = signal<boolean>(false);
 export const peekSamplingRateSignal = signal<number>(1);
 
-export const peek = async ({ audience, pipeline, grpcUrl, grpcToken }: {
+export const peek = async ({ audience, grpcUrl, grpcToken }: {
   audience: Audience;
-  pipeline: Pipeline;
   grpcUrl: string;
   grpcToken: string;
 }) => {
+  const appendResponse = (response: TailResponse) =>
+    peekSignal.value = [
+      ...peekSignal.value.slice(
+        -MAX_PEEK_SIZE,
+      ),
+      response,
+    ];
   const abortController = new AbortController();
 
   effect(() => {
@@ -44,13 +49,11 @@ export const peek = async ({ audience, pipeline, grpcUrl, grpcToken }: {
     const transport = new GrpcWebFetchTransport({
       baseUrl: grpcUrl,
     });
-    const abortController = new AbortController();
 
     const client: IExternalClient = new ExternalClient(transport);
     const tailRequest = TailRequest.create({
       Id: crypto.randomUUID(),
       audience: audience,
-      pipelineId: pipeline?.id,
       type: TailRequestType.START,
     });
 
@@ -65,9 +68,7 @@ export const peek = async ({ audience, pipeline, grpcUrl, grpcToken }: {
 
     for await (const response of tailCall?.responses) {
       if (!peekSamplingSignal.value || peekSignal.value.length === 0) {
-        peekSignal.value = [...peekSignal.value, response].slice(
-          -MAX_PEEK_SIZE,
-        );
+        appendResponse(response);
       }
 
       const last = parseDate(peekSignal.value?.at(-1)?.timestampNs!);
@@ -78,14 +79,12 @@ export const peek = async ({ audience, pipeline, grpcUrl, grpcToken }: {
         ((current.getTime() - last.getTime()) / 1000 >
           peekSamplingRateSignal.value)
       ) {
-        peekSignal.value = [...peekSignal.value, response].slice(
-          -MAX_PEEK_SIZE,
-        );
+        appendResponse(response);
       }
     }
 
     const { status } = await tailCall;
-    console.info("grpc tail status", status);
+    status && console.info("grpc tail status", status);
   } catch (e) {
     console.error("received grpc tail error", e);
   }
