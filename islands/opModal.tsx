@@ -223,7 +223,7 @@ export default function OpModal(
                               <IconLink class="w-4" />
                             </button>
                           )}
-                        {(opModal.value?.attach && isOpen) && (
+                        {(opModal.value?.attach) && (
                           <OddAttachModal serviceMap={serviceMap} />
                         )}
                       </div>
