@@ -11,7 +11,6 @@ import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/
 
 import { useEffect, useRef, useState } from "preact/hooks";
 import {
-  MAX_PEEK_SIZE,
   peek,
   peekingSignal,
   peekPausedSignal,
