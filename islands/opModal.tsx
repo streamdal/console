@@ -1,11 +1,11 @@
-import {ConsumerIcon} from "../components/icons/consumer.tsx";
-import {ProducerIcon} from "../components/icons/producer.tsx";
+import { ConsumerIcon } from "../components/icons/consumer.tsx";
+import { ProducerIcon } from "../components/icons/producer.tsx";
 import IconPlus from "tabler-icons/tsx/plus.tsx";
 import IconUnlink from "tabler-icons/tsx/unlink.tsx";
 import IconAdjustmentsHorizontal from "tabler-icons/tsx/adjustments-horizontal.tsx";
-import {ServiceMapType} from "../lib/fetch.ts";
-import {opModal} from "../components/serviceMap/opModalSignal.ts";
-import {OperationType} from "snitch-protos/protos/sp_common.ts";
+import { ServiceMapType } from "../lib/fetch.ts";
+import { opModal } from "../components/serviceMap/opModalSignal.ts";
+import { OperationType } from "snitch-protos/protos/sp_common.ts";
 import IconLink from "tabler-icons/tsx/link.tsx";
 import IconPlayerPause from "tabler-icons/tsx/player-pause.tsx";
 import { Toast } from "../components/toasts/toast.tsx";
@@ -23,25 +23,24 @@ import {
   peekingSignal,
   peekSamplingRateSignal,
   peekSamplingSignal,
-  peekSignal,
 } from "../lib/peek.ts";
 import IconTrash from "tabler-icons/tsx/trash.tsx";
-import {DeleteServiceModal} from "../components/modals/deleteServiceModal.tsx";
+import { DeleteServiceModal } from "../components/modals/deleteServiceModal.tsx";
 
 export const OP_MODAL_WIDTH = "308px";
 
 export default function OpModal(
-    {serviceMap, grpcUrl, grpcToken}: {
-        serviceMap: ServiceMapType;
-        grpcUrl: string;
-        grpcToken: string;
-    },
+  { serviceMap, grpcUrl, grpcToken }: {
+    serviceMap: ServiceMapType;
+    grpcUrl: string;
+    grpcToken: string;
+  },
 ) {
-    const audience = opModal.value?.audience;
-    const attachedPipeline = opModal.value?.attachedPipeline;
-    const opType = OperationType[audience?.operationType];
+  const audience = opModal.value?.audience;
+  const attachedPipeline = opModal.value?.attachedPipeline;
+  const opType = OperationType[audience?.operationType];
 
-    const [peekNavOpen, setPeekNavOpen] = useState(false);
+  const [peekNavOpen, setPeekNavOpen] = useState(false);
 
   return (
     <>
@@ -64,7 +63,7 @@ export default function OpModal(
         />
       )}
       {opModal.value?.deleteService && (
-        <DeleteServiceModal audience={audience}/>
+        <DeleteServiceModal audience={audience} />
       )}
       <div class="flex flex-row">
         {peekingSignal.value && (
@@ -107,7 +106,7 @@ export default function OpModal(
               {/*    </svg>*/}
               {/*  </button>*/}
               {/*</div>*/}
-              {opModal.value == null
+              {(opModal.value == null || opModal.value.deleteService)
                 ? (
                   <div class="w-full h-4/5 flex flex-col justify-center items-center">
                     <EmptyStateBird class="mb-2" />
@@ -310,10 +309,96 @@ export default function OpModal(
                             </button>
                           </div>
                         </div>
+                        <h3 id="collapse-heading-3">
+                          <button
+                            type="button"
+                            className="flex items-center border-b border-purple-100 w-full px-5 py-3 font-medium text-left text-gray-500 focus:ring-2"
+                            data-accordion-target="#collapse-body-3"
+                            aria-expanded="true"
+                            aria-controls="collapse-body-3"
+                          >
+                            <h3 class="text-web text-sm font-semibold ml-3">
+                              Notifications
+                            </h3>
+                          </button>
+                        </h3>
+                        <div
+                          id="collapse-body-3"
+                          class="hidden"
+                          aria-labelledby="collapse-heading-3"
+                        >
+                          <div class="p-5">
+                            <p class="text-gray-300 text-xs dark:text-gray-400">
+                              Notifications coming soon...
+                            </p>
+                          </div>
+                        </div>
+                        <h3 id="collapse-heading-4">
+                          <button
+                            type="button"
+                            className="flex items-center w-full px-5 border-b border-purple-100 py-3 font-medium text-left text-web focus:ring-2"
+                            data-accordion-target="#collapse-body-4"
+                            aria-expanded="true"
+                            aria-controls="collapse-body-4"
+                          >
+                            <h3 class="text-web text-sm font-semibold ml-3">
+                              Trends
+                            </h3>
+                          </button>
+                        </h3>
+                        <div
+                          id="collapse-body-4"
+                          class="hidden"
+                          aria-labelledby="collapse-heading-4"
+                        >
+                          <p class="p-5 text-gray-300 text-xs dark:text-gray-400">
+                            Trends coming soon...
+                          </p>
+                        </div>
+                        <h3 id="collapse-heading-5">
+                          <button
+                            type="button"
+                            className="flex items-center w-full px-5 border-b border-purple-100 py-3 font-medium text-left text-web"
+                            data-accordion-target="#collapse-body-5"
+                            aria-expanded="true"
+                            aria-controls="collapse-body-5"
+                          >
+                            <h3 class="text-web text-sm font-semibold ml-3">
+                              Schema
+                            </h3>
+                          </button>
+                        </h3>
+                        <div
+                          id="collapse-body-5"
+                          class="hidden"
+                          aria-labelledby="collapse-heading-5"
+                        >
+                          <p class="p-5 text-gray-300 text-xs dark:text-gray-400">
+                            Schema coming soon...
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                </div>
+                    <button
+                      data-tooltip-target="delete-operation"
+                      type="button"
+                      onClick={() =>
+                        opModal.value = {
+                          ...opModal.value,
+                          delete: true,
+                        }}
+                      className="absolute bottom-5 right-[22px] w-[260px] h-[45px] border border-streamdalRed text-streamdalRed rounded flex justify-center items-center"
+                    >
+                      <IconTrash class="w-6 h-6 text-streamdalRed mr-3" />
+                      Delete Item
+                    </button>
+                  </div>
+                )}
             </div>
-            <Toast id="pipelineCrud"/>
-        </>
-    );
+          </div>
+        </div>
+      </div>
+      <Toast id="pipelineCrud" />
+    </>
+  );
 }
