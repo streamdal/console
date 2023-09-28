@@ -409,6 +409,7 @@ export default function OpModal(
                                                 .value
                                         }`,
                                       }}
+                                      class={"text-white"}
                                   >
                                   </div>
                                 </code>

@@ -5,3 +5,12 @@ select {
   background-position: 100%;
   background-repeat: no-repeat;
 }
+
+.hljs-string {
+  color: #956CFF;
+}
+
+.hljs-punctuation {
+  color: #C1AAFD
+}
+
