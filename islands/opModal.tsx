@@ -28,6 +28,7 @@ import {
 import IconTrash from "tabler-icons/tsx/trash.tsx";
 import { useEffect } from "preact/hooks";
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
+import { useSignalEffect } from "https://esm.sh/v131/@preact/signals@1.1.3/denonext/signals.mjs";
 
 export const OP_MODAL_WIDTH = "308px";
 
@@ -53,14 +54,14 @@ export default function OpModal(
   };
 
   useEffect(async () => {
-    if (schemaNavOpen) {
+    if (opModal.value) {
       const schema = await getSchema();
       opModal.value = {
         ...opModal.value,
         schema: JSON.stringify(schema.schema, null, 2),
       };
     }
-  }, [schemaNavOpen]);
+  }, [audience]);
 
   return (
     <>
