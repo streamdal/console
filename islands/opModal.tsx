@@ -379,13 +379,15 @@ export default function OpModal(
                         <h3 id="collapse-heading-5">
                           <button
                             type="button"
-                            className="flex items-center w-full px-5 border-b border-purple-100 py-3 font-medium text-left text-web"
+                            className={`flex items-center w-full px-5 ${
+                              !schemaNavOpen && "border-b"
+                            }  border-purple-100 py-3 font-medium text-left text-web`}
                             data-accordion-target="#collapse-body-5"
                             aria-expanded="true"
                             aria-controls="collapse-body-5"
                             onClick={() => setSchemaNavOpen(!schemaNavOpen)}
                           >
-                            <h3 class="text-web text-sm font-semibold ml-3">
+                            <h3 class={"text-web text-sm font-semibold ml-3"}>
                               Schema
                             </h3>
                           </button>
@@ -396,7 +398,7 @@ export default function OpModal(
                             aria-labelledby="collapse-heading-5"
                             class={"flex flex-col items-center justify-center p-4"}
                           >
-                            <p class="my-5 w-full text-left text-gray-500 text-xs dark:text-gray-400">
+                            <p class="mb-5 w-full text-left text-gray-500 text-xs dark:text-gray-400">
                               Displaying JSON
                             </p>
                             <div className="w-full rounded flex overflow-x-scroll bg-black text-white py-2 px-4 text-sm flex flex-col justify-start">
@@ -409,7 +411,7 @@ export default function OpModal(
                                                 .value
                                         }`,
                                       }}
-                                      class={"text-white"}
+                                      class={"font-sm"}
                                   >
                                   </div>
                                 </code>
