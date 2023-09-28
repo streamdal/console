@@ -41,6 +41,7 @@ export default function OpModal(
 ) {
   const audience = opModal.value?.audience;
   const attachedPipeline = opModal.value?.attachedPipeline;
+  const clients = opModal.value?.clients;
   const opType = OperationType[audience?.operationType];
 
   const [peekNavOpen, setPeekNavOpen] = useState(false);
@@ -145,11 +146,11 @@ export default function OpModal(
                             <h3 class="text-lg text-cloud">
                               {audience?.operationName}
                             </h3>
-                            {/*<p class="text-xs text-cloud">*/}
-                            {/*    {`${clients} attached client${*/}
-                            {/*        (clients !== 1) ? "s" : ""*/}
-                            {/*    }`}*/}
-                            {/*</p>*/}
+                            <p class="text-xs text-cloud">
+                              {`${clients} attached client${
+                                (clients !== 1) ? "s" : ""
+                              }`}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -276,56 +277,58 @@ export default function OpModal(
                           aria-labelledby="collapse-heading-2"
                         >
                           <div class="text-cobweb font-medium text-xs my-3">
-                            {attachedPipeline
+                            {clients
                               ? "View your pipeline data in realtime"
-                              : "You must attach a pipeline first"}
+                              : "You must attach a client first"}
                           </div>
-                          <div class="flex flex-col">
-                            <div class="flex flex-row justify-start items-center mb-3">
-                              <Toggle
-                                label="Sampling"
-                                value={peekSamplingSignal.value}
-                                setValue={(value) =>
-                                  peekSamplingSignal.value = value}
-                              />
-                              {peekSamplingSignal.value &&
-                                (
-                                  <label className="relative inline-flex items-center cursor-pointer ml-2">
-                                    <span className="mr-3 text-[12px] font-[500] leading-[20px] text-cobweb">
-                                      Sample Setting
-                                    </span>
+                          {clients && (
+                            <div class="flex flex-col">
+                              <div class="flex flex-row justify-start items-center mb-3">
+                                <Toggle
+                                  label="Sampling"
+                                  value={peekSamplingSignal.value}
+                                  setValue={(value) =>
+                                    peekSamplingSignal.value = value}
+                                />
+                                {peekSamplingSignal.value &&
+                                  (
+                                    <label className="relative inline-flex items-center cursor-pointer ml-2">
+                                      <span className="mr-3 text-[12px] font-[500] leading-[20px] text-cobweb">
+                                        Sample Setting
+                                      </span>
 
-                                    <input
-                                      class={`w-[${
-                                        (String(
-                                          peekSamplingRateSignal.value,
-                                        )
-                                          .length) * 12
-                                      }px] mr-2`}
-                                      value={peekSamplingRateSignal.value}
-                                      onChange={(e) => {
-                                        if (isNumeric(e.target.value)) {
-                                          peekSamplingRateSignal.value =
-                                            e.target.value;
-                                        }
-                                      }}
-                                    />
-                                    <span className="mr-3 text-[12px] font-[500] leading-[20px] text-cobweb">
-                                      /s
-                                    </span>
-                                  </label>
-                                )}
+                                      <input
+                                        class={`w-[${
+                                          (String(
+                                            peekSamplingRateSignal.value,
+                                          )
+                                            .length) * 12
+                                        }px] mr-2`}
+                                        value={peekSamplingRateSignal.value}
+                                        onChange={(e) => {
+                                          if (isNumeric(e.target.value)) {
+                                            peekSamplingRateSignal.value =
+                                              e.target.value;
+                                          }
+                                        }}
+                                      />
+                                      <span className="mr-3 text-[12px] font-[500] leading-[20px] text-cobweb">
+                                        /s
+                                      </span>
+                                    </label>
+                                  )}
+                              </div>
+                              <button
+                                onClick={() =>
+                                  peekingSignal.value = !peekingSignal.value}
+                                className={`text-white bg-web rounded-md w-[260px] h-[34px] flex justify-center items-center font-medium text-sm mb-4 cursor-pointer`}
+                              >
+                                {peekingSignal.value
+                                  ? "Stop Peeking"
+                                  : "Start Peeking"}
+                              </button>
                             </div>
-                            <button
-                              onClick={() =>
-                                peekingSignal.value = !peekingSignal.value}
-                              className={`text-white bg-web rounded-md w-[260px] h-[34px] flex justify-center items-center font-medium text-sm mb-4 cursor-pointer`}
-                            >
-                              {peekingSignal.value
-                                ? "Stop Peeking"
-                                : "Start Peeking"}
-                            </button>
-                          </div>
+                          )}
                         </div>
                         <h3 id="collapse-heading-3">
                           <button
