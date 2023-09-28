@@ -16,9 +16,9 @@ import { OddAttachModal } from "../components/modals/oddAttachModal.tsx";
 import { EmptyStateBird } from "../components/icons/emptyStateBird.tsx";
 import { useState } from "preact/hooks";
 import { DeleteOperationModal } from "../components/modals/deleteOperationModal.tsx";
-import { Peek } from "./peek.tsx";
+import { parseData, Peek } from "./peek.tsx";
 import { Toggle } from "../components/form/switch.tsx";
-import { isNumeric } from "../lib/utils.ts";
+import { getAudienceOpRoute, isNumeric } from "../lib/utils.ts";
 import {
   peekingSignal,
   peekSamplingRateSignal,
@@ -26,6 +26,8 @@ import {
   peekSignal,
 } from "../lib/peek.ts";
 import IconTrash from "tabler-icons/tsx/trash.tsx";
+import { useEffect } from "preact/hooks";
+import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
 
 export const OP_MODAL_WIDTH = "308px";
 
@@ -41,6 +43,24 @@ export default function OpModal(
   const opType = OperationType[audience?.operationType];
 
   const [peekNavOpen, setPeekNavOpen] = useState(false);
+  const [schemaNavOpen, setSchemaNavOpen] = useState(false);
+
+  const getSchema = async () => {
+    const response = await fetch(`${getAudienceOpRoute(audience)}/schema`, {
+      method: "GET",
+    });
+    return response.json();
+  };
+
+  useEffect(async () => {
+    if (schemaNavOpen) {
+      const schema = await getSchema();
+      opModal.value = {
+        ...opModal.value,
+        schema: JSON.stringify(schema.schema, null, 2),
+      };
+    }
+  }, [schemaNavOpen]);
 
   return (
     <>
@@ -359,21 +379,39 @@ export default function OpModal(
                             data-accordion-target="#collapse-body-5"
                             aria-expanded="true"
                             aria-controls="collapse-body-5"
+                            onClick={() => setSchemaNavOpen(!schemaNavOpen)}
                           >
                             <h3 class="text-web text-sm font-semibold ml-3">
                               Schema
                             </h3>
                           </button>
                         </h3>
-                        <div
-                          id="collapse-body-5"
-                          class="hidden"
-                          aria-labelledby="collapse-heading-5"
-                        >
-                          <p class="p-5 text-gray-300 text-xs dark:text-gray-400">
-                            Schema coming soon...
-                          </p>
-                        </div>
+                        {schemaNavOpen && (
+                          <div
+                            id="collapse-body-5"
+                            aria-labelledby="collapse-heading-5"
+                            class={"flex flex-col items-center justify-center p-4"}
+                          >
+                            <p class="my-5 w-full text-left text-gray-500 text-xs dark:text-gray-400">
+                              Displaying JSON
+                            </p>
+                            <div className="w-full rounded flex overflow-x-scroll bg-black text-white py-2 px-4 text-sm flex flex-col justify-start">
+                              <pre>
+                                <code>
+                                  <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: `${
+                                            hljs.highlight(`${opModal.value.schema}`, {language: 'json'})
+                                                .value
+                                        }`,
+                                      }}
+                                  >
+                                  </div>
+                                </code>
+                              </pre>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <button
