@@ -7,6 +7,7 @@ import { ServiceNodeMenu } from "./nodeMenu.tsx";
 import { ProducerIcon } from "../icons/producer.tsx";
 import { ConsumerIcon } from "../icons/consumer.tsx";
 import {
+  componentKey,
   removeWhitespace,
   serviceKey,
   setComponentGroup,
@@ -216,6 +217,8 @@ export const ComponentNode = ({ data }: { data: NodeData }) => {
       false,
     );
   };
+
+  const cKey = componentKey(data.audience);
   return (
     <div>
       <div className={"flex w-1/2 justify-between mb"}>
@@ -231,7 +234,7 @@ export const ComponentNode = ({ data }: { data: NodeData }) => {
         />
       </div>
       <div
-        id={data.audience.componentName}
+        id={`${cKey}-dragHandle`}
         class="z-0 flex justify-center items-center bg-web rounded-md hover:shadow-xl hover:border-4 hover:border-purple-600 h-[145px] w-[145px]"
         onMouseOver={() => setHover()}
         onMouseLeave={() => resetHover()}
