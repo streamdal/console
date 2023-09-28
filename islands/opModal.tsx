@@ -26,7 +26,8 @@ import {
   peekSignal,
 } from "../lib/peek.ts";
 import IconTrash from "tabler-icons/tsx/trash.tsx";
-
+import { opUpdateSignal } from "./serviceMap.tsx";
+import { useEffect } from "preact/hooks";
 export const OP_MODAL_WIDTH = "308px";
 
 export default function OpModal(
@@ -39,6 +40,13 @@ export default function OpModal(
   const audience = opModal.value?.audience;
   const attachedPipeline = opModal.value?.attachedPipeline;
   const opType = OperationType[audience?.operationType];
+
+  useEffect(() => {
+    if (opModal.value?.audience) {
+      opUpdateSignal.value = { audience };
+      console.log(opUpdateSignal.value);
+    }
+  }, [opModal.value]);
 
   const [peekNavOpen, setPeekNavOpen] = useState(false);
 

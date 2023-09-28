@@ -19,6 +19,7 @@ import { Tooltip } from "../tooltip/tooltip.tsx";
 import { NodeData, Operation } from "../../lib/nodeMapper.ts";
 import { opModal } from "./opModalSignal.ts";
 import IconTrash from "tabler-icons/tsx/trash.tsx";
+import { opUpdateSignal } from "../../islands/serviceMap.tsx";
 
 export const GROUP_WIDTH = 280;
 export const GROUP_MARGIN = 45;
@@ -126,11 +127,16 @@ export const GroupNode = ({ data }: { data: NodeData }) => {
 export const OperationNode = (
   { operation, css }: { operation: Operation; css: string },
 ) => {
+  console.log(operation?.audience === opModal.value?.audience);
   const toolTipId = removeWhitespace(operation.audience.operationName);
+  const highlight = operation?.audience === opModal.value?.audience;
+
   return (
     <div
       type="button"
-      class={`flex items-center justify-between w-[260px] h-[64px] bg-white rounded-lg shadow-lg border-1 border-purple-200 pl-1 pr-2 ${css}`}
+      class={`flex items-center justify-between w-[260px] h-[64px] bg-white rounded-lg shadow-lg ${
+        highlight ? "border-2 border-purple-600" : "border-1 border-purple-200"
+      } pl-1 pr-2 ${css}`}
     >
       <div
         class="whitespace-nowrap text-ellipsis overflow-hidden w-full"
