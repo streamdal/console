@@ -280,7 +280,6 @@ export const mapEdges = (audiences: Audience[]): Map<string, FlowEdge> => {
 // unrouted modals client-side and those changes need to be reflected
 // in the already rendered nodes
 export const updateNode = (nodes: FlowNode[], update: OpUpdate) => {
-  console.log("fucking update", update);
   return nodes.map((n: FlowNode) =>
     n.id ===
         groupKey(update.audience)

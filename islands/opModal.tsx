@@ -47,7 +47,6 @@ export default function OpModal(
   useEffect(() => {
     if (opModal.value?.audience) {
       opUpdateSignal.value = { audience };
-      console.log(opUpdateSignal.value);
     }
   }, [opModal.value]);
 
@@ -154,8 +153,8 @@ export default function OpModal(
                               {audience?.operationName}
                             </h3>
                             <p class="text-xs text-cloud">
-                              {`${clients} attached client${
-                                (clients !== 1) ? "s" : ""
+                              {`${clients.length} attached client${
+                                (clients.length !== 1) ? "s" : ""
                               }`}
                             </p>
                           </div>
