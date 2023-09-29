@@ -8,8 +8,6 @@ import {
   setServiceSignal,
 } from "../components/serviceMap/serviceSignal.ts";
 import { getAll } from "../lib/fetch.ts";
-import { version } from "../version.ts";
-import { Toast, toastSignal } from "../components/toasts/toast.tsx";
 import { grpcToken, grpcUrl } from "../lib/configs.ts";
 
 export default async function Layout(req: Request, ctx: LayoutContext) {
@@ -17,6 +15,8 @@ export default async function Layout(req: Request, ctx: LayoutContext) {
   const token = await grpcToken();
   const allServices = await getAll();
   setServiceSignal(allServices);
+
+  const version = await Deno.readTextFile("VERSION");
 
   return (
     <>
@@ -32,6 +32,8 @@ export default async function Layout(req: Request, ctx: LayoutContext) {
           <ServiceMapComponent
             initNodes={Array.from(serviceSignal.value.nodesMap.values())}
             initEdges={Array.from(serviceSignal.value.edgesMap.values())}
+            grpcUrl={url}
+            grpcToken={token}
             blur={req.url.includes("pipelines") ||
               req.url.includes("notifications")}
           />

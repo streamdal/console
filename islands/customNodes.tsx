@@ -8,6 +8,8 @@ import { ProducerIcon } from "../components/icons/producer.tsx";
 import { ConsumerIcon } from "../components/icons/consumer.tsx";
 import {
   componentKey,
+  audienceKey,
+  edgeKey,
   removeWhitespace,
   serviceKey,
   setComponentGroup,
@@ -90,7 +92,7 @@ export const GroupNode = ({ data }: { data: NodeData }) => {
 
   return (
     <div
-      class={`rounded-lg bg-sunset border border-purple-200 w-[${GROUP_WIDTH}px] pb-4 hover:shadow-lg hover:border-purple-600`}
+      className={`rounded-lg bg-sunset border border-purple-200 w-[${GROUP_WIDTH}px] pb-4 hover:shadow-lg hover:border-purple-600`}
       onMouseOver={() => setHover()}
       onMouseLeave={() => resetHover()}
     >
@@ -109,7 +111,6 @@ export const GroupNode = ({ data }: { data: NodeData }) => {
           />
         ))}
       </div>
-
       <Handle
         type="source"
         position={producer ? Position.Bottom : Position.Top}
