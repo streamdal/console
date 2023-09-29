@@ -129,6 +129,7 @@ export const OperationNode = (
 ) => {
   const toolTipId = removeWhitespace(operation.audience.operationName);
   const highlight = operation?.audience === opModal.value?.audience;
+  const trashActive = opModal.value?.delete;
 
   return (
     <div
@@ -175,12 +176,12 @@ export const OperationNode = (
             delete: true,
           };
         }}
-        className={"p-2 rounded"}
+        className={"p-2 rounded group/item"}
       >
         <IconTrash
-          class={`w-5 h-5 hover:text-streamdalRed invisible z-50  group-hover:visible ${
-            highlight ? "visible text-streamdalRed" : "text-gray-300"
-          }`}
+          class={`w-5 h-5 hover:text-streamdalRed invisible z-50 ${
+            trashActive ? "text-streamdalRed" : "text-gray-300"
+          } group-hover:visible ${highlight && "visible"}`}
         />
       </button>
     </div>
