@@ -127,14 +127,13 @@ export const GroupNode = ({ data }: { data: NodeData }) => {
 export const OperationNode = (
   { operation, css }: { operation: Operation; css: string },
 ) => {
-  console.log(operation?.audience === opModal.value?.audience);
   const toolTipId = removeWhitespace(operation.audience.operationName);
   const highlight = operation?.audience === opModal.value?.audience;
 
   return (
     <div
       type="button"
-      class={`flex items-center justify-between w-[260px] h-[64px] bg-white rounded-lg shadow-lg ${
+      class={`flex items-center justify-between w-[260px] h-[64px] group bg-white rounded-lg shadow-lg ${
         highlight ? "border-2 border-purple-600" : "border-1 border-purple-200"
       } pl-1 pr-2 ${css}`}
     >
@@ -176,9 +175,13 @@ export const OperationNode = (
             delete: true,
           };
         }}
-        className={"p-2 rounded hover:bg-red-50"}
+        className={"p-2 rounded"}
       >
-        <IconTrash class="w-6 h-6 text-streamdalRed" />
+        <IconTrash
+          class={`w-5 h-5 hover:text-streamdalRed invisible z-50 text-gray-300 group-hover:visible ${
+            highlight && "text-streamdalRed"
+          }`}
+        />
       </button>
     </div>
   );
