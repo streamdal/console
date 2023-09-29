@@ -10,7 +10,7 @@ import {
   GroupNode,
   OperationNode,
   ServiceNode,
-} from "../components/serviceMap/customNodes.tsx";
+} from "./customNodes.tsx";
 import { signal, useSignalEffect } from "@preact/signals";
 import { Audience } from "snitch-protos/protos/sp_common.ts";
 import { Pipeline } from "snitch-protos/protos/sp_pipeline.ts";

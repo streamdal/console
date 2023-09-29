@@ -11,10 +11,7 @@ import {
 } from "./utils.ts";
 import { OpUpdate } from "../islands/serviceMap.tsx";
 import { ServiceMapper } from "./serviceMapper.ts";
-import {
-  GROUP_MARGIN,
-  GROUP_WIDTH,
-} from "../components/serviceMap/customNodes.tsx";
+import { GROUP_MARGIN, GROUP_WIDTH } from "../islands/customNodes.tsx";
 import { MarkerType } from "reactflow";
 
 export type Operation = {

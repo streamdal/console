@@ -3,9 +3,9 @@ import IconGripVertical from "tabler-icons/tsx/grip-vertical.tsx";
 import IconDatabase from "tabler-icons/tsx/database.tsx";
 import "twind";
 import { OperationType } from "snitch-protos/protos/sp_common.ts";
-import { ServiceNodeMenu } from "./nodeMenu.tsx";
-import { ProducerIcon } from "../icons/producer.tsx";
-import { ConsumerIcon } from "../icons/consumer.tsx";
+import { ServiceNodeMenu } from "../components/serviceMap/nodeMenu.tsx";
+import { ProducerIcon } from "../components/icons/producer.tsx";
+import { ConsumerIcon } from "../components/icons/consumer.tsx";
 import {
   componentKey,
   removeWhitespace,
@@ -14,12 +14,12 @@ import {
   setOperationHoverGroup,
   setServiceGroup,
   titleCase,
-} from "../../lib/utils.ts";
-import { Tooltip } from "../tooltip/tooltip.tsx";
-import { NodeData, Operation } from "../../lib/nodeMapper.ts";
-import { opModal } from "./opModalSignal.ts";
+} from "../lib/utils.ts";
+import { Tooltip } from "../components/tooltip/tooltip.tsx";
+import { NodeData, Operation } from "../lib/nodeMapper.ts";
+import { opModal } from "../components/serviceMap/opModalSignal.ts";
 import IconTrash from "tabler-icons/tsx/trash.tsx";
-import { opUpdateSignal } from "../../islands/serviceMap.tsx";
+import { opUpdateSignal } from "./serviceMap.tsx";
 
 export const GROUP_WIDTH = 280;
 export const GROUP_MARGIN = 45;
@@ -176,7 +176,7 @@ export const OperationNode = (
             delete: true,
           };
         }}
-        className={"p-2 rounded group/item"}
+        className={"p-2 rounded"}
       >
         <IconTrash
           class={`w-5 h-5 hover:text-streamdalRed invisible z-50 ${
