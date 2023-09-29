@@ -178,8 +178,8 @@ export const OperationNode = (
         className={"p-2 rounded"}
       >
         <IconTrash
-          class={`w-5 h-5 hover:text-streamdalRed invisible z-50 text-gray-300 group-hover:visible ${
-            highlight && "text-streamdalRed"
+          class={`w-5 h-5 hover:text-streamdalRed invisible z-50  group-hover:visible ${
+            highlight ? "visible text-streamdalRed" : "text-gray-300"
           }`}
         />
       </button>
