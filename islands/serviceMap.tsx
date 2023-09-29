@@ -25,6 +25,7 @@ import {
   ComponentEdge,
   ServiceEdge,
 } from "../components/serviceMap/customEdge.tsx";
+import { opModal } from "../components/serviceMap/opModalSignal.ts";
 
 const LAYOUT_KEY = "service-map-layout";
 
@@ -199,7 +200,9 @@ export default function ServiceMapComponent(
         edgeTypes={edgeTypes}
       >
         {nodes.length === 0 && <EmptyService />}
-        <Background style={{ height: "100vh" }} />
+        <Background
+          style={{ height: "100vh" }}
+        />
       </ReactFlow>
     </div>
   );

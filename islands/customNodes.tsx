@@ -7,8 +7,8 @@ import { ServiceNodeMenu } from "../components/serviceMap/nodeMenu.tsx";
 import { ProducerIcon } from "../components/icons/producer.tsx";
 import { ConsumerIcon } from "../components/icons/consumer.tsx";
 import {
-  componentKey,
   audienceKey,
+  componentKey,
   edgeKey,
   removeWhitespace,
   serviceKey,
@@ -27,6 +27,9 @@ export const GROUP_WIDTH = 280;
 export const GROUP_MARGIN = 45;
 
 export const ServiceNode = ({ data }: { data: NodeData }) => {
+  console.log("data", data);
+  const highlighted = data?.audience === opModal.value?.audience &&
+    opModal.value?.displayType === "service";
   const setHover = () => {
     setServiceGroup(
       data.audience.serviceName,
@@ -43,12 +46,23 @@ export const ServiceNode = ({ data }: { data: NodeData }) => {
   };
 
   return (
-    <div>
+    <div
+      onClick={() => {
+        opModal.value = {
+          audience: data.audience,
+          displayType: "service",
+        };
+      }}
+    >
       <div
-        class="min-h-[80px] w-[320px] flex items-center justify-between bg-white rounded-lg z-10 px-2 border hover:border-purple-600 hover:shadow-lg"
-        id={`${serviceKey(data.audience)}-draghandle`}
+        class={`min-h-[80px] w-[320px] flex items-center justify-between bg-white rounded-lg z-10 px-2 hover:border-purple-600 hover:shadow-lg ${
+          highlighted
+            ? "border-2 border-purple-600"
+            : "border-1 border-purple-200"
+        }`}
         onMouseOver={() => setHover()}
         onMouseLeave={() => resetHover()}
+        id={`${serviceKey(data.audience)}-draghandle`}
       >
         <div class="flex flex-row items-center">
           <IconGripVertical class="w-6 h-6 text-purple-100 mr-1" />
@@ -129,7 +143,8 @@ export const OperationNode = (
   { operation, css }: { operation: Operation; css: string },
 ) => {
   const toolTipId = removeWhitespace(operation.audience.operationName);
-  const highlight = operation?.audience === opModal.value?.audience;
+  const highlight = operation?.audience === opModal.value?.audience &&
+    opModal.value?.displayType === "operation";
   const trashActive = opModal.value?.delete;
 
   return (
@@ -144,6 +159,7 @@ export const OperationNode = (
         onClick={() =>
           opModal.value = {
             audience: operation.audience,
+            displayType: "operation",
             attachedPipeline: operation.attachedPipeline,
             clients: operation.clients,
           }}
@@ -172,6 +188,7 @@ export const OperationNode = (
         onClick={() => {
           opModal.value = {
             audience: operation.audience,
+            displayType: "operation",
             attachedPipeline: operation.attachedPipeline,
             clients: operation.clients,
             delete: true,
@@ -214,6 +231,10 @@ export const ComponentImage = (
 };
 
 export const ComponentNode = ({ data }: { data: NodeData }) => {
+  console.log("in component", data);
+  const highlighted = data?.audience === opModal.value?.audience &&
+    opModal.value?.displayType === "component";
+  console.log("hello", highlighted);
   const setHover = () => {
     setComponentGroup(
       data.audience.componentName,
@@ -231,7 +252,14 @@ export const ComponentNode = ({ data }: { data: NodeData }) => {
 
   const cKey = componentKey(data.audience);
   return (
-    <div>
+    <div
+      onClick={() => {
+        opModal.value = {
+          audience: data.audience,
+          displayType: "component",
+        };
+      }}
+    >
       <div className={"flex w-1/2 justify-between mb"}>
         <Handle
           type="source"
@@ -246,7 +274,9 @@ export const ComponentNode = ({ data }: { data: NodeData }) => {
       </div>
       <div
         id={`${cKey}-dragHandle`}
-        class="z-0 flex justify-center items-center bg-web rounded-md hover:shadow-xl hover:border-4 hover:border-purple-600 h-[145px] w-[145px]"
+        class={`z-0 flex justify-center items-center bg-web rounded-md hover:shadow-xl hover:border-4 hover:border-purple-600 h-[145px] w-[145px] ${
+          highlighted && "border-4 border-purple-600"
+        }`}
         onMouseOver={() => setHover()}
         onMouseLeave={() => resetHover()}
       >
