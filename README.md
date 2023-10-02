@@ -51,3 +51,5 @@ generate a release:
 3. git push the generated version tag: `git push origin <tag_name>`
 4. Generate a release from the tag with user-friendly release notes:
    https://github.com/streamdal/snitch-node-client/releases
+   1. Creating a release will trigger a Github Action to publish
+      package to package managers, etc.
