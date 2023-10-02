@@ -30,6 +30,7 @@ import { useEffect } from "preact/hooks";
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
 import { useSignalEffect } from "https://esm.sh/v131/@preact/signals@1.1.3/denonext/signals.mjs";
 import { opUpdateSignal } from "./serviceMap.tsx";
+import { ComponentImage } from "./customNodes.tsx";
 export const OP_MODAL_WIDTH = "308px";
 
 export default function OpModal(
@@ -50,13 +51,30 @@ export default function OpModal(
     }
   };
 
+  const iconDisplay = () => {
+    if (displayType === "operation") {
+      return opType === "CONSUMER"
+        ? <ConsumerIcon className={"mx-2"} />
+        : <ProducerIcon className={"mx-2"} />;
+    }
+    if (displayType === "component") {
+      return (
+        <ComponentImage componentName={displayName} className={"w-6 mx-2"} />
+      );
+    }
+    return (
+      <img
+        src={"/images/placeholder-icon.png"}
+        className={"w-7 mx-2"}
+      />
+    );
+  };
+
   const audience = opModal.value?.audience;
   const attachedPipeline = opModal.value?.attachedPipeline;
   const clients = opModal.value?.clients;
   const opType = OperationType[audience?.operationType];
   const displayName = setDisplayName();
-
-  console.log("shit", audience);
 
   const [peekNavOpen, setPeekNavOpen] = useState(false);
   const [schemaNavOpen, setSchemaNavOpen] = useState(false);
@@ -107,7 +125,7 @@ export default function OpModal(
           />
         )}
         <div
-          class={`fixed z-50 h-screen top-0 right-0 transition-transform ${`translate-x-full right-[${OP_MODAL_WIDTH}]`} flex flex-row justify-end items-start`}
+          class={`fixed z-50 h-screen top-0 right-0 transition-transform ${`translate-x-full right-[${OP_MODAL_WIDTH}]`} flex flex-row justify-end items-start bg-black`}
         >
           <div class="w-[308px] shadow-xl h-full">
             <div class="bg-white h-full">
@@ -125,9 +143,10 @@ export default function OpModal(
                     <div>
                       <div class="rounded-t flex justify-between">
                         <div class="z-[20] flex items-center justify-start px-4 w-full h-16 bg-web">
-                          {opType === "CONSUMER"
-                            ? <ConsumerIcon className={"mx-2"} />
-                            : <ProducerIcon className={"mx-2"} />}
+                          {iconDisplay()}
+                          {/*{opType === "CONSUMER"*/}
+                          {/*  ? <ConsumerIcon className={"mx-2"} />*/}
+                          {/*  : <ProducerIcon className={"mx-2"} />}*/}
                           <div class="flex flex-col">
                             <h3 class="text-lg text-cloud">
                               {displayName}

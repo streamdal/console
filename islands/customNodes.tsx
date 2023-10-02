@@ -27,7 +27,6 @@ export const GROUP_WIDTH = 280;
 export const GROUP_MARGIN = 45;
 
 export const ServiceNode = ({ data }: { data: NodeData }) => {
-  console.log("data", data);
   const highlighted = data?.audience === opModal.value?.audience &&
     opModal.value?.displayType === "service";
   const setHover = () => {
@@ -207,13 +206,13 @@ export const OperationNode = (
 };
 
 export const ComponentImage = (
-  { componentName }: { componentName: string },
+  { componentName, className }: { componentName: string; className: string },
 ) => {
   if (componentName.toLowerCase().includes("kafka")) {
     return (
       <img
         src={"/images/kafka-dark.svg"}
-        className="w-[30px]"
+        className={className}
       />
     );
   }
@@ -222,7 +221,7 @@ export const ComponentImage = (
     return (
       <img
         src={"/images/postgresql.svg"}
-        className="w-[30px]"
+        className={className}
       />
     );
   }
@@ -231,10 +230,8 @@ export const ComponentImage = (
 };
 
 export const ComponentNode = ({ data }: { data: NodeData }) => {
-  console.log("in component", data);
   const highlighted = data?.audience === opModal.value?.audience &&
     opModal.value?.displayType === "component";
-  console.log("hello", highlighted);
   const setHover = () => {
     setComponentGroup(
       data.audience.componentName,
@@ -281,7 +278,10 @@ export const ComponentNode = ({ data }: { data: NodeData }) => {
         onMouseLeave={() => resetHover()}
       >
         <div class="flex justify-center flex-col items-center">
-          <ComponentImage componentName={data.audience.componentName} />
+          <ComponentImage
+            componentName={data.audience.componentName}
+            className={"w-[30px]"}
+          />
           <p class={"z-10 mt-2 text-white"}>{data.audience.componentName}</p>
         </div>
       </div>
