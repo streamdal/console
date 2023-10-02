@@ -180,6 +180,12 @@ export default function ServiceMapComponent(
     }
   });
 
+  const clearModal = (e) => {
+    if (e.target.className === "react-flow__pane react-flow__pane") {
+      opModal.value = null;
+    }
+  };
+
   return (
     <div
       class={`w-full h-screen m-0 ${
@@ -198,6 +204,7 @@ export default function ServiceMapComponent(
         nodeTypes={nodeTypes}
         defaultViewport={defaultViewport}
         edgeTypes={edgeTypes}
+        onClick={(e) => clearModal(e)}
       >
         {nodes.length === 0 && <EmptyService />}
         <Background

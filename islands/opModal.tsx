@@ -125,7 +125,7 @@ export default function OpModal(
           />
         )}
         <div
-          class={`fixed z-50 h-screen top-0 right-0 transition-transform ${`translate-x-full right-[${OP_MODAL_WIDTH}]`} flex flex-row justify-end items-start bg-black`}
+          class={`fixed z-50 h-screen top-0 right-0 transition-transform ${`translate-x-full right-[${OP_MODAL_WIDTH}]`} flex flex-row justify-end items-start`}
         >
           <div class="w-[308px] shadow-xl h-full">
             <div class="bg-white h-full">
@@ -144,9 +144,6 @@ export default function OpModal(
                       <div class="rounded-t flex justify-between">
                         <div class="z-[20] flex items-center justify-start px-4 w-full h-16 bg-web">
                           {iconDisplay()}
-                          {/*{opType === "CONSUMER"*/}
-                          {/*  ? <ConsumerIcon className={"mx-2"} />*/}
-                          {/*  : <ProducerIcon className={"mx-2"} />}*/}
                           <div class="flex flex-col">
                             <h3 class="text-lg text-cloud">
                               {displayName}
@@ -311,16 +308,19 @@ export default function OpModal(
                                             <input
                                               class={`w-[${
                                                 (String(
-                                                  peekSamplingRateSignal.value,
+                                                  peekSamplingRateSignal
+                                                    .value,
                                                 )
                                                   .length) * 12
                                               }px] mr-2`}
                                               value={peekSamplingRateSignal
                                                 .value}
                                               onChange={(e) => {
-                                                if (isNumeric(e.target.value)) {
-                                                  peekSamplingRateSignal.value =
-                                                    e.target.value;
+                                                if (
+                                                  isNumeric(e.target.value)
+                                                ) {
+                                                  peekSamplingRateSignal
+                                                    .value = e.target.value;
                                                 }
                                               }}
                                             />
