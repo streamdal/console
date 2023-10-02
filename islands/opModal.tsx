@@ -14,19 +14,17 @@ import { PausePipelineModal } from "../components/modals/pausePipelineModal.tsx"
 import { DetachPipelineModal } from "../components/modals/detachPipelineModal.tsx";
 import { OddAttachModal } from "../components/modals/oddAttachModal.tsx";
 import { EmptyStateBird } from "../components/icons/emptyStateBird.tsx";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { DeleteOperationModal } from "../components/modals/deleteOperationModal.tsx";
-import { parseData, Peek } from "./peek.tsx";
+import { Peek } from "./peek.tsx";
 import { Toggle } from "../components/form/switch.tsx";
 import { getAudienceOpRoute, isNumeric } from "../lib/utils.ts";
 import {
   peekingSignal,
   peekSamplingRateSignal,
   peekSamplingSignal,
-  peekSignal,
 } from "../lib/peek.ts";
 import IconTrash from "tabler-icons/tsx/trash.tsx";
-import { useEffect } from "preact/hooks";
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
 import { useSignalEffect } from "https://esm.sh/v131/@preact/signals@1.1.3/denonext/signals.mjs";
 import { opUpdateSignal } from "./serviceMap.tsx";
@@ -94,7 +92,7 @@ export default function OpModal(
         schema: JSON.stringify(schema.schema, null, 2),
       };
     }
-  }, [audience]);
+  }, [audience, schemaNavOpen]);
 
   return (
     <>
