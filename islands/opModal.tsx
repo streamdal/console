@@ -26,6 +26,8 @@ import {
 } from "../lib/peek.ts";
 import IconTrash from "tabler-icons/tsx/trash.tsx";
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
+import IconWindowMaximize from "tabler-icons/tsx/window-maximize.tsx";
+import { SchemaModal } from "../components/modals/schemaModal.tsx";
 
 export const OP_MODAL_WIDTH = "308px";
 
@@ -43,6 +45,7 @@ export default function OpModal(
 
   const [peekNavOpen, setPeekNavOpen] = useState(false);
   const [schemaNavOpen, setSchemaNavOpen] = useState(false);
+  const [schemaModalOpen, setSchemaModalOpen] = useState(false);
 
   const getSchema = async () => {
     const response = await fetch(`${getAudienceOpRoute(audience)}/schema`, {
@@ -81,6 +84,7 @@ export default function OpModal(
           pipeline={attachedPipeline || null}
         />
       )}
+      {schemaModalOpen && <SchemaModal schema={opModal.value.schema} />}
       <div class="flex flex-row">
         {peekingSignal.value && (
           <Peek
@@ -94,34 +98,6 @@ export default function OpModal(
         >
           <div class="w-[308px] shadow-xl h-full">
             <div class="bg-white h-full">
-              {/*<div class="flex h-16 p-4 justify-between items-center border-b border-purple-100">*/}
-              {/*  <div class="flex items-center justify-start">*/}
-              {/*    <IconUserCircle class="w-12 h-12 mr-4" />*/}
-              {/*    <h2 class="text-web font-semibold">User Name</h2>*/}
-              {/*  </div>*/}
-              {/*  <button class="p-1 rounded hover:bg-purple-100">*/}
-              {/*    <svg*/}
-              {/*      width="18"*/}
-              {/*      height="18"*/}
-              {/*      viewBox="0 0 18 18"*/}
-              {/*      fill="none"*/}
-              {/*      xmlns="http://www.w3.org/2000/svg"*/}
-              {/*    >*/}
-              {/*      <path*/}
-              {/*        fill-rule="evenodd"*/}
-              {/*        clip-rule="evenodd"*/}
-              {/*        d="M3.53975 11.479C3.75942 11.2593 4.11558 11.2593 4.33525 11.479L8.67992 15.8236C8.75314 15.8969 8.87186 15.8969 8.94508 15.8236L13.2898 11.479C13.5094 11.2593 13.8656 11.2593 14.0852 11.479C14.3049 11.6986 14.3049 12.0548 14.0852 12.2745L9.74058 16.6191C9.22801 17.1317 8.39699 17.1317 7.88442 16.6191L3.53975 12.2745C3.32008 12.0548 3.32008 11.6986 3.53975 11.479Z"*/}
-              {/*        fill="#372D56"*/}
-              {/*      />*/}
-              {/*      <path*/}
-              {/*        fill-rule="evenodd"*/}
-              {/*        clip-rule="evenodd"*/}
-              {/*        d="M3.53975 6.64946C3.75942 6.86913 4.11558 6.86913 4.33525 6.64946L8.67992 2.30479C8.75314 2.23156 8.87186 2.23157 8.94508 2.30479L13.2898 6.64946C13.5094 6.86913 13.8656 6.86913 14.0852 6.64946C14.3049 6.42979 14.3049 6.07363 14.0852 5.85396L9.74058 1.50929C9.22801 0.996729 8.39699 0.996731 7.88442 1.50929L3.53975 5.85396C3.32008 6.07363 3.32008 6.42979 3.53975 6.64946Z"*/}
-              {/*        fill="#372D56"*/}
-              {/*      />*/}
-              {/*    </svg>*/}
-              {/*  </button>*/}
-              {/*</div>*/}
               {opModal.value == null
                 ? (
                   <div class="w-full h-4/5 flex flex-col justify-center items-center">
@@ -398,7 +374,15 @@ export default function OpModal(
                             <p class="mb-5 w-full text-left text-gray-500 text-xs">
                               Displaying JSON
                             </p>
-                            <div className="w-full rounded flex overflow-x-scroll bg-black text-white py-2 px-4 text-sm flex flex-col justify-start">
+                            <div className="w-full rounded flex overflow-x-scroll bg-black text-white text-sm flex flex-col justify-start">
+                              <div class={"w-full flex justify-end"}>
+                                <button
+                                  class={"cursor-pointer"}
+                                  onClick={() => setSchemaModalOpen(true)}
+                                >
+                                  <IconWindowMaximize class="w-5 h-5 text-white mx-1 my-1" />
+                                </button>
+                              </div>
                               <pre>
                                 <code>
                                   <div
@@ -408,7 +392,7 @@ export default function OpModal(
                                                 .value
                                         }`,
                                       }}
-                                      class={"font-sm"}
+                                      class={"font-sm pb-2 px-4"}
                                   >
                                   </div>
                                 </code>
