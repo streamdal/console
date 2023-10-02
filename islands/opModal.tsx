@@ -254,7 +254,6 @@ export default function OpModal(
                                 <OddAttachModal serviceMap={serviceMap} />
                               )}
                             </div>
-
                             <div
                               id="pipeline-attach-detach"
                               data-accordion="open"
