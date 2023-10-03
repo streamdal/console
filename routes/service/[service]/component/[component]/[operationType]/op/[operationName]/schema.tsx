@@ -9,7 +9,9 @@ export const handler: Handers<> = {
     if (schema) {
       const decoded = new TextDecoder().decode(schema.schema.jsonSchema);
       const parsed = JSON.parse(decoded);
-      return new Response(JSON.stringify({ schema: parsed }));
+      return new Response(
+        JSON.stringify({ schema: parsed, version: schema.schema.Version }),
+      );
     }
   },
 };

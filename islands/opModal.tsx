@@ -54,12 +54,20 @@ export default function OpModal(
     return response.json();
   };
 
+  const handleClose = () => {
+    setSchemaModalOpen(false);
+  };
+
   useEffect(async () => {
     if (opModal.value) {
       const schema = await getSchema();
+      console.log(schema.version);
       opModal.value = {
         ...opModal.value,
-        schema: JSON.stringify(schema.schema, null, 2),
+        schemaInfo: {
+          schema: JSON.stringify(schema.schema, null, 2),
+          version: schema.version,
+        },
       };
     }
   }, [audience, schemaNavOpen]);
@@ -84,7 +92,13 @@ export default function OpModal(
           pipeline={attachedPipeline || null}
         />
       )}
-      {schemaModalOpen && <SchemaModal schema={opModal.value.schema} />}
+      {schemaModalOpen && (
+        <SchemaModal
+          schema={opModal.value.schemaInfo.schema}
+          version={opModal.value.schemaInfo.version}
+          setClose={handleClose}
+        />
+      )}
       <div class="flex flex-row">
         {peekingSignal.value && (
           <Peek
@@ -371,33 +385,37 @@ export default function OpModal(
                             aria-labelledby="collapse-heading-5"
                             class={"flex flex-col items-center justify-center p-4"}
                           >
-                            <p class="mb-5 w-full text-left text-gray-500 text-xs">
-                              Displaying JSON
-                            </p>
-                            <div className="w-full rounded flex overflow-x-scroll bg-black text-white text-sm flex flex-col justify-start">
-                              <div class={"w-full flex justify-end"}>
-                                <button
-                                  class={"cursor-pointer"}
-                                  onClick={() => setSchemaModalOpen(true)}
-                                >
-                                  <IconWindowMaximize class="w-5 h-5 text-white mx-1 my-1" />
-                                </button>
-                              </div>
-                              <pre>
-                                <code>
-                                  <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: `${
-                                            hljs.highlight(`${opModal.value.schema}`, {language: 'json'})
-                                                .value
-                                        }`,
-                                      }}
-                                      class={"font-sm pb-2 px-4"}
-                                  >
+                            {!schemaModalOpen && (
+                              <>
+                                <p class="mb-5 w-full text-left text-gray-500 text-xs">
+                                  Displaying JSON
+                                </p>
+                                <div className="w-full rounded flex overflow-x-scroll bg-black text-white text-sm flex flex-col justify-start">
+                                  <div class={"w-full flex justify-end"}>
+                                    <button
+                                      class={"cursor-pointer"}
+                                      onClick={() => setSchemaModalOpen(true)}
+                                    >
+                                      <IconWindowMaximize class="w-5 h-5 text-white mx-1 my-1" />
+                                    </button>
                                   </div>
-                                </code>
-                              </pre>
-                            </div>
+                                  <pre>
+                          <code>
+                          <div
+                          dangerouslySetInnerHTML={{
+                          __html: `${
+                          hljs.highlight(`${opModal.value.schemaInfo.schema}`, {language: 'json'})
+                          .value
+                        }`,
+                        }}
+                        class={"font-sm pb-2 px-4"}
+                      >
+                      </div>
+                    </code>
+                                  </pre>
+                                </div>
+                              </>
+                            )}
                           </div>
                         )}
                       </div>
