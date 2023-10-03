@@ -95,7 +95,6 @@ export default function OpModal(
   useEffect(async () => {
     if (opModal.value) {
       const schema = await getSchema();
-      console.log(schema.version);
       opModal.value = {
         ...opModal.value,
         schemaInfo: {
@@ -428,33 +427,43 @@ export default function OpModal(
                                   aria-labelledby="collapse-heading-5"
                                   class={"flex flex-col items-center justify-center p-4"}
                                 >
-                                  <p class="mb-5 w-full text-left text-gray-500 text-xs">
-                                    Displaying JSON
-                                  </p>
-                                  <div className="w-full rounded flex overflow-x-scroll bg-black text-white py-2 px-4 text-sm flex flex-col justify-start">
-                                    <div class={"w-full flex justify-end"}>
-                                      <button
-                                        class={"cursor-pointer"}
-                                        onClick={() => setSchemaModalOpen(true)}
-                                      >
-                                        <IconWindowMaximize class="w-5 h-5 text-white mx-1 my-1" />
-                                      </button>
-                                    </div>
-                                    <pre>
-                                      <code>
-                                        <div
-                                            dangerouslySetInnerHTML={{
-                                              __html: `${
-                                                  hljs.highlight(`${opModal.value.schema}`, {language: 'json'})
-                                                      .value
-                                              }`,
-                                            }}
-                                            class={"font-sm"}
-                                        >
+                                  {!schemaModalOpen && (
+                                    <>
+                                      <p class="mb-5 w-full text-left text-gray-500 text-xs">
+                                        Displaying JSON
+                                      </p>
+                                      <div className="w-full rounded flex overflow-x-scroll bg-black text-white pt-2 pb-6 px-4 text-sm flex flex-col justify-start">
+                                        <div class={"w-full flex justify-end"}>
+                                          <button
+                                            class={"cursor-pointer"}
+                                            onClick={() =>
+                                              setSchemaModalOpen(true)}
+                                            data-tooltip-target="maximize"
+                                          >
+                                            <IconWindowMaximize class="w-5 h-5 text-white mx-1 my-1" />
+                                          </button>
+                                          <Tooltip
+                                            targetId="maximize"
+                                            message={"Click to maximize schema"}
+                                          />
                                         </div>
-                                      </code>
-                                    </pre>
-                                  </div>
+                                        <pre>
+                                          <code>
+                                            <div
+                                            dangerouslySetInnerHTML={{
+                                            __html: `${
+                                            hljs.highlight(`${opModal.value.schemaInfo?.schema}`, {language: 'json'})
+                                            .value
+                                          }`,
+                                          }}
+                                          class={"font-sm"}
+                                              >
+                                            </div>
+                                          </code>
+                                        </pre>
+                                      </div>
+                                    </>
+                                  )}
                                 </div>
                               )}
                             </div>
