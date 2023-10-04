@@ -5,6 +5,7 @@ import {
 } from "https://deno.land/x/fresh_session@0.2.2/mod.ts";
 import { ErrorType } from "../components/form/validate.ts";
 import { ServiceMapper } from "../lib/serviceMapper.ts";
+import { checkEmailVerified, RegistrationStatus } from "../lib/fetch.ts";
 
 export type SuccessType = {
   status: boolean;
@@ -36,4 +37,24 @@ const sessionHandler = (req: Request, ctx: MiddlewareHandlerContext<State>) => {
     return session(req, ctx as any);
   }
 };
-export const handler = [sessionHandler];
+
+const emailVerifier = async (
+  _req: Request,
+  ctx: MiddlewareHandlerContext<{ isEmailVerified: boolean }>,
+) => {
+  if (ctx.state.isEmailVerified) {
+    return ctx.next();
+  }
+
+  const { status } = await checkEmailVerified();
+
+  switch (status) {
+    case RegistrationStatus.SUBMIT:
+      return Response.redirect("/email/collect", 307);
+    case RegistrationStatus.VERIFY:
+      return Response.redirect("/email/verify", 307);
+    default:
+      return ctx.next();
+  }
+};
+export const handler = [sessionHandler, emailVerifier];
