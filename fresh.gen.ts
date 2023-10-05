@@ -21,6 +21,7 @@ import * as $15 from "./routes/service/[service]/component/[component]/[operatio
 import * as $16 from "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/pipeline/[id]/pause.tsx";
 import * as $17 from "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/schema.tsx";
 import * as $18 from "./routes/ws/service-map.tsx";
+import * as $19 from "./routes/ws/tail.tsx";
 import * as $$0 from "./islands/customNodes.tsx";
 import * as $$1 from "./islands/notifications.tsx";
 import * as $$2 from "./islands/opModal.tsx";
@@ -56,6 +57,7 @@ const manifest = {
     "./routes/service/[service]/component/[component]/[operationType]/op/[operationName]/schema.tsx":
       $17,
     "./routes/ws/service-map.tsx": $18,
+    "./routes/ws/tail.tsx": $19,
   },
   islands: {
     "./islands/customNodes.tsx": $$0,

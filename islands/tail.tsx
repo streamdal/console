@@ -9,45 +9,39 @@ import { Head } from "$fresh/runtime.ts";
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
 
 import { useEffect, useRef, useState } from "preact/hooks";
-import {
-  tail,
-  tailEnabledSignal,
-  tailPausedSignal,
-  tailSignal,
-} from "../lib/tail.ts";
-import { useSignalEffect } from "@preact/signals";
+import { signal, useSignalEffect } from "@preact/signals";
 import { longDateFormat } from "../lib/utils.ts";
 
-export const MAX_TAIL_UI_SIZE = 100;
+export const MAX_TAIL_SIZE = 100;
 
-export const parseData = (data: Uint8Array) => {
-  const decoded = new TextDecoder().decode(data);
+export const tailSignal = signal<{ timestamp: Date; data: any }[] | []>(
+  [],
+);
 
+export const tailEnabledSignal = signal<boolean>(false);
+export const tailPausedSignal = signal<boolean>(false);
+export const tailSamplingSignal = signal<boolean>(false);
+export const tailSamplingRateSignal = signal<number>(1);
+
+export type TailData = { timestamp: Date; data: string };
+
+export const parseData = (data: string) => {
   try {
-    const parsed = JSON.parse(decoded);
+    const parsed = JSON.parse(data);
     return JSON.stringify(parsed, null, 2);
   } catch (e) {
-    console.error("Error parsing tail data, returning decoded data instead", e);
+    console.debug("Error parsing tail data, returning raw data instead");
   }
-  return decoded;
-};
-
-export const parseDate = (timestampNs: string) => {
-  try {
-    return new Date(Number(BigInt(timestampNs) / BigInt(1e6)));
-  } catch (e) {
-    console.error("error parsing", timestampNs);
-  }
-  return null;
+  return data;
 };
 
 export const TailRow = (
-  { row }: { row: TailResponse; index: number },
+  { row }: { row: TailData; index: number },
 ) => {
   const lastRef = useRef();
 
   useEffect(() => {
-    lastRef.current &&
+    tailPausedSignal.value === false && lastRef.current &&
       lastRef.current.scrollIntoView({
         behavior: "smooth",
         block: "nearest",
@@ -62,7 +56,7 @@ export const TailRow = (
         className="bg-black text-white py-2 px-4 text-sm overflow-x-scroll flex flex-col justify-start"
       >
         <div className="text-stream">
-          {parseDate(row.timestampNs)?.toLocaleDateString(
+          {row.timestamp?.toLocaleDateString(
             "en-us",
             longDateFormat,
           )}
@@ -70,7 +64,7 @@ export const TailRow = (
         <pre>
           <code>
             <div dangerouslySetInnerHTML={{
-                __html: hljs.highlightAuto(parseData(row.newData && row.newData.length > 0 ? row.newData : row.originalData)).value,
+                __html: hljs.highlightAuto(parseData(row.data)).value,
               }}
             >
             </div>
@@ -81,30 +75,52 @@ export const TailRow = (
   );
 };
 
-export const Tail = (
-  {
-    audience,
-    grpcToken,
-    grpcUrl,
-  }: {
-    audience: Audience;
-    grpcUrl: string;
-    grpcToken: string;
-  },
-) => {
-  const [tailData, setTailData] = useState(tailSignal.value);
+export const Tail = ({ audience }: { audience: Audience }) => {
   const [fullScreen, setFullScreen] = useState(false);
 
   useEffect(() => {
-    tailPausedSignal.value = false;
-    void tail({ audience, grpcUrl, grpcToken });
-  }, []);
+    const url = new URL("./ws/tail", location.href);
+    url.protocol = url.protocol.replace("http", "ws");
+    const webSocket = new WebSocket(url);
 
-  useSignalEffect(() => {
-    if (!tailPausedSignal.value) {
-      setTailData(tailSignal.value);
-    }
-  });
+    webSocket.addEventListener("open", (event) => {
+      webSocket.send("ping");
+      webSocket.send(
+        JSON.stringify({
+          audience,
+          ...tailSamplingSignal.value
+            ? { sampling: tailSamplingRateSignal.value }
+            : {},
+        }),
+      );
+    });
+
+    webSocket.addEventListener("message", (event) => {
+      if (event.data === "pong") {
+        console.debug("got server pong");
+        return;
+      }
+
+      try {
+        const parsedTail = JSON.parse(event.data);
+        tailSignal.value = [
+          ...tailSignal.value.slice(
+            -MAX_TAIL_SIZE,
+          ),
+          {
+            timestamp: new Date(parsedTail.timestamp),
+            data: parsedTail.data,
+          },
+        ];
+      } catch (e) {
+        console.error("error parsing tail data", e);
+      }
+    });
+
+    return () => {
+      webSocket?.close();
+    };
+  }, [tailSamplingSignal.value, tailSamplingRateSignal.value]);
 
   return (
     <>
@@ -168,9 +184,9 @@ export const Tail = (
               fullScreen ? "200" : "260"
             }px)] overflow-y-scroll rounded-md bg-black text-white`}
           >
-            {tailData?.slice(-MAX_TAIL_UI_SIZE).map((
-              p: TailResponse,
-            ) => <TailRow row={p} />)}
+            {tailSignal.value?.map((
+              tail: TailData,
+            ) => <TailRow row={tail} />)}
           </div>
         </div>
       </div>
