@@ -51,3 +51,19 @@ export const getSchema = async (audience: Audience) => {
   const { response } = await client.getSchema({ audience }, meta);
   return response;
 };
+
+export enum RegistrationStatus {
+  UNKNOWN = 0,
+  SUBMIT = 1000,
+  VERIFY = 1001,
+  DONE = 1002,
+}
+
+export const checkEmailVerified = async (): Promise<
+  { status: RegistrationStatus }
+> => {
+  //
+  // Coming soon
+  // const { response } = await client.getRegistration();
+  return { status: RegistrationStatus.VERIFY };
+};
