@@ -39,7 +39,7 @@ const sessionHandler = async (
     return ctx.next();
   } else {
     console.log("case 2");
-    console.log("up here", await session(req, ctx));
+    // console.log("up here", await session(req, ctx));
     return session(req, ctx as any);
   }
 };
