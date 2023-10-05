@@ -11,6 +11,7 @@ import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/
 import { useEffect, useRef, useState } from "preact/hooks";
 import { signal, useSignalEffect } from "@preact/signals";
 import { longDateFormat } from "../lib/utils.ts";
+import { tailSocket } from "../lib/sockets.ts";
 
 export const MAX_TAIL_SIZE = 100;
 
@@ -79,46 +80,10 @@ export const Tail = ({ audience }: { audience: Audience }) => {
   const [fullScreen, setFullScreen] = useState(false);
 
   useEffect(() => {
-    const url = new URL("./ws/tail", location.href);
-    url.protocol = url.protocol.replace("http", "ws");
-    const webSocket = new WebSocket(url);
-
-    webSocket.addEventListener("open", (event) => {
-      webSocket.send("ping");
-      webSocket.send(
-        JSON.stringify({
-          audience,
-          ...tailSamplingSignal.value
-            ? { sampling: tailSamplingRateSignal.value }
-            : {},
-        }),
-      );
-    });
-
-    webSocket.addEventListener("message", (event) => {
-      if (event.data === "pong") {
-        console.debug("got server pong");
-        return;
-      }
-
-      try {
-        const parsedTail = JSON.parse(event.data);
-        tailSignal.value = [
-          ...tailSignal.value.slice(
-            -MAX_TAIL_SIZE,
-          ),
-          {
-            timestamp: new Date(parsedTail.timestamp),
-            data: parsedTail.data,
-          },
-        ];
-      } catch (e) {
-        console.error("error parsing tail data", e);
-      }
-    });
+    const socket = tailSocket("./ws/tail", audience);
 
     return () => {
-      webSocket?.close();
+      socket?.close();
     };
   }, [tailSamplingSignal.value, tailSamplingRateSignal.value]);
 
