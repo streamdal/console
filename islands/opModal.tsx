@@ -21,6 +21,7 @@ import {
   tailEnabledSignal,
   tailSamplingRateSignal,
   tailSamplingSignal,
+  tailSignal,
 } from "./tail.tsx";
 import { Toggle } from "../components/form/switch.tsx";
 import { getAudienceOpRoute, isNumeric } from "../lib/utils.ts";
@@ -29,6 +30,9 @@ import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/
 import IconWindowMaximize from "tabler-icons/tsx/window-maximize.tsx";
 import { SchemaModal } from "../components/modals/schemaModal.tsx";
 import { ComponentImage } from "./customNodes.tsx";
+import { useSignalEffect } from "@preact/signals";
+import { updateNode } from "../lib/nodeMapper.ts";
+import { opUpdateSignal } from "./serviceMap.tsx";
 
 export const OP_MODAL_WIDTH = "308px";
 
@@ -86,6 +90,12 @@ export default function OpModal(
   const handleClose = () => {
     setSchemaModalOpen(false);
   };
+
+  useSignalEffect(() => {
+    if (tailEnabledSignal.value === false) {
+      tailSignal.value = {};
+    }
+  });
 
   useEffect(async () => {
     if (opModal.value) {

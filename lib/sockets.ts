@@ -7,6 +7,7 @@ import {
   tailSignal,
 } from "../islands/tail.tsx";
 import { Audience } from "snitch-protos/protos/sp_common.ts";
+import { audienceKey } from "./utils.ts";
 
 export const getSocket = (path: string) => {
   const url = new URL(path, location.href);
@@ -88,15 +89,19 @@ export const tailSocket = (path: string, audience: Audience) => {
 
     try {
       const parsedTail = JSON.parse(event.data);
-      tailSignal.value = [
-        ...tailSignal.value.slice(
-          -MAX_TAIL_SIZE,
-        ),
-        {
-          timestamp: new Date(parsedTail.timestamp),
-          data: parsedTail.data,
-        },
-      ];
+      const key = audienceKey(audience);
+      tailSignal.value = {
+        ...tailSignal.value,
+        [key]: [
+          ...(tailSignal.value[key] || []).slice(
+            -MAX_TAIL_SIZE,
+          ),
+          {
+            timestamp: new Date(parsedTail.timestamp),
+            data: parsedTail.data,
+          },
+        ],
+      };
     } catch (e) {
       console.error("error parsing tail data", e);
     }

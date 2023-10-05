@@ -1,4 +1,4 @@
-import { Audience, TailResponse } from "snitch-protos/protos/sp_common.ts";
+import { Audience } from "snitch-protos/protos/sp_common.ts";
 import { OP_MODAL_WIDTH } from "./opModal.tsx";
 import IconPlayerPauseFilled from "tabler-icons/tsx/player-pause-filled.tsx";
 import IconPlayerPlayFilled from "tabler-icons/tsx/player-play-filled.tsx";
@@ -9,14 +9,14 @@ import { Head } from "$fresh/runtime.ts";
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
 
 import { useEffect, useRef, useState } from "preact/hooks";
-import { signal, useSignalEffect } from "@preact/signals";
-import { longDateFormat } from "../lib/utils.ts";
+import { signal } from "@preact/signals";
+import { audienceKey, longDateFormat } from "../lib/utils.ts";
 import { tailSocket } from "../lib/sockets.ts";
 
 export const MAX_TAIL_SIZE = 100;
 
-export const tailSignal = signal<{ timestamp: Date; data: any }[] | []>(
-  [],
+export const tailSignal = signal<{ [key in string]: TailData[] }>(
+  {},
 );
 
 export const tailEnabledSignal = signal<boolean>(false);
@@ -149,7 +149,7 @@ export const Tail = ({ audience }: { audience: Audience }) => {
               fullScreen ? "200" : "260"
             }px)] overflow-y-scroll rounded-md bg-black text-white`}
           >
-            {tailSignal.value?.map((
+            {tailSignal.value[audienceKey(audience)]?.map((
               tail: TailData,
             ) => <TailRow row={tail} />)}
           </div>
