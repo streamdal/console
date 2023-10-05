@@ -17,6 +17,12 @@ export type SuccessRoute = {
   success: SuccessType;
 };
 
+const excludes = [
+  "/ws",
+  "/email/collect",
+  "/email/verify",
+];
+
 //
 // ensure session key is present
 !Deno.env.get("APP_KEY") && Deno.env.set("APP_KEY", crypto.randomUUID());
@@ -32,14 +38,13 @@ const sessionHandler = async (
   ctx: MiddlewareHandlerContext<State>,
 ) => {
   const { pathname } = new URL(req.url);
+
   if (
-    pathname.includes("/ws/")
+    ctx.destination !== "route" ||
+    excludes.some((route) => pathname.startsWith(route))
   ) {
-    console.log("case 1");
     return ctx.next();
   } else {
-    console.log("case 2");
-    // console.log("up here", await session(req, ctx));
     return session(req, ctx as any);
   }
 };
@@ -48,21 +53,24 @@ const emailVerifier = async (
   req: Request,
   ctx: MiddlewareHandlerContext<{ isEmailVerified: boolean }>,
 ) => {
-  if (ctx.state.isEmailVerified) {
+  const { pathname } = new URL(req.url);
+
+  if (
+    ctx.state.isEmailVerified || ctx.destination !== "route" ||
+    excludes.some((route) => pathname.startsWith(route))
+  ) {
     return ctx.next();
   }
 
   const { status } = await checkEmailVerified();
-  console.log(status);
+
   switch (status) {
     case RegistrationStatus.SUBMIT:
-      console.log("in switch collect");
       return new Response("", {
         status: 307,
         headers: { Location: "/email/collect" },
       });
     case RegistrationStatus.VERIFY:
-      console.log("in switch verify");
       return new Response("", {
         status: 307,
         headers: { Location: "/email/verify" },
