@@ -15,7 +15,7 @@ export const parseDate = (timestampNs: string) => {
   try {
     return new Date(Number(BigInt(timestampNs) / BigInt(1e6)));
   } catch (e) {
-    console.error("error parsing", e);
+    console.error("error parsing nanosecond timestamp", e);
   }
   return null;
 };
