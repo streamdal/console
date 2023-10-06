@@ -165,13 +165,6 @@ export default function OpModal(
                             <h3 class="text-lg text-cloud">
                               {displayName}
                             </h3>
-                            {displayType === "operation" && (
-                              <p class="text-xs text-cloud">
-                                {`${clients?.length || 0} attached client${
-                                  (clients?.length !== 1) ? "s" : ""
-                                }`}
-                              </p>
-                            )}
                           </div>
                         </div>
                       </div>
