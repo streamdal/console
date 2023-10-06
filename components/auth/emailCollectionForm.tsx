@@ -51,7 +51,7 @@ export const EmailCollectionForm = (
               className={"bg-streamdalYellow btn-heimdal text-web mb-3 w-full font-bold"}
               type="submit"
             >
-              Send verification code
+              Get verification code
             </button>
           </a>
         </div>
