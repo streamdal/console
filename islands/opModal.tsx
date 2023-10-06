@@ -16,27 +16,29 @@ import { OddAttachModal } from "../components/modals/oddAttachModal.tsx";
 import { EmptyStateBird } from "../components/icons/emptyStateBird.tsx";
 import { useEffect, useState } from "preact/hooks";
 import { DeleteOperationModal } from "../components/modals/deleteOperationModal.tsx";
-import { Tail } from "./tail.tsx";
-import { Toggle } from "../components/form/switch.tsx";
-import { getAudienceOpRoute, isNumeric } from "../lib/utils.ts";
 import {
+  Tail,
   tailEnabledSignal,
   tailSamplingRateSignal,
   tailSamplingSignal,
-} from "../lib/tail.ts";
+  tailSignal,
+} from "./tail.tsx";
+import { Toggle } from "../components/form/switch.tsx";
+import { getAudienceOpRoute, isNumeric } from "../lib/utils.ts";
 import IconTrash from "tabler-icons/tsx/trash.tsx";
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
-import { useSignalEffect } from "https://esm.sh/v131/@preact/signals@1.1.3/denonext/signals.mjs";
-import { opUpdateSignal } from "./serviceMap.tsx";
+import IconWindowMaximize from "tabler-icons/tsx/window-maximize.tsx";
+import { SchemaModal } from "../components/modals/schemaModal.tsx";
 import { ComponentImage } from "./customNodes.tsx";
+import { useSignalEffect } from "@preact/signals";
+import { updateNode } from "../lib/nodeMapper.ts";
+import { opUpdateSignal } from "./serviceMap.tsx";
+
+import { BetaTag, ComingSoonTag } from "../components/icons/featureTags.tsx";
 export const OP_MODAL_WIDTH = "308px";
 
 export default function OpModal(
-  { serviceMap, grpcUrl, grpcToken }: {
-    serviceMap: ServiceMapType;
-    grpcUrl: string;
-    grpcToken: string;
-  },
+  { serviceMap }: { serviceMap: ServiceMapType },
 ) {
   const displayType = opModal.value?.displayType;
   const itemName = () => {
@@ -77,6 +79,7 @@ export default function OpModal(
 
   const [tailNavOpen, setTailNavOpen] = useState(false);
   const [schemaNavOpen, setSchemaNavOpen] = useState(false);
+  const [schemaModalOpen, setSchemaModalOpen] = useState(false);
 
   const getSchema = async () => {
     const response = await fetch(`${getAudienceOpRoute(audience)}/schema`, {
@@ -85,12 +88,25 @@ export default function OpModal(
     return response.json();
   };
 
+  const handleClose = () => {
+    setSchemaModalOpen(false);
+  };
+
+  useSignalEffect(() => {
+    if (tailEnabledSignal.value === false) {
+      tailSignal.value = {};
+    }
+  });
+
   useEffect(async () => {
     if (opModal.value) {
       const schema = await getSchema();
       opModal.value = {
         ...opModal.value,
-        schema: JSON.stringify(schema.schema, null, 2),
+        schemaInfo: {
+          schema: JSON.stringify(schema.schema, null, 2),
+          version: schema.version,
+        },
       };
     }
   }, [audience, schemaNavOpen]);
@@ -115,14 +131,15 @@ export default function OpModal(
           pipeline={attachedPipeline || null}
         />
       )}
+      {schemaModalOpen && (
+        <SchemaModal
+          schema={opModal.value.schemaInfo.schema}
+          version={opModal.value.schemaInfo.version}
+          setClose={handleClose}
+        />
+      )}
       <div class="flex flex-row">
-        {tailEnabledSignal.value && (
-          <Tail
-            audience={audience}
-            grpcUrl={grpcUrl}
-            grpcToken={grpcToken}
-          />
-        )}
+        {tailEnabledSignal.value && <Tail audience={audience} />}
         <div
           class={`fixed z-50 h-screen top-0 right-0 transition-transform ${`translate-x-full right-[${OP_MODAL_WIDTH}]`} flex flex-row justify-end items-start`}
         >
@@ -147,13 +164,6 @@ export default function OpModal(
                             <h3 class="text-lg text-cloud">
                               {displayName}
                             </h3>
-                            {displayType === "operation" && (
-                              <p class="text-xs text-cloud">
-                                {`${clients?.length || 0} attached client${
-                                  (clients?.length !== 1) ? "s" : ""
-                                }`}
-                              </p>
-                            )}
                           </div>
                         </div>
                       </div>
@@ -161,10 +171,11 @@ export default function OpModal(
                         ? (
                           <>
                             <div class="px-4 py-4 rounded-md mx-2">
-                              <div class="mb-2 flex justify-between items-center pr-2">
+                              <div class="mb-2 flex items-center pr-2">
                                 <h3 class="text-web font-bold text-sm">
-                                  Attached Pipelines
+                                  Pipelines
                                 </h3>
+                                <BetaTag class={"ml-2"} />
                               </div>
                               {!serviceMap?.pipes.length
                                 ? (
@@ -347,9 +358,10 @@ export default function OpModal(
                                   aria-expanded="true"
                                   aria-controls="collapse-body-3"
                                 >
-                                  <h3 class="text-web text-sm font-semibold ml-3">
+                                  <h3 class="text-gray-400 text-sm font-semibold ml-3">
                                     Notifications
                                   </h3>
+                                  <ComingSoonTag class={"ml-2"} />
                                 </button>
                               </h3>
                               <div
@@ -371,9 +383,10 @@ export default function OpModal(
                                   aria-expanded="true"
                                   aria-controls="collapse-body-4"
                                 >
-                                  <h3 class="text-web text-sm font-semibold ml-3">
+                                  <h3 class="text-gray-400 text-sm font-semibold ml-3">
                                     Trends
                                   </h3>
+                                  <ComingSoonTag class={"ml-2"} />
                                 </button>
                               </h3>
                               <div
@@ -402,6 +415,7 @@ export default function OpModal(
                                   >
                                     Schema
                                   </h3>
+                                  <BetaTag class={"ml-2"} />
                                 </button>
                               </h3>
                               {schemaNavOpen && (
@@ -410,25 +424,88 @@ export default function OpModal(
                                   aria-labelledby="collapse-heading-5"
                                   class={"flex flex-col items-center justify-center p-4"}
                                 >
-                                  <p class="mb-5 w-full text-left text-gray-500 text-xs">
-                                    Displaying JSON
-                                  </p>
-                                  <div className="w-full rounded flex overflow-x-scroll bg-black text-white py-2 px-4 text-sm flex flex-col justify-start">
-                                    <pre>
-                                <code>
-                                  <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: `${
-                                            hljs.highlight(`${opModal.value.schema}`, {language: 'json'})
-                                                .value
-                                        }`,
-                                      }}
-                                      class={"font-sm"}
-                                  >
-                                  </div>
-                                </code>
-                                    </pre>
-                                  </div>
+                                  {!schemaModalOpen && (
+                                    <>
+                                      <div
+                                        class={"flex w-full items-center justify-start mb-5 "}
+                                      >
+                                        <p class="text-left text-gray-400 mr-2 text-sm">
+                                          Display
+                                        </p>
+                                        <button
+                                          id="dropdownCheckboxButton"
+                                          data-dropdown-toggle="dropdownDefaultCheckbox"
+                                          className="text-web font-medium text-sm text-center inline-flex items-center"
+                                          type="button"
+                                        >
+                                          JSON
+                                          <svg
+                                            class="w-2.5 h-2.5 ml-2.5"
+                                            aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 10 6"
+                                          >
+                                            <path
+                                              stroke="currentColor"
+                                              stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              stroke-width="2"
+                                              d="m1 1 4 4 4-4"
+                                            />
+                                          </svg>
+                                        </button>
+                                        <div
+                                          id="dropdownDefaultCheckbox"
+                                          class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow"
+                                        >
+                                          <ul
+                                            class="py-2 text-sm text-gray-700"
+                                            aria-labelledby="dropdownDefaultButton"
+                                          >
+                                            <li>
+                                              <a
+                                                href="#"
+                                                className="block px-4 py-2 hover:bg-gray-100"
+                                              >
+                                                Dashboard
+                                              </a>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                      <div className="w-full rounded flex overflow-x-scroll bg-black text-white pt-2 pb-6 px-4 text-sm flex flex-col justify-start">
+                                        <div class={"w-full flex justify-end"}>
+                                          <button
+                                            class={"cursor-pointer"}
+                                            onClick={() =>
+                                              setSchemaModalOpen(true)}
+                                            data-tooltip-target="maximize"
+                                          >
+                                            <IconWindowMaximize class="w-5 h-5 text-white mx-1 my-1" />
+                                          </button>
+                                          <Tooltip
+                                            targetId="maximize"
+                                            message={"Click to maximize schema"}
+                                          />
+                                        </div>
+                                        <pre>
+                                          <code>
+                                            <div
+                                            dangerouslySetInnerHTML={{
+                                            __html: `${
+                                            hljs.highlight(`${opModal.value.schemaInfo?.schema}`, {language: 'json'})
+                                            .value
+                                          }`,
+                                          }}
+                                          class={"font-sm"}
+                                              >
+                                            </div>
+                                          </code>
+                                        </pre>
+                                      </div>
+                                    </>
+                                  )}
                                 </div>
                               )}
                             </div>
