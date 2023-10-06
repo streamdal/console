@@ -8,7 +8,14 @@ export const config: RouteConfig = {
 };
 
 export const handler: Handlers<> = {
-  async GET(req, ctx) {
+  async POST(req, ctx) {
+    //this doesn't exist yet
+    // const response = sendEmail();
+    const email = await req.formData();
+    console.log("to be verified");
+
+    //If success, then render the email verification for below
+    //If fail, then redirect back to /email/collect
     return ctx.render({
       verified: false,
       email: true,

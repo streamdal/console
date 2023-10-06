@@ -1,10 +1,12 @@
 import { useState } from "preact/hooks";
 import { LoginFormInput } from "./loginFormInput.tsx";
+import { FormInput } from "../form/formInput.tsx";
 
 export const EmailVerificationForm = (
   { verificationStatus }: { verificationStatus: any },
 ) => {
-  const [error, setError] = useState<string>("");
+  const [errors, setErrors] = useState<string>("");
+  const [data, setData] = useState<string>("");
 
   const customTheme: CustomFlowbiteTheme["button"] = {
     color: {
@@ -24,9 +26,12 @@ export const EmailVerificationForm = (
         <h2 className={"text-center mb-3 text-3xl font-display tracking-wide"}>
           Please enter the verification code
         </h2>
-        <LoginFormInput
-          name={"verificationCode"}
-          label={"Verification Code"}
+        <FormInput
+          name="code"
+          label="Verification Code"
+          errors={errors}
+          data={data}
+          setData={setData}
         />
         <div className={"flex flex-col items-center"}>
           <a href={"/"} className={"w-full h-[47px]"}>

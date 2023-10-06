@@ -65,5 +65,5 @@ export const checkEmailVerified = async (): Promise<
   //
   // Coming soon
   // const { response } = await client.getRegistration();
-  return { status: RegistrationStatus.VERIFY };
+  return { status: RegistrationStatus.SUBMIT };
 };
