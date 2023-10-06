@@ -16,30 +16,29 @@ import { OddAttachModal } from "../components/modals/oddAttachModal.tsx";
 import { EmptyStateBird } from "../components/icons/emptyStateBird.tsx";
 import { useEffect, useState } from "preact/hooks";
 import { DeleteOperationModal } from "../components/modals/deleteOperationModal.tsx";
-import { Tail } from "./tail.tsx";
-import { Toggle } from "../components/form/switch.tsx";
-import { getAudienceOpRoute, isNumeric } from "../lib/utils.ts";
 import {
+  Tail,
   tailEnabledSignal,
   tailSamplingRateSignal,
   tailSamplingSignal,
-} from "../lib/tail.ts";
+  tailSignal,
+} from "./tail.tsx";
+import { Toggle } from "../components/form/switch.tsx";
+import { getAudienceOpRoute, isNumeric } from "../lib/utils.ts";
 import IconTrash from "tabler-icons/tsx/trash.tsx";
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
 import IconWindowMaximize from "tabler-icons/tsx/window-maximize.tsx";
 import { SchemaModal } from "../components/modals/schemaModal.tsx";
-import { useSignalEffect } from "https://esm.sh/v131/@preact/signals@1.1.3/denonext/signals.mjs";
-import { opUpdateSignal } from "./serviceMap.tsx";
 import { ComponentImage } from "./customNodes.tsx";
+import { useSignalEffect } from "@preact/signals";
+import { updateNode } from "../lib/nodeMapper.ts";
+import { opUpdateSignal } from "./serviceMap.tsx";
+
 import { BetaTag, ComingSoonTag } from "../components/icons/featureTags.tsx";
 export const OP_MODAL_WIDTH = "308px";
 
 export default function OpModal(
-  { serviceMap, grpcUrl, grpcToken }: {
-    serviceMap: ServiceMapType;
-    grpcUrl: string;
-    grpcToken: string;
-  },
+  { serviceMap }: { serviceMap: ServiceMapType },
 ) {
   const displayType = opModal.value?.displayType;
   const itemName = () => {
@@ -93,6 +92,12 @@ export default function OpModal(
     setSchemaModalOpen(false);
   };
 
+  useSignalEffect(() => {
+    if (tailEnabledSignal.value === false) {
+      tailSignal.value = {};
+    }
+  });
+
   useEffect(async () => {
     if (opModal.value) {
       const schema = await getSchema();
@@ -134,13 +139,7 @@ export default function OpModal(
         />
       )}
       <div class="flex flex-row">
-        {tailEnabledSignal.value && (
-          <Tail
-            audience={audience}
-            grpcUrl={grpcUrl}
-            grpcToken={grpcToken}
-          />
-        )}
+        {tailEnabledSignal.value && <Tail audience={audience} />}
         <div
           class={`fixed z-50 h-screen top-0 right-0 transition-transform ${`translate-x-full right-[${OP_MODAL_WIDTH}]`} flex flex-row justify-end items-start`}
         >
