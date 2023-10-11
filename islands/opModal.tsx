@@ -175,7 +175,7 @@ export default function OpModal(
                           <OperationOpModalInfo
                             serviceMap={serviceMap}
                             attachedPipeline={attachedPipeline}
-                            setSchemaModalOpen={setTailNavOpen}
+                            setSchemaModalOpen={setSchemaModalOpen}
                             schemaModalOpen={schemaModalOpen}
                             setTailNavOpen={setTailNavOpen}
                             tailNavOpen={tailNavOpen}

@@ -4,10 +4,10 @@ import { opModal } from "../components/serviceMap/opModalSignal.ts";
 import IconPlayerPause from "tabler-icons/tsx/player-pause.tsx";
 import { Tooltip } from "../components/tooltip/tooltip.tsx";
 import IconUnlink from "tabler-icons/tsx/unlink.tsx";
-import IconAdjustmentsHorizontal from "tabler-icons/tsx/adjustments-horizontal.tsx";
 import IconLink from "tabler-icons/tsx/link.tsx";
 import { OddAttachModal } from "../components/modals/oddAttachModal.tsx";
 import { Toggle } from "../components/form/switch.tsx";
+import { OperationActionMenu } from "../components/operation/operationActionMenu.tsx";
 import {
   tailEnabledSignal,
   tailSamplingRateSignal,
@@ -17,7 +17,8 @@ import { isNumeric } from "../lib/utils.ts";
 import IconWindowMaximize from "tabler-icons/tsx/window-maximize.tsx";
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
 import { ClientInfo } from "streamdal-protos/protos/sp_info.ts";
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
+import { Schema } from "../components/operation/schema.tsx";
 
 export const OperationOpModalInfo = (
   {
@@ -68,55 +69,7 @@ export const OperationOpModalInfo = (
               className={`flex justify-between items-center text-web bg-purple-50 border border-purple-600 font-medium rounded-md w-full text-sm px-2 text-xs py-1 focus:ring-1 focus:outline-none focus:ring-purple-600`}
             >
               {attachedPipeline?.name}
-              <div class="py-1 flex flex-row items-center">
-                <button
-                  data-tooltip-target="pipeline-pause"
-                  type="button"
-                  onClick={() =>
-                    opModal.value = {
-                      ...opModal.value,
-                      pause: true,
-                    }}
-                  class="mr-2"
-                >
-                  <IconPlayerPause class="w-4 h-4 text-gray-400" />
-                </button>
-                <Tooltip
-                  targetId="pipeline-pause"
-                  message={"Click to pause pipelines"}
-                />
-                <button
-                  data-tooltip-target="pipeline-unlink"
-                  type="button"
-                  class="mr-2"
-                  onClick={() =>
-                    opModal.value = {
-                      ...opModal.value,
-                      detach: true,
-                    }}
-                >
-                  <IconUnlink class="w-4 h-4 text-gray-400" />
-                </button>
-                <Tooltip
-                  targetId="pipeline-unlink"
-                  message={"Click to detach pipeline"}
-                />
-                <a
-                  href={"/pipelines"}
-                  className="flex items-center"
-                >
-                  <button
-                    type="button"
-                    data-tooltip-target="pipeline-edit"
-                  >
-                    <IconAdjustmentsHorizontal class="w-4 h-4 text-gray-400" />
-                  </button>
-                  <Tooltip
-                    targetId="pipeline-edit"
-                    message={"Edit Pipelines"}
-                  />
-                </a>
-              </div>
+              <OperationActionMenu />
             </div>
           )
           : (
@@ -287,85 +240,7 @@ export const OperationOpModalInfo = (
           class={"flex flex-col items-center justify-center p-4"}
         >
           {!schemaModalOpen && (
-            <>
-              <div
-                class={"flex w-full items-center justify-start mb-5 "}
-              >
-                <p class="text-left text-gray-400 mr-2 text-sm">
-                  Display
-                </p>
-                <button
-                  id="dropdownCheckboxButton"
-                  data-dropdown-toggle="dropdownDefaultCheckbox"
-                  className="text-web font-medium text-sm text-center inline-flex items-center"
-                  type="button"
-                >
-                  JSON
-                  <svg
-                    class="w-2.5 h-2.5 ml-2.5"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 10 6"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m1 1 4 4 4-4"
-                    />
-                  </svg>
-                </button>
-                <div
-                  id="dropdownDefaultCheckbox"
-                  class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow"
-                >
-                  <ul
-                    class="py-2 text-sm text-gray-700"
-                    aria-labelledby="dropdownDefaultButton"
-                  >
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Dashboard
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="w-full rounded flex overflow-x-scroll bg-black text-white pt-2 pb-6 px-4 text-sm flex flex-col justify-start">
-                <div class={"w-full flex justify-end"}>
-                  <button
-                    class={"cursor-pointer"}
-                    onClick={() => setSchemaModalOpen(true)}
-                    data-tooltip-target="maximize"
-                  >
-                    <IconWindowMaximize class="w-5 h-5 text-white mx-1 my-1" />
-                  </button>
-                  <Tooltip
-                    targetId="maximize"
-                    message={"Click to maximize schema"}
-                  />
-                </div>
-                <pre>
-                              <code>
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html: `${
-                                            hljs.highlight(`${opModal.value.schemaInfo?.schema}`, {language: 'json'})
-                                                .value
-                                        }`,
-                                    }}
-                                    class={"font-sm"}
-                                >
-                                </div>
-                              </code>
-                </pre>
-              </div>
-            </>
+            <Schema setSchemaModalOpen={setSchemaModalOpen} />
           )}
         </div>
       </div>
