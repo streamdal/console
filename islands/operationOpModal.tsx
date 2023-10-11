@@ -39,10 +39,10 @@ export const OperationOpModalInfo = (
     clients: ClientInfo[];
   },
 ) => {
-  const [attachSelectOpen, setAttachSelectOpen] = useState(false);
+  const [attachSelectionOpen, setAttachSelectionOpen] = useState(false);
 
   const handleAttachOpen = () => {
-    setAttachSelectOpen(!attachSelectOpen);
+    setAttachSelectionOpen(!attachSelectionOpen);
   };
 
   return (
@@ -83,11 +83,11 @@ export const OperationOpModalInfo = (
               <IconLink class="w-4" />
             </button>
           )}
-        {attachSelectOpen && (
+        {attachSelectionOpen && (
           <OddAttachModal
             serviceMap={serviceMap}
-            setAttachSelectOpen={setAttachSelectOpen}
-            attachSelectOpen={attachSelectOpen}
+            setAttachSelectionOpen={setAttachSelectionOpen}
+            attachSelectionOpen={attachSelectionOpen}
           />
         )}
       </div>
