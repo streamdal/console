@@ -17,6 +17,7 @@ import { isNumeric } from "../lib/utils.ts";
 import IconWindowMaximize from "tabler-icons/tsx/window-maximize.tsx";
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
 import { ClientInfo } from "streamdal-protos/protos/sp_info.ts";
+import { useEffect, useState } from "preact/hooks";
 
 export const OperationOpModalInfo = (
   {
@@ -37,6 +38,12 @@ export const OperationOpModalInfo = (
     clients: ClientInfo[];
   },
 ) => {
+  const [attachSelectOpen, setAttachSelectOpen] = useState(false);
+
+  const handleAttachOpen = () => {
+    setAttachSelectOpen(!attachSelectOpen);
+  };
+
   return (
     <>
       <div class="px-4 py-4 rounded-md mx-2">
@@ -58,13 +65,9 @@ export const OperationOpModalInfo = (
           : attachedPipeline
           ? (
             <div
-              className={`flex justify-between items-center text-web bg-purple-50 border border-purple-600 font-medium rounded-md w-full text-sm px-2 text-xs py-1 focus:ring-1 focus:outline-none focus:ring-purple-600 ${
-                opModal.value?.attach &&
-                "ring-1 outline-none active:ring-purple-600"
-              }`}
+              className={`flex justify-between items-center text-web bg-purple-50 border border-purple-600 font-medium rounded-md w-full text-sm px-2 text-xs py-1 focus:ring-1 focus:outline-none focus:ring-purple-600`}
             >
               {attachedPipeline?.name}
-
               <div class="py-1 flex flex-row items-center">
                 <button
                   data-tooltip-target="pipeline-pause"
@@ -121,17 +124,19 @@ export const OperationOpModalInfo = (
               id="attach-pipeline"
               className="text-web font-semibold bg-purple-50 border border-purple-600 hover:border-[#8E84AD] font-medium rounded-md w-full flex justify-between text-sm px-2 text-xs py-1 text-center inline-flex items-center focus:ring-1 focus:outline-none focus:ring-purple-600 active:ring-1 active:outline-none active:ring-purple-600"
               type="button"
-              onClick={() =>
-                opModal.value = {
-                  ...opModal.value,
-                  attach: true,
-                }}
+              onClick={() => handleAttachOpen()}
             >
               Attach a pipeline
               <IconLink class="w-4" />
             </button>
           )}
-        {(opModal.value?.attach) && <OddAttachModal serviceMap={serviceMap} />}
+        {attachSelectOpen && (
+          <OddAttachModal
+            serviceMap={serviceMap}
+            setAttachSelectOpen={setAttachSelectOpen}
+            attachSelectOpen={attachSelectOpen}
+          />
+        )}
       </div>
       <div
         id="pipeline-attach-detach"
