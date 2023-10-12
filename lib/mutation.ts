@@ -158,3 +158,21 @@ export const deleteAudience = async (audience: Audience, force: boolean) => {
     };
   }
 };
+
+export const deleteService = async (serviceName: string) => {
+  try {
+    const request = { serviceName, force: true };
+    const { response } = await client.deleteService(
+      request,
+      meta,
+    );
+    return response;
+  } catch (error) {
+    console.error("error deleting service", error);
+    return {
+      id: "deleteServiceRequest",
+      code: ResponseCode.INTERNAL_SERVER_ERROR,
+      error,
+    };
+  }
+};

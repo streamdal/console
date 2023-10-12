@@ -17,7 +17,6 @@ export const DeleteServiceModal = (
   const close = () =>
     opModal.value = { ...opModal.value, deleteService: false };
 
-  console.log(opModal.value);
   const deleteService = async () => {
     const response = await fetch(
       `/service/${audience.serviceName}/delete`,
@@ -37,7 +36,6 @@ export const DeleteServiceModal = (
       opModal.value.deleteService = false;
       setOpen(false);
       // opUpdateSignal.value = null;
-      console.log("fucking service signal", serviceSignal.value);
     }
   };
 
@@ -49,7 +47,6 @@ export const DeleteServiceModal = (
           class={"absolute top-[8%] left-[35%] z-50 p-4 overflow-x-hidden overflow-y-auto inset-0" +
             " max-h-[80vh]"}
         >
-          {console.log(audience)}
           <div class="relative w-full max-w-md max-h-full">
             <div class="relative bg-white rounded-lg border border-burnt shadow-xl shadow-burnt">
               <button
