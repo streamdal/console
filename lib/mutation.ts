@@ -9,6 +9,7 @@ import {
   AttachPipelineRequest,
   CreateNotificationRequest,
   DeleteAudienceRequest,
+  DeleteServiceRequest,
   DetachPipelineRequest,
   PausePipelineRequest,
 } from "streamdal-protos/protos/sp_external.ts";
@@ -161,7 +162,7 @@ export const deleteAudience = async (audience: Audience, force: boolean) => {
 
 export const deleteService = async (serviceName: string) => {
   try {
-    const request = { serviceName, force: true };
+    const request: DeleteServiceRequest = { serviceName, force: true };
     const { response } = await client.deleteService(
       request,
       meta,

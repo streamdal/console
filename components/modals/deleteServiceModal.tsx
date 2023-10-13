@@ -33,7 +33,7 @@ export const DeleteServiceModal = (
         type: success.status ? "success" : "error",
         message: success.message,
       };
-      opModal.value.deleteService = false;
+      opModal.value = null;
       setOpen(false);
       // opUpdateSignal.value = null;
     }
