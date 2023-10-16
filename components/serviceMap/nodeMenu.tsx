@@ -134,13 +134,6 @@ export const ServiceNodeMenu = ({ data }: { data: NodeData }) => {
 
   return (
     <div className={"flex flex-col"}>
-      {/*<div*/}
-      {/*  type="button"*/}
-      {/*  class="rounded bg-purple-50 ml-4 cursor-pointer"*/}
-      {/*  onClick={() => setOpen(!open)}*/}
-      {/*>*/}
-      {/*  <IconDots class="w-6 h-6 text-gray-400" aria-hidden="true" />*/}
-      {/*</div>*/}
       <button
         onClick={() =>
           opModal.value = {
