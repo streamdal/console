@@ -1,13 +1,12 @@
 import { signal } from "@preact/signals";
-import { Audience } from "snitch-protos/protos/sp_common.ts";
-import { Pipeline } from "snitch-protos/protos/sp_pipeline.ts";
+import { Audience } from "streamdal-protos/protos/sp_common.ts";
+import { Pipeline } from "streamdal-protos/protos/sp_pipeline.ts";
 
 export type OpModalType = {
   audience: Audience;
   displayType: string;
   attachedPipeline?: Pipeline;
   clients: number;
-  attach?: boolean;
   schema?: any;
   pause?: boolean;
   detach?: boolean;

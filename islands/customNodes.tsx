@@ -2,7 +2,7 @@ import { Handle, Position } from "reactflow";
 import IconGripVertical from "tabler-icons/tsx/grip-vertical.tsx";
 import IconDatabase from "tabler-icons/tsx/database.tsx";
 import "twind";
-import { OperationType } from "snitch-protos/protos/sp_common.ts";
+import { OperationType } from "streamdal-protos/protos/sp_common.ts";
 import { ServiceNodeMenu } from "../components/serviceMap/nodeMenu.tsx";
 import { ProducerIcon } from "../components/icons/producer.tsx";
 import { ConsumerIcon } from "../components/icons/consumer.tsx";
@@ -26,6 +26,7 @@ export const GROUP_MARGIN = 45;
 export const ServiceNode = ({ data }: { data: NodeData }) => {
   const highlighted = data?.audience === opModal.value?.audience &&
     opModal.value?.displayType === "service";
+
   const setHover = () => {
     setServiceGroup(
       data.audience.serviceName,
@@ -140,7 +141,8 @@ export const OperationNode = (
 ) => {
   const key = audienceKey(operation.audience);
   const highlight = opModal.value?.audience &&
-    key === audienceKey(opModal.value?.audience);
+    key === audienceKey(opModal.value?.audience) &&
+    opModal.value?.displayType === "operation";
   const trashActive = opModal.value?.delete;
 
   return (

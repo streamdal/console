@@ -1,4 +1,4 @@
-import { PipelineInfo } from "snitch-protos/protos/sp_info.ts";
+import { PipelineInfo } from "streamdal-protos/protos/sp_info.ts";
 import IconPlus from "tabler-icons/tsx/plus.tsx";
 import { getAudienceOpRoute } from "../../lib/utils.ts";
 import { toastSignal } from "../toasts/toast.tsx";
@@ -6,7 +6,11 @@ import { opModal } from "../serviceMap/opModalSignal.ts";
 import { opUpdateSignal } from "../../islands/serviceMap.tsx";
 
 export const OddAttachModal = (
-  { serviceMap }: { serviceMap: ServiceMap },
+  { serviceMap, setAttachSelectionOpen, attachSelectionOpen }: {
+    serviceMap: ServiceMap;
+    setAttachSelectOpen: () => void;
+    attachSelectOpen: boolean;
+  },
 ) => {
   const audience = opModal.value.audience;
   const attachedPipeline = opModal.value.attachedPipeline;
@@ -45,8 +49,8 @@ export const OddAttachModal = (
       opModal.value = {
         ...opModal.value,
         attachedPipeline: newPipeline,
-        attach: false,
       };
+      setAttachSelectionOpen(!attachSelectionOpen);
       opUpdateSignal.value = {
         audience,
         attachedPipeline: newPipeline,
