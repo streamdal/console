@@ -5,7 +5,8 @@ import {
 } from "https://deno.land/x/fresh_session@0.2.2/mod.ts";
 import { ErrorType } from "../components/form/validate.ts";
 import { ServiceMapper } from "../lib/serviceMapper.ts";
-import { checkEmailVerified, RegistrationStatus } from "../lib/fetch.ts";
+import { checkEmailVerified } from "../lib/fetch.ts";
+import {AppRegistrationStatusResponse_Status} from "streamdal-protos/protos/sp_external.ts";
 
 export type SuccessType = {
   status: boolean;
@@ -31,7 +32,7 @@ export type State =
   & { success: SuccessType; serviceMap: ServiceMapper }
   & WithSession;
 
-const session = cookieSession();
+const session = await cookieSession();
 
 const sessionHandler = async (
   req: Request,
@@ -61,16 +62,19 @@ const emailVerifier = async (
   ) {
     return ctx.next();
   }
+  console.log("damn", (await session(req, ctx as any)).headers.getSetCookie())
+  console.log("fucking hell", ctx)
 
-  const { status } = await checkEmailVerified();
+
+  const { status } = await checkEmailVerified("apitsas4@gmail.com");
 
   switch (status) {
-    case RegistrationStatus.SUBMIT:
+    case AppRegistrationStatusResponse_Status.SUBMIT:
       return new Response("", {
         status: 307,
         headers: { Location: "/email/collect" },
       });
-    case RegistrationStatus.VERIFY:
+    case AppRegistrationStatusResponse_Status.VERIFY:
       return new Response("", {
         status: 307,
         headers: { Location: "/email/verify" },

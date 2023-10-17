@@ -1,6 +1,7 @@
 {
   "version": "3",
   "redirects": {
+    "https://deno.land/x/zod/mod.ts": "https://deno.land/x/zod@v3.21.4/mod.ts",
     "https://esm.sh/v132/preact/compat": "https://esm.sh/v132/preact@10.18.1/compat"
   },
   "remote": {

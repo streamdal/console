@@ -8,14 +8,11 @@ export const config: RouteConfig = {
 };
 
 export const handler: Handlers<> = {
-  async GET(req, ctx) {
-    return ctx.render({
-      verified: false,
-      email: true,
-    });
-  },
+  async GET(_req, ctx) {
+    const {session} = ctx.state;
+  }
 };
 
-export default function Login(props: PageProps<RuleSetType>) {
+export default function Login() {
   return <EmailCollectionForm />;
 }
