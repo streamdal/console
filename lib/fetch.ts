@@ -1,5 +1,8 @@
 import { client, meta } from "./grpc.ts";
-import {AppRegistrationStatusResponse_Status, GetAllResponse} from "streamdal-protos/protos/sp_external.ts";
+import {
+  AppRegistrationStatusResponse_Status,
+  GetAllResponse,
+} from "streamdal-protos/protos/sp_external.ts";
 import { PipelineInfo } from "streamdal-protos/protos/sp_info.ts";
 import { Audience } from "streamdal-protos/protos/sp_common.ts";
 
@@ -52,12 +55,9 @@ export const getSchema = async (audience: Audience) => {
   return response;
 };
 
-
 export const checkEmailVerified = async (email: string): Promise<
   { status: AppRegistrationStatusResponse_Status }
 > => {
-  console.log()
   const { response } = await client.appRegistrationStatus({ email }, meta);
-  console.log("shit", await response)
   return response;
 };

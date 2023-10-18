@@ -5,8 +5,6 @@ import {
 } from "https://deno.land/x/fresh_session@0.2.2/mod.ts";
 import { ErrorType } from "../components/form/validate.ts";
 import { ServiceMapper } from "../lib/serviceMapper.ts";
-import { checkEmailVerified } from "../lib/fetch.ts";
-import {AppRegistrationStatusResponse_Status} from "streamdal-protos/protos/sp_external.ts";
 
 export type SuccessType = {
   status: boolean;
@@ -21,6 +19,7 @@ export type SuccessRoute = {
 const excludes = [
   "/ws",
   "/email/collect",
+  "/email/submit",
   "/email/verify",
 ];
 
@@ -52,35 +51,23 @@ const sessionHandler = async (
 
 const emailVerifier = async (
   req: Request,
-  ctx: MiddlewareHandlerContext<{ isEmailVerified: boolean }>,
+  ctx: MiddlewareHandlerContext<{ isReturning: boolean }>,
 ) => {
   const { pathname } = new URL(req.url);
+  console.log(ctx.state.isReturning);
 
   if (
-    ctx.state.isEmailVerified || ctx.destination !== "route" ||
+    ctx.state.isReturning || ctx.destination !== "route" ||
     excludes.some((route) => pathname.startsWith(route))
   ) {
     return ctx.next();
+  } else if (!ctx.state.isReturning) {
+    return new Response("", {
+      status: 307,
+      headers: { Location: "/email/collect" },
+    });
   }
-  console.log("damn", (await session(req, ctx as any)).headers.getSetCookie())
-  console.log("fucking hell", ctx)
-
-
-  const { status } = await checkEmailVerified("apitsas4@gmail.com");
-
-  switch (status) {
-    case AppRegistrationStatusResponse_Status.SUBMIT:
-      return new Response("", {
-        status: 307,
-        headers: { Location: "/email/collect" },
-      });
-    case AppRegistrationStatusResponse_Status.VERIFY:
-      return new Response("", {
-        status: 307,
-        headers: { Location: "/email/verify" },
-      });
-    default:
-      return ctx.next();
-  }
+  //check if isReturning is true (get cookie flag), if false => redirect to
+  // email/collect
 };
 export const handler = [sessionHandler, emailVerifier];

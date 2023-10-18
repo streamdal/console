@@ -2,9 +2,7 @@ import { useState } from "preact/hooks";
 import { LoginFormInput } from "./loginFormInput.tsx";
 import { FormInput } from "../form/formInput.tsx";
 
-export const EmailVerificationForm = (
-  { verificationStatus }: { verificationStatus: any },
-) => {
+export const EmailVerificationForm = () => {
   const [errors, setErrors] = useState<string>("");
   const [data, setData] = useState<string>("");
 
