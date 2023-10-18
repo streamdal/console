@@ -8,7 +8,7 @@ import {
 } from "../islands/tail.tsx";
 import { Audience } from "streamdal-protos/protos/sp_common.ts";
 import { audienceKey } from "./utils.ts";
-import { errorSignal } from "../components/serviceMap/errorSignal.tsx";
+import { serverErrorSignal } from "../components/serviceMap/serverErrorSignal.tsx";
 
 export const getSocket = (path: string) => {
   const url = new URL(path, location.href);
@@ -123,7 +123,7 @@ export const serverErrorSocket = (path: string) => {
       return;
     }
 
-    errorSignal.value = event.data;
+    serverErrorSignal.value = event.data;
   });
   return webSocket;
 };

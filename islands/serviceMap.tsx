@@ -34,7 +34,7 @@ import {
   opModal,
 } from "../components/serviceMap/opModalSignal.ts";
 import { ServerError } from "../components/error/server.tsx";
-import { errorSignal } from "../components/serviceMap/errorSignal.tsx";
+import { serverErrorSignal } from "../components/serviceMap/serverErrorSignal.tsx";
 
 const LAYOUT_KEY = "service-map-layout";
 
@@ -180,7 +180,9 @@ export default function ServiceMapComponent(
       } w-[calc(100vw-${OP_MODAL_WIDTH})]`}
       ref={wrapper}
     >
-      {errorSignal.value ? <ServerError message={errorSignal.value} /> : null}
+      {serverErrorSignal.value
+        ? <ServerError message={serverErrorSignal.value} />
+        : null}
       <ReactFlow
         onInit={(reactFlowInstance: ReactFlowInstance) => {
           setRfInstance(reactFlowInstance, fit(nodes, reactFlowInstance));
@@ -194,7 +196,7 @@ export default function ServiceMapComponent(
         edgeTypes={edgeTypes}
         onClick={(e) => clearModal(e)}
       >
-        {!errorSignal.value && nodes.length === 0 && <EmptyService />}
+        {!serverErrorSignal.value && nodes.length === 0 && <EmptyService />}
         <Background
           style={{ height: "100vh" }}
         />
