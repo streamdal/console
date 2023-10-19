@@ -37,7 +37,7 @@ export const handler: Handlers<> = {
     //   session.set("emailPrompted", true);
     // }
 
-    // session.flash("success", { status: true, message: "Thanks!" });
+    session.flash("success", { status: true, message: "Thanks!" });
     session.set("emailPrompted", true);
 
     return new Response(
