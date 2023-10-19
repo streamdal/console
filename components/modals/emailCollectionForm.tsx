@@ -34,7 +34,6 @@ export const EmailCollectionForm = (
     <div class="w-screen h-screen flex flex-col justify-center align-top items-center bg-login bg-cover bg-center  bg-no-repeat">
       <form
         class={"rounded-xl px-6 py-10 items-center bg-white w-[400px] rounded-xl px-6 py-10 items-center bg-white w-[400px]"}
-        action="/email/submit"
         method="post"
         onSubmit={() => onSumbit()}
       >

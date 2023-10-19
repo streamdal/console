@@ -7,7 +7,6 @@ export default async function InternalErrorRoute({ error }: ErrorPageProps) {
 
   return (
     <>
-      <NavBar />
       <div className="flex flex-col w-screen text-web">
         <InternalError message={(error as Error)?.message} />
         <div class="absolute bottom-0 left-0 text-streamdalPurple ml-2 mb-1">
