@@ -2,22 +2,18 @@ import { useState } from "preact/hooks";
 import { FormInput } from "../components/form/formInput.tsx";
 import { zfd } from "zod-form-data";
 import * as z from "zod/index.ts";
+import { validate } from "../components/form/validate.ts";
 
 export const EmailSchema = zfd.formData({
-  email: z.string().min(1, { message: "Required" }),
+  email: z.string().email({ message: "Must be a valid email." }).optional().or(
+    z.literal(""),
+  ),
 });
 export const EmailCollectionForm = () => {
   const [errors, setErrors] = useState<string>("");
   const [data, setData] = useState("");
 
-  const customTheme: CustomFlowbiteTheme["button"] = {
-    color: {
-      primary: "bg:red-100 hover:bg-red-600",
-    },
-  };
-
-  const onSubmit = (e: any) => {
-    console.log("hello");
+  const onSubmit = async (e: any) => {
     const emailData = new FormData(e.target);
     const { errors } = validate(EmailSchema, emailData);
     setErrors(errors || {});
@@ -63,10 +59,11 @@ export const EmailCollectionForm = () => {
               Submit
             </button>
           </div>
-          <button type="submit">
-            <h3 class={"underline cursor-pointer w-full text-center mt-3"}>
-              I'm good. Bring me to the dashboard
-            </h3>
+          <button
+            type="submit"
+            class={"btn-secondary text-web w-full font-bold"}
+          >
+            No thanks
           </button>
         </form>
       </div>

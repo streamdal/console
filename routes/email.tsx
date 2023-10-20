@@ -30,22 +30,15 @@ export const handler: Handlers<> = {
     }
 
     if (email.email) {
-      const emailResponse = await sendEmail(email.email);
+      void sendEmail(email.email);
+      session.flash("success", {
+        status: true,
+        message: "Thanks!",
+      });
     } else if (!email.email) {
-      const rejectResponse = await rejectEmailCollection();
+      void rejectEmailCollection();
     }
 
-    //
-    // TODO: do this conditionally once the rpc is fixed
-    // if (response.code === ResponseCode.OK) {
-    //   session.flash("success", { status: true, message: "Thanks!" });
-    //   session.set("emailPrompted", true);
-    // }
-
-    session.flash("success", {
-      status: true,
-      message: `${email.email ? "Thanks!" : "Welcome"}`,
-    });
     session.set("emailPrompted", true);
 
     return new Response(

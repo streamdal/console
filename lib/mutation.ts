@@ -183,9 +183,7 @@ export const deleteService = async (serviceName: string) => {
 export const sendEmail = async (email: string) => {
   try {
     const request = AppRegistrationRequest.create({ email });
-    console.log("damn registration request", request);
     const { response } = await client.appRegister(request, meta);
-    console.log("shit registration response", response);
     return response;
   } catch (error) {
     console.error("error registering app", error);
@@ -200,9 +198,7 @@ export const sendEmail = async (email: string) => {
 export const rejectEmailCollection = async () => {
   try {
     const request = AppRegisterRejectRequest.create();
-    console.log("rejection request", request);
     const { response } = await client.appRegisterReject(request, meta);
-    console.log("reject response", response);
     return response;
   } catch (error) {
     console.error("error rejecting to register app", error);
