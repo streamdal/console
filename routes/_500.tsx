@@ -1,4 +1,3 @@
-import { NavBar } from "../components/nav/nav.tsx";
 import { InternalError } from "../components/error/internal.tsx";
 import { ErrorPageProps } from "$fresh/server.ts";
 
