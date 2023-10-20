@@ -49,7 +49,7 @@ export const EmailCollectionForm = () => {
         />
         <div className={"flex flex-col items-center"}>
           <button
-            type={"submit"}
+            type="submit"
             className={"bg-streamdalYellow btn-heimdal text-web mb-3 w-full font-bold"}
           >
             Send
