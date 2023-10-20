@@ -1,18 +1,32 @@
 import { LayoutContext } from "$fresh/server.ts";
-import ServiceMapComponent from "../islands/serviceMap.tsx";
+import ServiceMapComponent, { opUpdateSignal } from "../islands/serviceMap.tsx";
 import { NavBar } from "../components/nav/nav.tsx";
 import { ReactFlowProvider } from "reactflow";
 import OpModal from "../islands/opModal.tsx";
 import { serviceSignal } from "../components/serviceMap/serviceSignal.ts";
 import { initAllServices } from "../lib/fetch.ts";
+import { Toast, toastSignal } from "../components/toasts/toast.tsx";
+import { opModal } from "../components/serviceMap/opModalSignal.ts";
 
 export default async function Layout(req: Request, ctx: LayoutContext) {
   await initAllServices();
+  const success = ctx.data?.success;
+
+  if (success?.message) {
+    toastSignal.value = {
+      id: "global",
+      type: success.status ? "success" : "error",
+      message: success.message,
+    };
+  }
 
   return (
     <>
+      <Toast id={"global"} />
       <NavBar />
-      <OpModal serviceMap={serviceSignal.value} />
+      {!req.url.includes("/email") && (
+        <OpModal serviceMap={serviceSignal.value} />
+      )}
       <div className="flex flex-col w-screen text-web">
         <ReactFlowProvider>
           <ctx.Component />

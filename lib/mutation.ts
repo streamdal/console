@@ -181,16 +181,33 @@ export const deleteService = async (serviceName: string) => {
 };
 
 export const sendEmail = async (email: string) => {
+    try {
+        const request = AppRegistrationRequest.create({email});
+        console.log("damn registration request", request);
+        const {response} = await client.appRegister(request, meta);
+        console.log("shit registration response", response);
+        return response;
+    } catch (error) {
+        console.error("error registering app", error);
+        return {
+            id: "appRegistrationRequest",
+            code: ResponseCode.INTERNAL_SERVER_ERROR,
+            error,
+        };
+    }
+};
+
+export const rejectEmailCollection = async () => {
   try {
-    const request = AppRegistrationRequest.create({ email });
-    console.log("damn registration request", request);
-    const { response } = await client.appRegister(request, meta);
-    console.log("shit registration response", response);
+    const request = AppRegisterRejectRequest.create();
+    console.log("rejection request", request);
+    const { response } = await client.appRegisterReject(request, meta);
+    console.log("reject response", response);
     return response;
   } catch (error) {
-    console.error("error registering app", error);
+    console.error("error rejecting to register app", error);
     return {
-      id: "appRegistrationRequest",
+      id: "appRegistrationRejectRequest",
       code: ResponseCode.INTERNAL_SERVER_ERROR,
       error,
     };
