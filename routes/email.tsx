@@ -1,12 +1,13 @@
-import { HandlerContext } from "$fresh/server.ts";
+import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { AppRegistrationRequest } from "streamdal-protos/protos/sp_external.ts";
 import { ErrorType, validate } from "../components/form/validate.ts";
 import {
   EmailCollectionForm,
   EmailSchema,
-} from "../components/modals/emailCollectionForm.tsx";
-import { sendEmail } from "../lib/mutation.ts";
+} from "../islands/emailCollectionForm.tsx";
+import { rejectEmailCollection, sendEmail } from "../lib/mutation.ts";
 import { WithSession } from "fresh-session/mod.ts";
+
 export type SessionData = { session: Record<string, string>; message?: string };
 
 export const handler: Handlers<> = {
@@ -28,7 +29,11 @@ export const handler: Handlers<> = {
       return new Response("", { status: 400 });
     }
 
-    const emailResponse = await sendEmail(email.email);
+    if (email.email) {
+      const emailResponse = await sendEmail(email.email);
+    } else if (!email.email) {
+      const rejectResponse = await rejectEmailCollection();
+    }
 
     //
     // TODO: do this conditionally once the rpc is fixed
@@ -37,7 +42,10 @@ export const handler: Handlers<> = {
     //   session.set("emailPrompted", true);
     // }
 
-    session.flash("success", { status: true, message: "Thanks!" });
+    session.flash("success", {
+      status: true,
+      message: `${email.email ? "Thanks!" : "Welcome"}`,
+    });
     session.set("emailPrompted", true);
 
     return new Response(
