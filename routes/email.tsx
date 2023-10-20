@@ -21,6 +21,7 @@ export const handler: Handlers<> = {
 
     if (!emailData.get("email")) {
       void rejectRegistrationEmail();
+      session.set("emailPrompted", true);
       return new Response(
         "",
         {
