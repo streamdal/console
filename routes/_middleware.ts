@@ -1,6 +1,7 @@
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import { cookieSession, WithSession } from "fresh-session/mod.ts";
 import { ErrorType } from "../components/form/validate.ts";
+import { DEMO, PRODUCTION } from "../lib/configs.ts";
 
 export type SuccessType = {
   status: boolean;
@@ -20,10 +21,6 @@ const emailExcludes = [
   ...sessionExcludes,
   "/email",
 ];
-
-//
-// ensure session key is present
-!Deno.env.get("APP_KEY") && Deno.env.set("APP_KEY", crypto.randomUUID());
 
 export type SessionState = WithSession;
 const session = await cookieSession();
@@ -54,8 +51,8 @@ const emailPromptHandler = async (
   if (
     emailPrompted || ctx.destination !== "route" ||
     emailExcludes.some((route) => pathname.startsWith(route)) ||
-    Deno.env.get("STREAMDAL_DEV") === "true" ||
-    Deno.env.get("STREAMDAL_DEMO") === "true"
+    PRODUCTION !== "true" ||
+    DEMO === "true"
   ) {
     return ctx.next();
   }
