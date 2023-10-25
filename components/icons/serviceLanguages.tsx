@@ -1,5 +1,8 @@
+import IconBrandPython from "tabler-icons/tsx/brand-python.tsx";
+import IconQuestionMark from "tabler-icons/tsx/question-mark.tsx";
+
 export const ServiceLanguage = ({ language }: { language?: string }) => {
-  if (language === "Typescript") {
+  if (language?.toLowerCase() === "typescript") {
     return (
       <svg
         fill="#000000"
@@ -21,7 +24,7 @@ export const ServiceLanguage = ({ language }: { language?: string }) => {
         </g>
       </svg>
     );
-  } else if (language === "Go") {
+  } else if (language?.toLowerCase() === "go") {
     return (
       <svg
         viewBox="0 0 34 13"
@@ -63,7 +66,7 @@ export const ServiceLanguage = ({ language }: { language?: string }) => {
         </defs>
       </svg>
     );
-  } else if (language === "Java") {
+  } else if (language?.toLowerCase() === "java") {
     return (
       <svg
         viewBox="0 0 50 50"
@@ -151,16 +154,9 @@ export const ServiceLanguage = ({ language }: { language?: string }) => {
         />
       </svg>
     );
+  } else if (language?.toLowerCase() === "python") {
+    return <IconBrandPython class="w-10 h-10" />;
+  } else {
+    return <IconQuestionMark class="w-6 h-6" />;
   }
-  return (
-    <svg
-      width="48"
-      height="48"
-      viewBox="0 0 48 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect width="48" height="48" rx="24" fill="#E6DDFE" />
-    </svg>
-  );
 };
