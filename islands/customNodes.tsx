@@ -319,7 +319,7 @@ export const ComponentNode = ({ data }: { data: NodeData }) => {
         <div class="flex justify-center flex-col items-center">
           <ComponentImage
             componentName={data.audience.componentName}
-            className={"w-[30px]"}
+            className={"w-[40px]"}
           />
           <p class={"z-10 mt-2 text-white"}>{data.audience.componentName}</p>
         </div>
