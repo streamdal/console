@@ -10,19 +10,19 @@ export default async function App(
     <html lang="en">
       <Head>
         <title>
-          {DEMO
+          {DEMO === "true"
             ? "Streamdal: Open Source Data Observability That Drives Action"
             : "Streamdal Console"}
         </title>
         <meta
           charSet="UTF-8"
-          content={DEMO
+          content={DEMO === "true"
             ? "Detect and resolve data incidents faster by peeking into data flowing through your systems" +
               " and act on it in real-time with Streamdal"
             : "Streamdal's Console"}
           name="description"
         />
-        {DEMO &&
+        {DEMO === "true" &&
           (
             <>
               <meta
