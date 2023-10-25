@@ -201,8 +201,6 @@ export const mapNodes = (
 
       const max = Math.max(...Array.from(nodesMap.operationGroups.values()));
 
-      console.dir(nodesMap.components);
-
       nodesMap.nodes.set(cKey, {
         id: cKey,
         type: "component",
