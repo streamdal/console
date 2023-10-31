@@ -12,5 +12,7 @@ services:
       - STREAMDAL_CONSOLE_DEMO=false
       - STREAMDAL_CONSOLE_SESSION_KEY
       - STREAMDAL_CONSOLE_PORT=8080
+      - STREAMDAL_CONSOLE_REDIS_HOST=host.docker.internal
+      - STREAMDAL_CONSOLE_REDIS_PORT=6379
     ports:
       - "8080:8080"

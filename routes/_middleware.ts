@@ -1,7 +1,8 @@
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
-import { cookieSession, WithSession } from "fresh-session/mod.ts";
+import { redisSession, WithSession } from "fresh-session/mod.ts";
 import { ErrorType } from "../components/form/validate.ts";
 import { DEMO, PRODUCTION } from "../lib/configs.ts";
+import { connect } from "https://deno.land/x/redis/mod.ts";
 
 export type SuccessType = {
   status: boolean;
@@ -22,8 +23,16 @@ const emailExcludes = [
   "/email",
 ];
 
+
 export type SessionState = WithSession;
-const session = await cookieSession();
+const redis = await connect({
+  hostname: Deno.env.get("STREAMDAL_CONSOLE_REDIS_HOST") || "localhost",
+  port: Deno.env.get("STREAMDAL_CONSOLE_REDIS_PORT") || 6379,
+})
+
+const session = redisSession(redis, {
+  maxAge: 1000,
+});
 
 const sessionHandler = async (
   req: Request,
