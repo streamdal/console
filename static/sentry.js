@@ -1,7 +1,10 @@
+//
+// We're using plain browser sentry and need to init in inline js
 window.Sentry && Sentry.onLoad(() => {
   Sentry.init({
-    dsn:
-      "https://3f6edea97aca1d46270c66aa4aab95d3@o464670.ingest.sentry.io/4506161671897088",
+    dsn: `https://${
+      document.currentScript.getAttribute("sentryKey")
+    }@o464670.ingest.sentry.io/4506161671897088`,
     integrations: [
       new Sentry.BrowserTracing(),
       new Sentry.Replay({ maskAllText: false }),
