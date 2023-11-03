@@ -1,6 +1,6 @@
 import { AppContext } from "$fresh/server.ts";
 import { Head } from "$fresh/src/runtime/head.ts";
-import { DEMO } from "../lib/configs.ts";
+import { DEMO, SENTRY_KEY } from "../lib/configs.ts";
 
 export default async function App(
   req: Request,
@@ -57,6 +57,14 @@ export default async function App(
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/base16/dark-violet.min.css"
         />
+        {DEMO && SENTRY_KEY &&
+          (
+            <script
+              src={`https://js.sentry-cdn.com/${SENTRY_KEY}.min.js`}
+              crossOrigin="anonymous"
+            >
+            </script>
+          )}
       </Head>
       <body className="h-screen bg-purple-50 m-0 overflow-hidden">
         <ctx.Component />
