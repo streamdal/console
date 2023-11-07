@@ -1,5 +1,5 @@
-import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
 import { OP_MODAL_WIDTH } from "../../islands/drawer/infoDrawer.tsx";
+import { opModal } from "../serviceMap/opModalSignal.ts";
 
 export const SchemaModal = (
   { schema, version, setClose }: {
@@ -53,10 +53,8 @@ export const SchemaModal = (
                 <div
                     class={"pb-2 px-4"}
                     dangerouslySetInnerHTML={{
-                        __html: `${
-                            hljs.highlight(`${schema}`, {language: 'json'})
-                                .value
-                        }`,
+                      __html: opModal.value?.schemaInfo.schema ? opModal.value.schemaInfo.schema:
+                        ""
                     }}
                 >
                 </div>

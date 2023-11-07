@@ -4,8 +4,6 @@ import { getAudienceOpRoute } from "../lib/utils.ts";
 import { Audience } from "streamdal-protos/protos/sp_common.ts";
 import { useEffect } from "preact/hooks";
 import { opModal } from "../components/serviceMap/opModalSignal.ts";
-import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
-import { tailEnabledSignal } from "./tail.tsx";
 
 export const Schema = (
   { audience, toggleModal }: { audience: Audience; toggleModal: () => void },
@@ -19,12 +17,13 @@ export const Schema = (
 
   useEffect(async () => {
     try {
-      const { schema, version } = await getSchema();
+      const { schema, version, metaData } = await getSchema();
       opModal.value = {
         ...opModal.value,
         schemaInfo: {
-          schema: JSON.stringify(schema, null, 2),
+          schema,
           version,
+          metaData,
         },
       };
     } catch (e) {
@@ -83,8 +82,7 @@ export const Schema = (
             <div
                 class={"font-sm "}
                 dangerouslySetInnerHTML={{
-                    __html: opModal.value?.schemaInfo?.schema ?
-                        `${hljs.highlight(`${opModal.value?.schemaInfo?.schema}`, {language: 'json'}).value}` :
+                    __html: opModal.value?.schemaInfo.schema ? opModal.value.schemaInfo.schema:
                         ""
                 }}
             >
