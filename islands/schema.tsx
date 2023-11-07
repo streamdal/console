@@ -1,11 +1,37 @@
 import IconWindowMaximize from "tabler-icons/tsx/window-maximize.tsx";
-import { Tooltip } from "../tooltip/tooltip.tsx";
+import { Tooltip } from "../components/tooltip/tooltip.tsx";
+import { getAudienceOpRoute } from "../lib/utils.ts";
+import { Audience } from "streamdal-protos/protos/sp_common.ts";
+import { useEffect } from "preact/hooks";
+import { opModal } from "../components/serviceMap/opModalSignal.ts";
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
-import { opModal } from "../serviceMap/opModalSignal.ts";
+import { tailEnabledSignal } from "./tail.tsx";
 
 export const Schema = (
-  { setSchemaModalOpen }: { setSchemaModalOpen: () => void },
+  { audience, toggleModal }: { audience: Audience; toggleModal: () => void },
 ) => {
+  const getSchema = async () => {
+    const response = await fetch(`${getAudienceOpRoute(audience)}/schema`, {
+      method: "GET",
+    });
+    return response.json();
+  };
+
+  useEffect(async () => {
+    try {
+      const { schema, version } = await getSchema();
+      opModal.value = {
+        ...opModal.value,
+        schemaInfo: {
+          schema: JSON.stringify(schema, null, 2),
+          version,
+        },
+      };
+    } catch (e) {
+      console.error("Error fetching schema", e);
+    }
+  }, [audience]);
+
   return (
     <>
       <div
@@ -42,7 +68,7 @@ export const Schema = (
         <div class={"w-full flex justify-end"}>
           <button
             className={"cursor-pointer"}
-            onClick={() => setSchemaModalOpen(true)}
+            onClick={toggleModal}
             data-tooltip-target="maximize"
           >
             <IconWindowMaximize class="w-5 h-5 text-white mx-1 my-1" />

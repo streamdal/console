@@ -1,5 +1,5 @@
 import { Audience } from "streamdal-protos/protos/sp_common.ts";
-import { OP_MODAL_WIDTH } from "./opModal.tsx";
+import { OP_MODAL_WIDTH } from "./drawer/infoDrawer.tsx";
 import IconPlayerPauseFilled from "tabler-icons/tsx/player-pause-filled.tsx";
 import IconPlayerPlayFilled from "tabler-icons/tsx/player-play-filled.tsx";
 import IconWindowMinimize from "tabler-icons/tsx/window-minimize.tsx";

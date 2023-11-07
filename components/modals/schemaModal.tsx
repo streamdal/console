@@ -1,5 +1,5 @@
 import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/highlight.min.js";
-import { OP_MODAL_WIDTH } from "../../islands/opModal.tsx";
+import { OP_MODAL_WIDTH } from "../../islands/drawer/infoDrawer.tsx";
 
 export const SchemaModal = (
   { schema, version, setClose }: {

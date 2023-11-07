@@ -1050,6 +1050,7 @@
     "https://esm.sh/v132/zustand@4.4.5/denonext/shallow.js": "6877c4b94991f7595e451f4cdf7701d6986aaf24e8416095840817fc35d25f91",
     "https://esm.sh/v132/zustand@4.4.5/denonext/traditional.js": "16303156a8715dc961cccf77a0ffcecaabe9a2cb6c5bf47c0ce3181e12fc5b4e",
     "https://esm.sh/v132/zustand@4.4.5/denonext/vanilla.js": "3c96e44805df9150e5fc13abc69023b4d628be7103bfc99c702734a4c2087f77",
+    "https://esm.sh/v133/@babel/helper-validator-identifier@7.22.20/denonext/helper-validator-identifier.mjs": "1ad312a9040d1f3b096e90a3e6a9da7ecfc99662140852fe3862a316c2591c93",
     "https://esm.sh/zod-form-data@2.0.1": "13dc944acec58785c3f778261a5d42f0616653bf4c315369fce0263c81a46b19"
   }
 }
