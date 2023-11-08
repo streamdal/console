@@ -2,7 +2,7 @@ import { ConsumerIcon } from "../../components/icons/consumer.tsx";
 import { ProducerIcon } from "../../components/icons/producer.tsx";
 import { opModal } from "../../components/serviceMap/opModalSignal.ts";
 import { OperationType } from "streamdal-protos/protos/sp_common.ts";
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import {
   tailEnabledSignal,
   tailSamplingRateSignal,
@@ -11,7 +11,6 @@ import {
 } from "./tail.tsx";
 import { isNumeric } from "../../lib/utils.ts";
 import { useSignalEffect } from "@preact/signals";
-import { initFlowbite } from "flowbite";
 import { ServiceSignal } from "../../components/serviceMap/serviceSignal.ts";
 import { BetaTag, ComingSoonTag } from "../../components/icons/featureTags.tsx";
 import IconPlus from "tabler-icons/tsx/plus.tsx";

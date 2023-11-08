@@ -9,7 +9,8 @@ attach pipelines to consumers and producers and monitor their operations.
 
 ![Console](./console-screenshot.png)
 
-<sub>For more details, see the main [streamdal repo](https://github.com/streamdal/streamdal).</sub>
+<sub>For more details, see the main
+[streamdal repo](https://github.com/streamdal/streamdal).</sub>
 
 ### Development
 
@@ -52,9 +53,9 @@ https://github.com/streamdal/streamdal/tree/main/docker/local
 
 The console depends on the following dependencies (direct and indirect):
 
-* [streamdal/server](https://github.com/streamdal/streamdal-server)
-* Envoy (used by Console for gRPC-Web)
-* Redis (used by `streamdal/server`)
+- [streamdal/server](https://github.com/streamdal/streamdal-server)
+- Envoy (used by Console for gRPC-Web)
+- Redis (used by `streamdal/server`)
 
 ### Releasing
 
