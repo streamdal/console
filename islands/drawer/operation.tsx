@@ -12,7 +12,7 @@ import {
   tailSamplingRateSignal,
   tailSamplingSignal,
   tailSignal,
-} from "../tail.tsx";
+} from "./tail.tsx";
 import { isNumeric } from "../../lib/utils.ts";
 import { SchemaModal } from "../../components/modals/schemaModal.tsx";
 import { useSignalEffect } from "@preact/signals";
@@ -25,7 +25,7 @@ import { OperationActionMenu } from "../../components/operation/operationActionM
 import IconLink from "tabler-icons/tsx/link.tsx";
 import { OddAttachModal } from "../../components/modals/oddAttachModal.tsx";
 import { Toggle } from "../../components/form/switch.tsx";
-import { Schema } from "../schema.tsx";
+import { Schema } from "./schema.tsx";
 import { OP_MODAL_WIDTH } from "./infoDrawer.tsx";
 
 export default function Operation(
@@ -77,13 +77,7 @@ export default function Operation(
           pipeline={attachedPipeline || null}
         />
       )}
-      {schemaModalOpen && (
-        <SchemaModal
-          schema={opModal.value.schemaInfo.schema}
-          version={opModal.value.schemaInfo.version}
-          setClose={() => setSchemaModalOpen(false)}
-        />
-      )}
+      {opModal.value?.schemaModal && <SchemaModal />}
       {opModal.value?.deleteService && (
         <DeleteServiceModal audience={audience} />
       )}
@@ -292,10 +286,7 @@ export default function Operation(
                 aria-labelledby="collapse-heading-5"
                 class={"flex flex-col items-center justify-center p-4"}
               >
-                <Schema
-                  audience={audience}
-                  toggleModal={() => setSchemaModalOpen(!schemaModalOpen)}
-                />
+                <Schema audience={audience} />
               </div>
             )}
           </div>

@@ -17,7 +17,7 @@ export const handler: Handers<> = {
         JSON.stringify({
           schema: highlighted,
           version: schema.Version,
-          metaData: schema.metaData,
+          metaData: schema.Metadata,
         }),
       );
     } catch (e) {

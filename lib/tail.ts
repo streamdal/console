@@ -9,7 +9,7 @@ import hljs from "../static/vendor/highlight@11.8.0.min.js";
 import { effect, signal } from "@preact/signals";
 import { client } from "./grpc.ts";
 import { GRPC_TOKEN } from "./configs.ts";
-import { tailSignal } from "../islands/tail.tsx";
+import { tailSignal } from "../islands/drawer/tail.tsx";
 
 export const tailAbortSignal = signal<boolean>(false);
 

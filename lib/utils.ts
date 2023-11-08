@@ -219,3 +219,12 @@ export const longDateFormat = {
   minute: "numeric" as const,
   fractionalSecondDigits: 3,
 } as DateTimeFormatOptions;
+
+export const humanDateFormat = {
+  year: "numeric" as const,
+  month: "numeric" as const,
+  day: "numeric" as const,
+  hour: "numeric" as const,
+  hour12: true,
+  minute: "numeric" as const,
+} as DateTimeFormatOptions;

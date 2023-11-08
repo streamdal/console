@@ -10,7 +10,7 @@ export type OpModalType = {
   pause?: boolean;
   detach?: boolean;
   delete?: boolean;
-  schema?: boolean;
+  schemaModal?: boolean;
   deleteService?: boolean;
 };
 

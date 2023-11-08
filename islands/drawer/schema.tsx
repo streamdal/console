@@ -1,12 +1,12 @@
 import IconWindowMaximize from "tabler-icons/tsx/window-maximize.tsx";
-import { Tooltip } from "../components/tooltip/tooltip.tsx";
-import { getAudienceOpRoute } from "../lib/utils.ts";
+import { Tooltip } from "../../components/tooltip/tooltip.tsx";
+import { getAudienceOpRoute } from "../../lib/utils.ts";
 import { Audience } from "streamdal-protos/protos/sp_common.ts";
 import { useEffect } from "preact/hooks";
-import { opModal } from "../components/serviceMap/opModalSignal.ts";
+import { opModal } from "../../components/serviceMap/opModalSignal.ts";
 
 export const Schema = (
-  { audience, toggleModal }: { audience: Audience; toggleModal: () => void },
+  { audience }: { audience: Audience },
 ) => {
   const getSchema = async () => {
     const response = await fetch(`${getAudienceOpRoute(audience)}/schema`, {
@@ -17,14 +17,10 @@ export const Schema = (
 
   useEffect(async () => {
     try {
-      const { schema, version, metaData } = await getSchema();
+      const schemaInfo = await getSchema();
       opModal.value = {
         ...opModal.value,
-        schemaInfo: {
-          schema,
-          version,
-          metaData,
-        },
+        schemaInfo,
       };
     } catch (e) {
       console.error("Error fetching schema", e);
@@ -67,7 +63,11 @@ export const Schema = (
         <div class={"w-full flex justify-end"}>
           <button
             className={"cursor-pointer"}
-            onClick={toggleModal}
+            onClick={() =>
+              opModal.value = {
+                ...opModal.value,
+                schemaModal: !opModal.value?.schemaModal,
+              }}
             data-tooltip-target="maximize"
           >
             <IconWindowMaximize class="w-5 h-5 text-white mx-1 my-1" />
@@ -82,7 +82,7 @@ export const Schema = (
             <div
                 class={"font-sm "}
                 dangerouslySetInnerHTML={{
-                    __html: opModal.value?.schemaInfo.schema ? opModal.value.schemaInfo.schema:
+                    __html: opModal.value?.schemaInfo?.schema ? opModal.value.schemaInfo?.schema:
                         ""
                 }}
             >

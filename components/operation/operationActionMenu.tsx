@@ -21,7 +21,7 @@ export const OperationActionMenu = () => {
       </button>
       <Tooltip
         targetId="pipeline-pause"
-        message={"Pause pipelines"}
+        message={"Pause pipeline"}
       />
       <button
         data-tooltip-target="pipeline-unlink"
