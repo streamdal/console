@@ -30,7 +30,7 @@ export const ResumePipelineModal = (
 ) => {
   const close = () => opModal.value = { ...opModal.value, resume: false };
 
-  const pause = async () => {
+  const resume = async () => {
     const response = await fetch(
       `${getAudienceOpRoute(audience)}/pipeline/${pipeline.id}/resume`,
       {
@@ -84,7 +84,7 @@ export const ResumePipelineModal = (
             <button
               class="btn-heimdal"
               type="submit"
-              onClick={pause}
+              onClick={resume}
             >
               Resume
             </button>
