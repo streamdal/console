@@ -9,9 +9,9 @@ import {
 
 export const Sockets = () => {
   useEffect(() => {
-    const serviceSocket = serviceMapSocket("./ws/service-map");
-    const audienceSocket = audienceMetricsSocket("./ws/audience-metrics");
-    const errorSocket = serverErrorSocket("./ws/server-error");
+    const serviceSocket = serviceMapSocket("/ws/service-map");
+    const audienceSocket = audienceMetricsSocket("/ws/audience-metrics");
+    const errorSocket = serverErrorSocket("/ws/server-error");
     return () => {
       serviceSocket?.close();
       audienceSocket?.close();
