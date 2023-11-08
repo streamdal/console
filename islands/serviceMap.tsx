@@ -15,7 +15,7 @@ import {
 import { signal, useSignalEffect } from "@preact/signals";
 import { Audience } from "streamdal-protos/protos/sp_common.ts";
 import { Pipeline } from "streamdal-protos/protos/sp_pipeline.ts";
-import { FlowEdge, FlowNode, updateNode } from "../lib/nodeMapper.ts";
+import { FlowEdge, FlowNode } from "../lib/nodeMapper.ts";
 import { serviceSignal } from "../components/serviceMap/serviceSignal.ts";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { OP_MODAL_WIDTH } from "./drawer/infoDrawer.tsx";
@@ -39,11 +39,9 @@ import { SuccessType } from "../routes/_middleware.ts";
 import { Toast, toastSignal } from "../components/toasts/toast.tsx";
 import { showNav } from "./nav.tsx";
 
-const LAYOUT_KEY = "service-map-layout";
-
 export type OpUpdate = {
   audience: Audience;
-  attachedPipeline?: Pipeline;
+  attachedPipelines?: Pipeline[];
 };
 
 export const opUpdateSignal = signal<OpUpdate | null>(null);
@@ -158,11 +156,6 @@ export default function ServiceMapComponent(
 
   useSignalEffect(() => {
     localStorage.setItem(OP_MODAL_KEY, JSON.stringify(opModal.value));
-
-    if (opUpdateSignal.value) {
-      const updated = updateNode(nodes, opUpdateSignal.value);
-      setNodes(updated);
-    }
   });
 
   useSignalEffect(() => {
