@@ -213,6 +213,7 @@ const PipelineDetail = (
   const [data, setData] = useState();
 
   useEffect(() => {
+    initFlowbite();
     setData({
       ...pipeline,
       steps: pipeline.steps.map((s: PipelineStep, i) => ({
