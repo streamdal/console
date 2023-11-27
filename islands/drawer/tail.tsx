@@ -36,7 +36,7 @@ export const TailRow = (
 ) => (
   <div className="flex flex-row w-full">
     <div className="bg-black text-white py-2 px-4 text-sm overflow-x-scroll flex flex-col justify-start">
-      <div className="text-stream">
+      <div className="text-stormCloud">
         {row.timestamp?.toLocaleDateString(
           "en-us",
           longDateFormat,
