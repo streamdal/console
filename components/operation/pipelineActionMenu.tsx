@@ -2,11 +2,9 @@ import { opModal } from "../serviceMap/opModalSignal.ts";
 import IconPlayerPause from "tabler-icons/tsx/player-pause.tsx";
 import IconPlayerPlay from "tabler-icons/tsx/player-play.tsx";
 import { Tooltip } from "../tooltip/tooltip.tsx";
-import IconUnlink from "tabler-icons/tsx/unlink.tsx";
 import IconAdjustmentsHorizontal from "tabler-icons/tsx/adjustments-horizontal.tsx";
 import { Audience } from "streamdal-protos/protos/sp_common.ts";
 import { audienceKey } from "../../lib/utils.ts";
-import IconLink from "tabler-icons/tsx/link.tsx";
 import { useEffect } from "preact/hooks";
 import { initFlowbite } from "flowbite";
 import Pipeline from "../../islands/pipeline.tsx";
@@ -14,48 +12,29 @@ import { serviceSignal } from "../serviceMap/serviceSignal.ts";
 
 const AttachDetach = (
   { pipeline, attached }: { pipeline: Pipeline; attached: boolean },
-) =>
-  attached
-    ? (
-      <>
-        <button
-          data-tooltip-target="pipeline-unlink"
-          type="button"
-          className="mr-2"
-          onClick={() =>
-            opModal.value = {
-              ...opModal.value,
-              detachPipeline: pipeline,
-            }}
-        >
-          <IconUnlink class="w-4 h-4 text-gray-400" />
-        </button>
-        <Tooltip
-          targetId="pipeline-unlink"
-          message={"Detach pipeline"}
-        />
-      </>
-    )
-    : (
-      <>
-        <button
-          data-tooltip-target="pipeline-link"
-          type="button"
-          className="mr-2"
-          onClick={() =>
-            opModal.value = {
-              ...opModal.value,
-              attachPipeline: pipeline,
-            }}
-        >
-          <IconLink class="w-4 h-4 text-gray-400" />
-        </button>
-        <Tooltip
-          targetId="pipeline-link"
-          message={"Attach pipeline"}
-        />
-      </>
-    );
+) => (
+  <div
+    data-tooltip-target={`attach-detach-pipeline-${pipeline.id}`}
+    class="flex flex-row items-center"
+  >
+    <input
+      type="checkbox"
+      className={`w-4 h-4 rounded border mx-2 checkmark-streamdal border-streamdalPurple appearance-none checked:bg-streamdalPurple flex justify-center items-center`}
+      checked={attached}
+      onChange={() =>
+        opModal.value = {
+          ...opModal.value,
+          ...attached
+            ? { detachPipeline: pipeline }
+            : { attachPipeline: pipeline },
+        }}
+    />
+    <Tooltip
+      targetId={`attach-detach-pipeline-${pipeline.id}`}
+      message={`${attached ? "Detach" : "Attach"} pipeline`}
+    />
+  </div>
+);
 
 const PauseResume = (
   { pipeline, attached, paused }: {
@@ -127,7 +106,9 @@ export const PipelineActionMenu = (
   }, [attached, paused]);
 
   return (
-    <div class="p-2 flex flex-row justify-between items-center hover:bg-purple-100">
+    <div
+      class={`p-2 flex flex-row justify-between items-center hover:bg-purple-100`}
+    >
       <div class="flex flex-row justify-start items-center">
         <AttachDetach pipeline={pipeline} attached={attached} />
         <PauseResume
