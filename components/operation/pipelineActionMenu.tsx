@@ -5,36 +5,51 @@ import { Tooltip } from "../tooltip/tooltip.tsx";
 import IconAdjustmentsHorizontal from "tabler-icons/tsx/adjustments-horizontal.tsx";
 import { Audience } from "streamdal-protos/protos/sp_common.ts";
 import { audienceKey } from "../../lib/utils.ts";
-import { useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { initFlowbite } from "flowbite";
 import Pipeline from "../../islands/pipeline.tsx";
 import { serviceSignal } from "../serviceMap/serviceSignal.ts";
 
 const AttachDetach = (
   { pipeline, attached }: { pipeline: Pipeline; attached: boolean },
-) => (
-  <div
-    data-tooltip-target={`attach-detach-pipeline-${pipeline.id}`}
-    class="flex flex-row items-center"
-  >
-    <input
-      type="checkbox"
-      className={`w-4 h-4 rounded border mx-2 checkmark-streamdal border-streamdalPurple appearance-none checked:bg-streamdalPurple flex justify-center items-center`}
-      checked={attached}
-      onChange={() =>
-        opModal.value = {
-          ...opModal.value,
-          ...attached
-            ? { detachPipeline: pipeline }
-            : { attachPipeline: pipeline },
-        }}
-    />
-    <Tooltip
-      targetId={`attach-detach-pipeline-${pipeline.id}`}
-      message={`${attached ? "Detach" : "Attach"} pipeline`}
-    />
-  </div>
-);
+) => {
+  const [checked, setChecked] = useState(false);
+
+  const toggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    opModal.value = {
+      ...opModal.value,
+      ...attached ? { detachPipeline: pipeline } : { attachPipeline: pipeline },
+    };
+  };
+
+  useEffect(() => {
+    setChecked(attached);
+  }, [attached]);
+
+  useEffect(() => {
+    setChecked(attached);
+  }, [confirm]);
+
+  return (
+    <div
+      data-tooltip-target={`attach-detach-pipeline-${pipeline.id}`}
+      class="flex flex-row items-center"
+      onClick={toggle}
+    >
+      <input
+        type="checkbox"
+        className={`w-4 h-4 rounded border mx-2 checkmark-streamdal border-streamdalPurple appearance-none checked:bg-streamdalPurple flex justify-center items-center`}
+        checked={checked}
+      />
+      <Tooltip
+        targetId={`attach-detach-pipeline-${pipeline.id}`}
+        message={`${attached ? "Detach" : "Attach"} pipeline`}
+      />
+    </div>
+  );
+};
 
 const PauseResume = (
   { pipeline, attached, paused }: {
