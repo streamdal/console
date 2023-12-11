@@ -81,7 +81,7 @@ const stepKindSchema = z.discriminatedUnion("oneofKind", [
   z.object({
     oneofKind: z.literal("detective"),
     detective: z.object({
-      path: z.string().min(1, { message: "Required" }),
+      path: z.string(),
       args: zfd.repeatable(z.array(z.string()).default([])),
       type: zfd.numeric(DetectiveTypeEnum),
       negate: z.boolean().default(false),
@@ -436,7 +436,7 @@ const PipelineDetail = (
                         data={data}
                         setData={setData}
                         label="Path"
-                        placeHolder="ex: object.field"
+                        placeHolder="an empty path with search entire payload"
                         errors={errors}
                       />
                       <div className="flex flex-col">
